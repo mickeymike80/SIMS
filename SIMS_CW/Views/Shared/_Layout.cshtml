@@ -1,43 +1,245 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <title>@RenderSection("title", false)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <script type="application/x-javascript">
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <link href="~/Assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="~/Assets/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/Assets/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Merriweather+Sans:300,300i,400,400i,700,700i,800" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Mallanna" rel="stylesheet">
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Create Idea", "CreateIdea", "Idea")</li>
+    <!--Header-->
+    <div class="top-bar_sub_w3layouts_agile">
+        <h6>Need support? <a href="Contact">Contact Us </a></h6>
+        <div class="search" style="width: 110px !important">
+            <h5><a class="sign" href="#" data-toggle="modal" data-target="#myModal2">Login</a></h5>
+            <div class="cd-main-header">
+                <ul class="cd-header-buttons">
+                    <li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
                 </ul>
+                <!-- cd-header-buttons -->
+            </div>
+            <div id="cd-search" class="cd-search">
+                <form action="#" method="post">
+                    <input name="Search" type="search" placeholder="Click enter after typing...">
+                </form>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <div class="header inner_banner" id="home">
+        <!--/top-bar-->
+        <div class="top-bar">
+            <div class="header-nav-agileits">
+                <nav class="navbar navbar-default">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <h1>
+                            <a class="navbar-brand" href="Index">
+                                SIMS
+                                <span style="margin-top: 10px;">Online Education</span>
+                            </a>
+                        </h1>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse nav-wil" id="bs-example-navbar-collapse-1">
+                        <nav>
+                            <ul class="top_nav">
+                                <li><a href="Index">Home</a></li>
+                                <li><a href="About">About</a></li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" data-hover="Pages" role="button" aria-haspopup="true" aria-expanded="false">Drop Down <span class="fa fa-angle-down"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="services.html">Services</a></li>
+                                        <li><a href="join.html">Join now</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="Contact">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </nav>
+
+            </div>
+        </div>
+        <!--//top-bar-->
+        <!--/ banner-text -->
+        <!--// banner-text -->
+    </div>
+    <!--//inner_banner-->
+    <!--/short-->
+    <div class="services-breadcrumb-w3ls-agile">
+        <div class="inner_breadcrumb">
+            <ul class="short">
+                <li><a href="Index">Home</a><span>|</span></li>
+                <li>@RenderSection("title_page", false)</li>
+            </ul>
+        </div>
+    </div>
+    <!--//short-->
+    <!-- Modal1 -->
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="signin-form profile">
+                        <div class="login-m_page_img">
+                            <img src="~/Assets/images/model.jpg" class="img-responsive" />
+                        </div>
+                        <div class="login-m_page">
+                            <h3 class="sign">Sign In</h3>
+                            <div class="login-form-wthree-agile">
+                                <form action="#" method="post">
+                                    <input type="email" name="email" placeholder="E-mail" required="">
+                                    <input type="password" name="password" placeholder="Password" required="">
+                                    <div class="tp">
+                                        <input type="submit" value="Sign In">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="login-social-grids">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                                </ul>
+                            </div>
+                            <p><a href="#" data-toggle="modal" data-target="#myModal3"> Don't have an account?</a></p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    <!-- //Modal1 -->
+    <!-- Modal2 -->
+    <div class="modal fade" id="myModal3" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+                    <div class="signin-form profile">
+
+                        <div class="login-m_page_img">
+
+                            <img src="~/Assets/images/model.jpg" alt=" " class="img-responsive" />
+
+                        </div>
+                        <div class="login-m_page">
+                            <h3 class="sign">Sign Up</h3>
+                            <div class="login-form-wthree-agile">
+                                <form action="#" method="post">
+                                    <input type="text" name="name" placeholder="Username" required="">
+                                    <input type="email" name="email" placeholder="Email" required="">
+                                    <input type="password" name="password" placeholder="Password" required="">
+                                    <input type="password" name="password" placeholder="Confirm Password" required="">
+                                    <input type="submit" value="Sign Up">
+                                </form>
+                            </div>
+                            <p><a href="#"> By clicking Sign up, I agree to your terms</a></p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //Modal2 -->
+    <!--//Header-->
+    <!--/inner_connectent-->
+    <div class="banner_bottom">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </div>
+    <!--//inner_connectent-->
+    <!--footer-->
+    <div class="contact-footer-w3layouts-agile">
+        <div class="bottom-social-agileits-w3ls">
+            <div class="container">
+                <div class="col-md-8 botttom-nav-w3ls-agileits">
+                    <ul class="f_links col-md-4">
+                        <li>
+                            <a href="Index">Home</a>
+                        </li>
+                        <li>
+                            <a href="About">About</a>
+                        </li>
+                        <li>
+                            <a href="Contact">Contact</a>
+                        </li>
+                    </ul>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-md-4 social-icons-wthree">
+                    <h6>Connect with us</h6>
+                    <a class="facebook" href="#"><span class="fa fa-facebook"></span></a>
+                    <a class="twitter" href="#"><span class="fa fa-twitter"></span></a>
+                    <a class="pinterest" href="#"><span class="fa fa-pinterest-p"></span></a>
+                    <a class="linkedin" href="#"><span class="fa fa-linkedin"></span></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="copy-w3-agileits">
+            <h2 class="footer-logo"><a href="index.html"><div style="margin-left: -40px;">SIMS</div> <span>Online Education</span></a></h2>
+            <p>© 2018 SIMS . All Rights Reserved</p>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!--/footer -->
+    <!-- js -->
+    <script src="~/Assets/js/jquery-2.2.3.min.js" type="text/javascript"></script>
+    <!-- //js -->
+    <!--search-bar-->
+    <script src="~/Assets/js/main.js"></script>
+    <!--//search-bar-->
+    <!-- start-smoth-scrolling -->
+    <script src="~/Assets/js/move-top.js" type="text/javascript"></script>
+    <script src="~/Assets/js/easing.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+                $('html,body').animate({
+                    scrollTop: $(this.hash).offset().top
+                }, 900);
+            });
+        });
+    </script>
+    <!-- start-smoth-scrolling -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $().UItoTop({
+                easingType: 'easeOutQuart'
+            });
+        });
+    </script>
+    <a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+    <script src="~/Assets/js/bootstrap-3.1.1.min.js" type="text/javascript"></script>
 </body>
 </html>
