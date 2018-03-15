@@ -1,7 +1,39 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "About";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+@section title {
+    About
+}
+
+@section title_page {
+    About
+}
+
+<style>
+    .ab_info h4 {
+        margin-top: 1em;
+        color: #333;
+        font-size: 2em;
+        font-weight: 500;
+    }
+</style>
+
+<div>
+    <h3 class="headerw3">About Us</h3>
+    <div class="inner_sec_w3_agileinfo">
+        <div class="ab_info">
+            <img src="~/Assets/images/banner1.jpg" alt=" " class="img-responsive">
+            <h4>Volutpat purus viverra sit amet</h4>
+            <p class="sub_p">
+                Etiam faucibus viverra libero vel efficitur. Ut semper nisl ut laoreet ultrices. Maecenas dictum arcu purus, sit amet
+                volutpat purus viverra sit amet. Quisque lacinia quam sed tortor interdum, malesuada congue nunc ornare. Cum sociis
+                In semper lorem eget tortor pulvinar ultricies.Quisque lacinia quam sed tortor interdum, malesuada congue nunc ornare.
+                Cum sociis In semper lorem eget tortor pulvinar ultricies.
+            </p>
+        </div>
+    </div>
+</div>
+

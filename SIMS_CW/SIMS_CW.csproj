@@ -168,6 +168,65 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\css\about.css" />
+    <Content Include="Assets\css\bootstrap.css" />
+    <Content Include="Assets\css\chocolat.css" />
+    <Content Include="Assets\css\contact.css" />
+    <Content Include="Assets\css\easy-responsive-tabs.css" />
+    <Content Include="Assets\css\font-awesome.css" />
+    <Content Include="Assets\css\style.css" />
+    <Content Include="Assets\css\team.css" />
+    <Content Include="Assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="Assets\fonts\fontello.svg" />
+    <Content Include="Assets\images\app.png" />
+    <Content Include="Assets\images\app1.png" />
+    <Content Include="Assets\images\app_mb.png" />
+    <Content Include="Assets\images\banner1.jpg" />
+    <Content Include="Assets\images\banner2.jpg" />
+    <Content Include="Assets\images\banner3.jpg" />
+    <Content Include="Assets\images\banner4.jpg" />
+    <Content Include="Assets\images\c-arrows.png" />
+    <Content Include="Assets\images\class.jpg" />
+    <Content Include="Assets\images\class2.jpg" />
+    <Content Include="Assets\images\close.png" />
+    <Content Include="Assets\images\g1.jpg" />
+    <Content Include="Assets\images\g2.jpg" />
+    <Content Include="Assets\images\g3.jpg" />
+    <Content Include="Assets\images\g4.jpg" />
+    <Content Include="Assets\images\g5.jpg" />
+    <Content Include="Assets\images\g6.jpg" />
+    <Content Include="Assets\images\g7.jpg" />
+    <Content Include="Assets\images\gal1.jpg" />
+    <Content Include="Assets\images\gal2.jpg" />
+    <Content Include="Assets\images\gal3.jpg" />
+    <Content Include="Assets\images\gal32.jpg" />
+    <Content Include="Assets\images\gal4.jpg" />
+    <Content Include="Assets\images\gal5.jpg" />
+    <Content Include="Assets\images\gal6.jpg" />
+    <Content Include="Assets\images\gal7.jpg" />
+    <Content Include="Assets\images\gal8.jpg" />
+    <Content Include="Assets\images\left.png" />
+    <Content Include="Assets\images\model.jpg" />
+    <Content Include="Assets\images\right.png" />
+    <Content Include="Assets\images\scroll-top.png" />
+    <Content Include="Assets\images\stretch.jpg" />
+    <Content Include="Assets\images\t1.jpg" />
+    <Content Include="Assets\images\t2.jpg" />
+    <Content Include="Assets\images\t3.jpg" />
+    <Content Include="Assets\images\t4.jpg" />
+    <Content Include="Assets\images\top_up.png" />
+    <Content Include="Assets\images\video.jpg" />
+    <Content Include="Assets\js\bootstrap-3.1.1.min.js" />
+    <Content Include="Assets\js\easing.js" />
+    <Content Include="Assets\js\easyResponsiveTabs.js" />
+    <Content Include="Assets\js\jquery-2.2.3.min.js" />
+    <Content Include="Assets\js\jquery.chocolat.js" />
+    <Content Include="Assets\js\jquery.countup.js" />
+    <Content Include="Assets\js\jquery.waypoints.min.js" />
+    <Content Include="Assets\js\main.js" />
+    <Content Include="Assets\js\move-top.js" />
+    <Content Include="Assets\js\responsive-nav.js" />
+    <Content Include="Assets\js\responsiveslides.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -179,6 +238,17 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="Assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Assets\fonts\FontAwesome.otf" />
+    <Content Include="Assets\fonts\fontello.eot" />
+    <Content Include="Assets\fonts\fontello.ttf" />
+    <Content Include="Assets\fonts\fontello.woff" />
+    <Content Include="Assets\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Assets\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Assets\images\Thumbs.db" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -203,8 +273,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Idea\Create.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -237,7 +308,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52547</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
