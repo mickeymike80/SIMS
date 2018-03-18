@@ -1,0 +1,49 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Idea.idea_title</h2>
+
+<h4>@Model.Idea_user.user_name</h4>
+<br />
+<p>@Model.Idea.idea_content</p>
+<br />
+@using (Html.BeginForm("Details", "Idea", FormMethod.Post))
+{
+@Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.Label("Post Comment", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextArea("comment_content")
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Post Anonymously", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="checkbox" name="isAnonymous" />
+        </div>
+    </div>
+    <input type="hidden" value="@Model.Idea.idea_id" name="idea_id"/>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Post Comment" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+<h3>Comments</h3>
+<table class="table">
+
+    @for (int i = 0; i < Model.Comments.Count; i++)
+    {
+        <tr>
+            <td>@Model.Comment_users[i].user_name</td>
+            <td>@Model.Comments[i].comment_content</td>
+        </tr>
+    }
+
+</table>

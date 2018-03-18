@@ -2,8 +2,9 @@
 
 @{
     ViewBag.Title = "Create Idea";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>CreateIdea</h2>
+<h2>Create Idea</h2>
 
 
 @using (Html.BeginForm("Create", "Idea", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -54,12 +55,4 @@
             </div>
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }
