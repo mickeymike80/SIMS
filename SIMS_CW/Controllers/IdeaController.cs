@@ -125,7 +125,7 @@ namespace SIMS_CW.Controllers
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 
             dbData.SaveChanges();
-            return View("Index");
+            return Redirect(Url.Action("Index", "Idea", new { page = 1}));
         }
 
         [HttpGet]

@@ -69,7 +69,7 @@ namespace SIMS_CW.Controllers
                 }
                 
             }
-            return View();
+            return View("loginPage");
         }
     }
 }
