@@ -6,26 +6,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>View</h2>
+@section title {
+    View all ideas
+}
 
-<p>
+@section title_page {
+    View all ideas
+}
 
-</p>
-<table class="table">
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.user.user_name</td>
-            <td>
-                <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
-            </td>
-            <td>@item.idea.idea_content</td>
-        </tr>
-    }
+<button style="margin-bottom: 30px;" "button" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Create", "Idea")">Create</a>
+</button>
 
-</table>
+<h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Content</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.user.user_name</td>
+                    <td>
+                        <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
+                    </td>
+                    <td>@item.idea.idea_content</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@*Pagination*@
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

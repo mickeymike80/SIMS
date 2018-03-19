@@ -31,6 +31,11 @@ namespace SIMS_CW.Controllers
             return View();
         }
 
+        public ActionResult loginPage()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult Login()
         {
@@ -65,8 +70,6 @@ namespace SIMS_CW.Controllers
                 
             }
             return View();
-
-
         }
     }
 }
