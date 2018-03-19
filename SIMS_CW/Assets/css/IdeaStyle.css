@@ -1,0 +1,83 @@
+﻿.col-sm-12 {
+    padding: 0 0 10px 0;
+}
+
+
+.panel-gray {
+    border: 1px solid #dddddd;
+    background: #f5f5f5;
+    border-radius: 10px;
+}
+
+/*Idea Heading*/
+.idea-heading {
+    height: 70px;
+    padding: 20px 15px 0 15px;
+}
+
+.idea-heading .title {
+    margin-bottom: 0;
+}
+
+.idea-heading .title a {
+    color: black;
+}
+
+.idea-heading .title a:hover {
+    color: #aaaaaa;
+}
+
+.idea-heading .created {
+    margin-top: 8px;
+    color: #999;
+}
+
+
+
+
+
+.idea-description {
+    padding: 15px;
+}
+
+.idea-description p {
+    font-size: 14px;
+}
+
+.idea-description .votes {
+     margin-top: 20px;
+}
+
+.idea-description .votes a {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.idea-description .votes .vote-item .icon {
+    margin-right: 8px;
+}
+
+
+
+
+.icon-up {
+    background: url('Icon_ThumbUp(30x33px).png');
+    height: 33px;
+    width: 30px;
+    display: block;
+}
+
+.icon-down {
+    background: url('Icon_ThumbDown(30x33px).png');
+    height: 33px;
+    width: 30px;
+    display: block;
+}
+
+.idea-description {
+    text-align: justify;
+}
+
+.idea-title h3 {
+    margin-top: 0;
+}

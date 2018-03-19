@@ -6,26 +6,73 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>View</h2>
+@section title {
+    Ideas
+}
+
+@section title_page {
+    Ideas
+}
+
+<h3 class="headerw3">Ideas</h3>
 
 <p>
 
 </p>
-<table class="table">
+
+<div class="container">
     @foreach (var item in Model)
     {
-        <tr>
-            <td>@item.user.user_name</td>
-            <td>
-                <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
-            </td>
-            <td>@item.idea.idea_content</td>
-        </tr>
+        <div class="row">
+            <div class="col-sm-12">
+
+                <div class="panel-gray idea">
+
+                    <div class="idea-heading">
+                        <div>
+                            <div class="title">
+                                <a href="#">
+                                    <b>
+                                        @item.user.user_name
+                                    </b>
+                                </a>
+                            </div>
+                            <h6 class="created">
+                                @item.idea.created_at
+
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="idea-description">
+                        <div class="idea-title">
+                            <h3>
+                                <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
+                            </h3>
+                            <hr>
+                        </div>
+                        <p>
+                            @item.idea.idea_content
+                        </p>
+                        <div class="votes">
+                            <a href="#" class="btn btn-default">
+                                <i class="icon-up"></i>
+                                vote count
+                            </a>
+                            <a href="#" class="btn btn-default">
+                                <i class="icon-down"></i>
+                                vote count
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
     }
+</div>
 
-</table>
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
