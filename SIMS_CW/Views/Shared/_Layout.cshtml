@@ -24,7 +24,16 @@
     <div class="top-bar_sub_w3layouts_agile">
         <h6>Need support? <a href="Contact">Contact Us </a></h6>
         <div class="search" style="width: 110px !important">
-            <h5><a class="sign" href="@Url.Action("loginPage", "Home")">Login</a></h5>
+            <h5>
+                @if (Session["loggedIn"] == null)
+                {
+                    <a class="sign" href="@Url.Action("LoginPage", "Home")">Login</a>
+                }
+                else
+                {
+                    <a class="sign" href="@Url.Action("Logout", "Home")">Logout</a>
+                }
+            </h5>
             <div class="cd-main-header">
                 <ul class="cd-header-buttons">
                     <li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
@@ -64,7 +73,7 @@
                         <nav>
                             <ul class="top_nav">
                                 <li><a href="@Url.Action("Index", "Home")">Home</a></li>
-                                <li><a href="@Url.Action("About", "Home")">About</a></li>                               
+                                <li><a href="@Url.Action("About", "Home")">About</a></li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle active" data-toggle="dropdown" data-hover="Pages" role="button" aria-haspopup="true" aria-expanded="false">
                                         Ideas

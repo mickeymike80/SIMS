@@ -31,9 +31,10 @@ namespace SIMS_CW.Controllers
             return View();
         }
 
-        public ActionResult loginPage()
+        [HttpGet]
+        public ActionResult LoginPage()
         {
-            return View();
+            return View("Login");
         }
 
         [HttpPost]
@@ -69,7 +70,15 @@ namespace SIMS_CW.Controllers
                 }
                 
             }
-            return View("loginPage");
+            ViewBag.error = "Incorrect email or password. Please check again!";
+            return View("Login");
+        }
+
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return View("Index");
         }
     }
 }

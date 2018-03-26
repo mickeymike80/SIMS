@@ -4,36 +4,74 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Model.Idea.idea_title</h2>
-
-<h4>@Model.Idea_user.user_name</h4>
+<h2>@ViewBag.Idea.idea_title</h2>
+@if (ViewBag.Idea_user == null)
+{
+    <h4>Anonymous</h4>
+}
+else
+{
+    <h4>@ViewBag.Idea_user.user_name</h4>
+}
 <br />
-<p>@Model.Idea.idea_content</p>
+<p>@ViewBag.Idea.idea_content</p>
+<br />
+@foreach (var item in ViewBag.documents)
+{
+    <a href="@Url.Action("DownloadAttachment", "Idea", new { @new_file_name = item.new_file_name, @old_file_name = item.old_file_name})">@item.old_file_name</a>
+    <br />
+}
+<br />
+@using (Html.BeginForm("Like", "Idea", FormMethod.Post))
+{
+    if (ViewBag.rate == 1)
+    {
+        <input type="submit" value="Like" class="btn" style="background-color:red" disabled="disabled" />
+    }
+    else
+    {
+        <input type="submit" value="Like" class="btn" />
+    }
+    <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
+}
+
+@using (Html.BeginForm("Dislike", "Idea", FormMethod.Post))
+{
+    if (ViewBag.rate == -1)
+    {
+        <input type="submit" value="Dislike" class="btn" style="background-color:red" disabled="disabled" />
+    }
+    else
+    {
+        <input type="submit" value="Dislike" class="btn" />
+    }
+    <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
+}
 <br />
 @using (Html.BeginForm("Details", "Idea", FormMethod.Post))
 {
-@Html.AntiForgeryToken()
-<div class="form-horizontal">
-    <div class="form-group">
-        @Html.Label("Post Comment", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextArea("comment_content")
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Post Comment", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextArea("comment_content")
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.Label("Post Anonymously", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <input type="checkbox" name="isAnonymous" />
+        <div class="form-group">
+            @Html.Label("Post Anonymously", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="checkbox" name="isAnonymous" />
+            </div>
+        </div>
+        <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Post Comment" class="btn btn-default" />
+            </div>
         </div>
     </div>
-    <input type="hidden" value="@Model.Idea.idea_id" name="idea_id"/>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Post Comment" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 <h3>Comments</h3>
 <table class="table">

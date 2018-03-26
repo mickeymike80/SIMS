@@ -15,9 +15,16 @@ namespace SIMS_CW.Controllers
     public class IdeaController : Controller
     {
         DbModel dbData = new DbModel();
-        // GET: Idea
+
+        [HttpGet]
         public ActionResult Index(int? page)
         {
+            //check logged in?
+            if (Session["loggedIn"] == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+
             List<display_idea> display_Ideas = new List<display_idea>();
             List<idea> ideas = dbData.ideas.ToList();
             for (int i = 0; i < ideas.Count; i++)
@@ -49,6 +56,12 @@ namespace SIMS_CW.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            //check logged in?
+            if (Session["loggedIn"] == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+
             List<category> categories = dbData.categories.ToList();
             SelectList listItems = new SelectList(categories, "category_id", "category_name");
             Session["cateCbb"] = listItems;
@@ -58,6 +71,12 @@ namespace SIMS_CW.Controllers
         [HttpPost]
         public ActionResult Create(idea idea, HttpPostedFileBase[] files)
         {
+            //check logged in?
+            if (Session["loggedIn"] == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+
             // 0 = false; 1 = true
             idea.category_id = Convert.ToInt32(Request.Form["categoryID"].ToString());
             idea.isEnabled = 1;
@@ -125,18 +144,26 @@ namespace SIMS_CW.Controllers
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 
             dbData.SaveChanges();
-            return Redirect(Url.Action("Index", "Idea", new { page = 1}));
+            return Redirect(Url.Action("Index", "Idea", new { page = 1 }));
         }
 
         [HttpGet]
         public ActionResult Details(int idea_id)
         {
+            //check logged in?
+            if (Session["loggedIn"] == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+
             user loggedIn = (user)Session["loggedIn"];
 
             idea idea = dbData.ideas.Where(i => i.idea_id == idea_id).First();
             int uid = Convert.ToInt32(idea.user_id);
             List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).ToList();
             List<comment> temp = new List<comment>();
+
+            //student can't see staff comments
             if (loggedIn.role_id == 5)
             {
                 foreach (comment c in comments)
@@ -153,7 +180,7 @@ namespace SIMS_CW.Controllers
                     comments.Remove(c);
                 }
             }
-
+            //get all comments
             List<user> comment_users = new List<user>();
             for (int i = 0; i < comments.Count; i++)
             {
@@ -173,10 +200,25 @@ namespace SIMS_CW.Controllers
                     comment_users[i] = u;
                 }
             }
+            //get attachment
+            List<document> documents = dbData.documents.Where(d => d.idea_id == idea_id).ToList();
+            ViewBag.documents = documents;
+
+            //get rate
+            IQueryable<rate> rates = dbData.rates.Where(r => r.idea_id == idea_id).Where(r => r.user_id == loggedIn.user_id);
+            if (rates.Any())
+            {
+                ViewBag.rate = rates.First().rate_point;
+            }
+
+
+            ViewBag.Idea = idea;
+            if (idea.isAnonymous == 0)
+            {
+                ViewBag.Idea_user = dbData.users.Where(u => u.user_id == uid).First();
+            }
 
             dynamic mymodel = new ExpandoObject();
-            mymodel.Idea = idea;
-            mymodel.Idea_user = dbData.users.Where(u => u.user_id == uid).First();
             mymodel.Comments = comments;
             mymodel.Comment_users = comment_users;
 
@@ -186,6 +228,12 @@ namespace SIMS_CW.Controllers
         [HttpPost]
         public ActionResult Details()
         {
+            //check logged in?
+            if (Session["loggedIn"] == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+
             comment comment = new comment();
             int idea_id = Convert.ToInt32(Request.Form["idea_id"].ToString());
             comment.idea_id = idea_id;
@@ -207,6 +255,78 @@ namespace SIMS_CW.Controllers
             dbData.SaveChanges();
 
             return Redirect(Url.Action("Details", "Idea", new { idea_id = idea_id }));
+        }
+
+        [HttpPost]
+        public ActionResult Like()
+        {
+            //check logged in?
+            if (Session["loggedIn"] == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+
+            int idea_id = Convert.ToInt32(Request.Form["idea_id"].ToString());
+            int user_id = ((user)Session["loggedIn"]).user_id;
+            rate rate;
+            IQueryable<rate> rates = dbData.rates.Where(r => r.idea_id == idea_id).Where(r => r.user_id == user_id);
+            if (rates.Any())
+            {
+                rate = rates.First();
+                rate.rate_point = 1;
+                rate.created_at = DateTime.Now;
+            }
+            else
+            {
+                rate = new rate();
+                rate.user_id = user_id;
+                rate.idea_id = idea_id;
+                rate.rate_point = 1;
+                rate.created_at = DateTime.Now;
+                dbData.rates.Add(rate);
+            }
+
+            dbData.SaveChanges();
+            return Redirect("~/Idea/Details?idea_id=" + idea_id);
+        }
+
+        [HttpPost]
+        public ActionResult Dislike()
+        {
+            //check logged in?
+            if (Session["loggedIn"] == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+
+            int idea_id = Convert.ToInt32(Request.Form["idea_id"].ToString());
+            int user_id = ((user)Session["loggedIn"]).user_id;
+            rate rate;
+            IQueryable<rate> rates = dbData.rates.Where(r => r.idea_id == idea_id).Where(r => r.user_id == user_id);
+            if (rates.Any())
+            {
+                rate = rates.First();
+                rate.rate_point = -1;
+                rate.created_at = DateTime.Now;
+            }
+            else
+            {
+                rate = new rate();
+                rate.user_id = user_id;
+                rate.idea_id = idea_id;
+                rate.rate_point = -1;
+                rate.created_at = DateTime.Now;
+                dbData.rates.Add(rate);
+            }
+            dbData.SaveChanges();
+            return Redirect("~/Idea/Details?idea_id=" + idea_id);
+        }
+
+        public FileResult DownloadAttachment(string new_file_name, string old_file_name)
+        {
+            string currentFile = "~/UploadedFiles/" + new_file_name;
+            string contentType = "application/" + old_file_name.Split('.')[1];
+            return File(currentFile, contentType, old_file_name);
         }
     }
 }
