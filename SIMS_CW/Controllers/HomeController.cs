@@ -11,6 +11,7 @@ namespace SIMS_CW.Controllers
     {
         DbModel dbModel = new DbModel();
 
+      
         public ActionResult Index()
         {
             return View();
@@ -47,6 +48,7 @@ namespace SIMS_CW.Controllers
                     {
                         case 1:
                             //admin
+                            return Redirect(Url.Action("Index", "Manager"));
                             break;
                         case 2:
                             //QA Manager
