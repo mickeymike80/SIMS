@@ -97,7 +97,7 @@ namespace SIMS_CW.Controllers
                 xvalues += dept.department_name + ",";
                 yvalues += ideaa.Where(i => i.user.user_id == dept.department_id).Distinct().Count() + ",";
                 yvalues2 += cmt.Where(c => c.user.user_id == dept.department_id).Distinct().Count() + ",";
-
+       
             }
 
             xvalues = xvalues.Remove(xvalues.Length - 1, 1);
