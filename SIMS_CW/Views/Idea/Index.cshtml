@@ -19,6 +19,19 @@
 </button>
 
 <h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
+@using (Html.BeginForm("Filter", "Idea", FormMethod.Post))
+{
+    @Html.Label("Title:")
+    @Html.TextBox("title")
+
+    @Html.Label("Name:")
+    @Html.TextBox("name")
+
+    @Html.Label("Category")
+    @Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "None")
+
+    <input type="submit" value="Filter" class="btn" />
+}
 <div class="table-responsive">
     <table class="table">
         <thead>
@@ -47,4 +60,4 @@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
     @Html.PagedListPager(Model, page => Url.Action("Index",
-            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

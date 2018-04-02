@@ -24,7 +24,20 @@ namespace SIMS_CW.Controllers
             {
                 return Redirect("~/Home/LoginPage");
             }
+            if (Session["cateCbb"] == null)
+            {
+                List<category> categories = dbData.categories.ToList();
+                SelectList listItems = new SelectList(categories, "category_id", "category_name");
+                Session["cateCbb"] = listItems;
+            }
+            List<display_idea> display_Ideas = getAllDisplayIdeas();
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(display_Ideas.ToPagedList(pageNumber, pageSize));
+        }
 
+        private List<display_idea> getAllDisplayIdeas()
+        {
             List<display_idea> display_Ideas = new List<display_idea>();
             List<idea> ideas = dbData.ideas.ToList();
             for (int i = 0; i < ideas.Count; i++)
@@ -48,9 +61,8 @@ namespace SIMS_CW.Controllers
                 }
                 display_Ideas.Add(display_Idea);
             }
-            int pageSize = 5;
-            int pageNumber = (page ?? 1);
-            return View(display_Ideas.ToPagedList(pageNumber, pageSize));
+
+            return display_Ideas;
         }
 
         [HttpGet]
@@ -61,10 +73,13 @@ namespace SIMS_CW.Controllers
             {
                 return Redirect("~/Home/LoginPage");
             }
-
-            List<category> categories = dbData.categories.ToList();
-            SelectList listItems = new SelectList(categories, "category_id", "category_name");
-            Session["cateCbb"] = listItems;
+            if (Session["cateCbb"] == null)
+            {
+                List<category> categories = dbData.categories.ToList();
+                SelectList listItems = new SelectList(categories, "category_id", "category_name");
+                Session["cateCbb"] = listItems;
+            }
+            
             return View();
         }
 
@@ -327,6 +342,35 @@ namespace SIMS_CW.Controllers
             string currentFile = "~/UploadedFiles/" + new_file_name;
             string contentType = "application/" + old_file_name.Split('.')[1];
             return File(currentFile, contentType, old_file_name);
+        }
+
+        [HttpPost]
+        public ActionResult Filter(int ? page)
+        {
+            string title = Request.Form["title"].ToString();
+            string name = Request.Form["name"].ToString();
+
+            //int category_id = Convert.ToInt32(Request.Form["categoryID"].ToString());
+            List<display_idea> display_Ideas = getAllDisplayIdeas();
+            if (title != null)
+            {
+                List<display_idea> temp = new List<display_idea>();
+                foreach(display_idea item in display_Ideas)
+                {
+                    if (!item.idea.idea_title.Contains(title))
+                    {
+                        temp.Add(item);
+                    }
+                }
+                foreach(display_idea item in temp)
+                {
+                    display_Ideas.Remove(item);
+                }
+            }
+            ViewData["title"] = title;
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View("Index", display_Ideas.ToPagedList(pageNumber, pageSize));
         }
     }
 }
