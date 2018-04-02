@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using SIMS_CW.Models;
 
@@ -59,6 +60,27 @@ namespace SIMS_CW.Controllers
                 user.password = password;
                 db.users.Add(user);
                 db.SaveChanges();
+
+                // send email about account details
+                //Configuring webMail class to send emails  
+                //gmail smtp server  
+                WebMail.SmtpServer = "smtp.gmail.com";
+                //gmail port to send emails  
+                WebMail.SmtpPort = 587;
+                WebMail.SmtpUseDefaultCredentials = true;
+                //sending emails with secure protocol  
+                WebMail.EnableSsl = true;
+                //EmailId used to send emails from application  
+                WebMail.UserName = "simscw2018@gmail.com";
+                WebMail.Password = "abc123xyz";
+
+                //Sender email address.  
+                WebMail.From = "simscw2018@gmail.com";
+                String ToEmail = "koolkido1412@gmail.com";
+                String EmailSubject = "Account Details";
+                String EMailBody = "Email: " + user.email +"\nPassword: "+ password + "\nLink: <a href='http://localhost:52547/Home/LoginPage'>Click here</a>";
+                //Send email  
+                WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
                 return RedirectToAction("Index");
             }
 

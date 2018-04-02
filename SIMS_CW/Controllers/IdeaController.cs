@@ -291,7 +291,8 @@ namespace SIMS_CW.Controllers
             int uid = Convert.ToInt32(idea.user_id);
             List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).ToList();
             List<comment> temp = new List<comment>();
-
+            idea.viewed_count += 1;
+            dbData.SaveChanges();
             //student can't see staff comments
             if (loggedIn.role_id == 5)
             {
@@ -351,6 +352,7 @@ namespace SIMS_CW.Controllers
             mymodel.Comments = comments;
             mymodel.Comment_users = comment_users;
 
+            
             return View(mymodel);
         }
 
