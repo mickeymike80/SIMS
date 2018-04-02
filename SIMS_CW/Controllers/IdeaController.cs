@@ -41,6 +41,27 @@ namespace SIMS_CW.Controllers
                 }
                 display_Ideas.Add(display_Idea);
             }
+
+            string title = Request.Form["idea_title"].ToString();
+            string name = Request.Form["name"].ToString();
+
+            //int category_id = Convert.ToInt32(Request.Form["categoryID"].ToString());
+            if (title != null)
+            {
+                List<display_idea> temp = new List<display_idea>();
+                foreach (display_idea item in display_Ideas)
+                {
+                    if (!item.idea.idea_title.Contains(title))
+                    {
+                        temp.Add(item);
+                    }
+                }
+                foreach (display_idea item in temp)
+                {
+                    display_Ideas.Remove(item);
+                }
+                ViewBag.idea_title = title;
+            }
             int pageSize = 5;
             int pageNumber = (page ?? 1);
             return View(display_Ideas.ToPagedList(pageNumber, pageSize));
@@ -125,7 +146,7 @@ namespace SIMS_CW.Controllers
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 
             dbData.SaveChanges();
-            return View("Index");
+            return View("Index?page=1");
         }
 
         [HttpGet]

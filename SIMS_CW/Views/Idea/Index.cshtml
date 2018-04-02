@@ -21,6 +21,15 @@
 </p>
 
 <div class="container">
+    @using (Html.BeginForm("Index", "Idea"))
+    {
+        @Html.Label("Title")
+        @Html.TextBox("idea_title")
+        @Html.Label("Name")
+        @Html.TextBox("name")
+
+        <input type="submit" value="Filter" />
+    }
     @foreach (var item in Model)
     {
         <div class="row">
