@@ -55,7 +55,6 @@ namespace SIMS_CW.Controllers
                         case 1:
                             //admin
                             return Redirect(Url.Action("Index", "Manager"));
-                            break;
                         case 2:
                             //QA Manager
                             break;

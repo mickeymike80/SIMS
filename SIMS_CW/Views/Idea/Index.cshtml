@@ -13,23 +13,42 @@
 @section title_page {
     View all ideas
 }
+<script>
+    $(function () {
+        $(".date-picker").datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+    });
+</script>
+
 
 <button style="margin-bottom: 30px;" "button" class="btn btn-primary">
     <a style="color: white;" href="@Url.Action("Create", "Idea")">Create</a>
 </button>
 
 <h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
-@using (Html.BeginForm("Filter", "Idea", FormMethod.Post))
+@using (Html.BeginForm("Index", "Idea", new { page = 1 }))
 {
     @Html.Label("Title:")
-    @Html.TextBox("title")
+    @Html.TextBox("idea_title")
 
     @Html.Label("Name:")
     @Html.TextBox("name")
 
     @Html.Label("Category")
     @Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "None")
+    <br />
+    @Html.Label("Publish Order")
+    @Html.DropDownList("time_order", new SelectList(new List<String> { "Newest", "Oldest" }))
 
+    <br />
+    @Html.Label("Publish from")
+    <input class="date-picker" name="pubFrom" type="date" value="@ViewBag.pubFrom"/>
+    @Html.Label("to")
+    <input type="date" name="pubTo" class="date-picker" value="@ViewBag.pubTo"/>
+
+
+    @ViewBag.error
     <input type="submit" value="Filter" class="btn" />
 }
 <div class="table-responsive">
@@ -39,6 +58,7 @@
                 <th>Name</th>
                 <th>Title</th>
                 <th>Content</th>
+                <th>Published at</th>
             </tr>
         </thead>
         <tbody>
@@ -50,6 +70,7 @@
                         <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
                     </td>
                     <td>@item.idea.idea_content</td>
+                    <td>@item.idea.created_at</td>
                 </tr>
             }
         </tbody>
@@ -60,4 +81,4 @@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
     @Html.PagedListPager(Model, page => Url.Action("Index",
-                            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))
