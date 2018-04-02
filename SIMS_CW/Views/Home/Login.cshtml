@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "loginPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section title {
+    Login
+}
+
+@section title_page {
+    Login
+}
+
+<div class="signin-form profile">
+    <div style="width: 50%; margin: auto;">
+        <h3 class="sign">Sign In</h3>
+        <div class="login-form-wthree-agile">
+            @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+            {
+                <input type="email" name="email" placeholder="E-mail" required="">
+                <input type="password" name="password" placeholder="Password" required="">
+                @ViewBag.error
+                <div class="tp">
+                    <input type="submit" value="Sign In">
+                </div>
+            }
+        </div>
+        <div class="login-social-grids">
+            <ul>
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-rss"></i></a></li>
+            </ul>
+        </div>
+        <p><a href="#" data-toggle="modal" data-target="#myModal3"> Don't have an account?</a></p>
+    </div>
+</div>
+

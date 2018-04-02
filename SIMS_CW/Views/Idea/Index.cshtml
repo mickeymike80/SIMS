@@ -7,81 +7,57 @@
 }
 
 @section title {
-    Ideas
+    View all ideas
 }
 
 @section title_page {
-    Ideas
+    View all ideas
 }
 
-<h3 class="headerw3">Ideas</h3>
+<button style="margin-bottom: 30px;" "button" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Create", "Idea")">Create</a>
+</button>
 
-<p>
+<h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
+@using (Html.BeginForm("Filter", "Idea", FormMethod.Post))
+{
+    @Html.Label("Title:")
+    @Html.TextBox("title")
 
-</p>
+    @Html.Label("Name:")
+    @Html.TextBox("name")
 
-<div class="container">
-    @using (Html.BeginForm("Index", "Idea"))
-    {
-        @Html.Label("Title")
-        @Html.TextBox("idea_title")
-        @Html.Label("Name")
-        @Html.TextBox("name")
+    @Html.Label("Category")
+    @Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "None")
 
-        <input type="submit" value="Filter" />
-    }
-    @foreach (var item in Model)
-    {
-        <div class="row">
-            <div class="col-sm-12">
-
-                <div class="panel-gray idea">
-
-                    <div class="idea-heading">
-                        <div>
-                            <div class="title">
-                                <a href="#">
-                                    <b>
-                                        @item.user.user_name
-                                    </b>
-                                </a>
-                            </div>
-                            <h6 class="created">
-                                @item.idea.created_at
-
-                            </h6>
-                        </div>
-                    </div>
-                    <div class="idea-description">
-                        <div class="idea-title">
-                            <h3>
-                                <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
-                            </h3>
-                            <hr>
-                        </div>
-                        <p>
-                            @item.idea.idea_content
-                        </p>
-                        <div class="votes">
-                            <a href="#" class="btn btn-default">
-                                <i class="icon-up"></i>
-                                vote count
-                            </a>
-                            <a href="#" class="btn btn-default">
-                                <i class="icon-down"></i>
-                                vote count
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    }
+    <input type="submit" value="Filter" class="btn" />
+}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Content</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.user.user_name</td>
+                    <td>
+                        <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
+                    </td>
+                    <td>@item.idea.idea_content</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
+@*Pagination*@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
     @Html.PagedListPager(Model, page => Url.Action("Index",
-                new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

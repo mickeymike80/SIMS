@@ -25,7 +25,16 @@
     <div class="top-bar_sub_w3layouts_agile">
         <h6>Need support? <a href="Contact">Contact Us </a></h6>
         <div class="search" style="width: 110px !important">
-            <h5><a class="sign" href="#" data-toggle="modal" data-target="#myModal2">Login</a></h5>
+            <h5>
+                @if (Session["loggedIn"] == null)
+                {
+                    <a class="sign" href="@Url.Action("LoginPage", "Home")">Login</a>
+                }
+                else
+                {
+                    <a class="sign" href="@Url.Action("Logout", "Home")">Logout</a>
+                }
+            </h5>
             <div class="cd-main-header">
                 <ul class="cd-header-buttons">
                     <li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
@@ -64,18 +73,19 @@
                     <div class="collapse navbar-collapse nav-wil" id="bs-example-navbar-collapse-1">
                         <nav>
                             <ul class="top_nav">
-                                <li><a href="Index">Home</a></li>
-                                <li><a href="About">About</a></li>
-                                <li><a href="@Url.Action("Index", "Idea")">Ideas</a></li>
-                                <li><a href="@Url.Action("Create", "Idea")">New Ideas</a></li>
+                                <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                                <li><a href="@Url.Action("About", "Home")">About</a></li>
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" data-hover="Pages" role="button" aria-haspopup="true" aria-expanded="false">Drop Down <span class="fa fa-angle-down"></span></a>
+                                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" data-hover="Pages" role="button" aria-haspopup="true" aria-expanded="false">
+                                        Ideas
+                                        <span class="fa fa-angle-down"></span>
+                                    </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="services.html">Services</a></li>
-                                        <li><a href="join.html">Join now</a></li>
+                                        <li><a href="@Url.Action("Index", "Idea")">View</a></li>
+                                        <li><a href="@Url.Action("Create", "Idea")">Create</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="Contact">Contact</a></li>
+                                <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -121,7 +131,6 @@
                                         <input type="submit" value="Sign In">
                                     </div>
                                 }
-
                             </div>
                             <div class="login-social-grids">
                                 <ul>
@@ -189,13 +198,13 @@
                 <div class="col-md-8 botttom-nav-w3ls-agileits">
                     <ul class="f_links col-md-4">
                         <li>
-                            <a href="Index">Home</a>
+                            <a href="@Url.Action("Index", "Home")">Home</a>
                         </li>
                         <li>
-                            <a href="About">About</a>
+                            <a href="@Url.Action("About", "Home")">About</a>
                         </li>
                         <li>
-                            <a href="Contact">Contact</a>
+                            <a href="@Url.Action("Contact", "Home")">Contact</a>
                         </li>
                     </ul>
 
