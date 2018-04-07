@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace SIMS_CW.Controllers
@@ -21,14 +22,43 @@ namespace SIMS_CW.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Contact() 
         {
             return View();
         }
+   
 
         public ActionResult Error()
         {
             return View();
+        }
+
+        public ActionResult MockedGraph()
+        {
+            List<string> department = new List<string>();
+            List<int> idealCount = new List<int>();
+
+            using (DbModel db = new DbModel())
+            {
+                foreach(department departmant in db.departments){
+                    department.Add(departmant.department_name);
+                    int numberofideas = 0;
+                    foreach(user user in departmant.users)
+                    {
+                        numberofideas += user.ideas.Count;
+                    }
+                    idealCount.Add(numberofideas);
+                }
+            }
+                var chart = new Chart(800, 400)
+                    .AddTitle("title")
+                    .AddSeries(
+                        name: "Mocked Graph",
+                        //chartType:"pie",
+                        xValue: department.ToArray(),
+                        yValues: idealCount.ToArray()
+                    ).Write("bmp");
+            return null;
         }
 
         [HttpPost]
