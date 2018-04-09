@@ -20,32 +20,42 @@
     <link href="//fonts.googleapis.com/css?family=Merriweather+Sans:300,300i,400,400i,700,700i,800" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Mallanna" rel="stylesheet">
 </head>
+<style>
+    .search {
+        width: auto !important;
+    }
+</style>
 <body>
     <!--Header-->
     <div class="top-bar_sub_w3layouts_agile">
         <h6>Need support? <a href="Contact">Contact Us </a></h6>
-        <div class="search" style="width: 110px !important">
+        <div class="search">
             <h5>
                 @if (Session["loggedIn"] == null)
                 {
                     <a class="sign" href="@Url.Action("LoginPage", "Home")">Login</a>
                 }
                 else
-                {
-                    <a class="sign" href="@Url.Action("Logout", "Home")">Logout</a>
+                {               
+                    <div style="display: flex">
+                        <p style="margin: -5px 5px 0 0">@Session["loggedIn"],</p>
+                        <a class="sign" href="@Url.Action("Logout", "Home")">                          
+                            Logout
+                        </a>
+                    </div>                             
                 }
             </h5>
-            <div class="cd-main-header">
-                <ul class="cd-header-buttons">
-                    <li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-                </ul>
-                <!-- cd-header-buttons -->
-            </div>
-            <div id="cd-search" class="cd-search">
-                <form action="#" method="post">
-                    <input name="Search" type="search" placeholder="Click enter after typing...">
-                </form>
-            </div>
+            @*<div class="cd-main-header">
+                    <ul class="cd-header-buttons">
+                        <li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
+                    </ul>
+                     cd-header-buttons
+                </div>
+                <div id="cd-search" class="cd-search">
+                    <form action="#" method="post">
+                        <input name="Search" type="search" placeholder="Click enter after typing...">
+                    </form>
+                </div>*@
         </div>
         <div class="clearfix"> </div>
     </div>
@@ -90,7 +100,6 @@
                         </nav>
                     </div>
                 </nav>
-
             </div>
         </div>
         <!--//top-bar-->
@@ -102,7 +111,7 @@
     <div class="services-breadcrumb-w3ls-agile">
         <div class="inner_breadcrumb">
             <ul class="short">
-                <li><a href="Index">Home</a><span>|</span></li>
+                <li><a href="@Url.Action("Index", "Home")">Home</a><span>|</span></li>
                 <li>@RenderSection("title_page", false)</li>
             </ul>
         </div>
@@ -155,13 +164,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-
                     <div class="signin-form profile">
-
                         <div class="login-m_page_img">
-
                             <img src="~/Assets/images/model.jpg" alt=" " class="img-responsive" />
-
                         </div>
                         <div class="login-m_page">
                             <h3 class="sign">Sign Up</h3>
@@ -188,7 +193,6 @@
     <div class="banner_bottom">
         <div class="container">
             @RenderBody()
-
             @Scripts.Render("~/bundles/jquery")
             @Scripts.Render("~/bundles/jqueryval")
             @Scripts.Render("~/bundles/jqueryui")
@@ -211,7 +215,6 @@
                             <a href="@Url.Action("Contact", "Home")">Contact</a>
                         </li>
                     </ul>
-
                     <div class="clearfix"></div>
                 </div>
                 <div class="col-md-4 social-icons-wthree">

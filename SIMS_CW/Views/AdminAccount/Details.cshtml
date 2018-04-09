@@ -1,72 +1,48 @@
 ﻿@model SIMS_CW.Models.user
-
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h2>Details</h2>
-
 <div>
-    <h4>user</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.department.department_name)
+            Department
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.department.department_name)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.role.role_name)
+            Role
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.role.role_name)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.user_university_id)
+            ID
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.user_university_id)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.user_name)
+            Username
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.user_name)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.email)
+            Email
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.email)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.password)
+            Created at
         </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.password)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.created_at)
-        </dt>
-
         <dd>
             @Html.DisplayFor(model => model.created_at)
         </dd>
-
     </dl>
 </div>
 <p>

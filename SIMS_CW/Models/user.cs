@@ -48,5 +48,10 @@ namespace SIMS_CW.Models
         public virtual ICollection<rate> rates { get; set; }
 
         public virtual role role { get; set; }
+
+        public override string ToString()
+        {
+            return user_name;
+        }
     }
 }

@@ -5,60 +5,67 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.department.department_name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.role.role_name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.user_university_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.user_name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.created_at)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.department.department_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.role.role_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.user_university_id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.user_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.created_at)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.user_id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.user_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.user_id })
-        </td>
-    </tr>
+@section title {
+    Admin
 }
+@section title_page {
+    Admin
+}
+<h2>Index</h2>
+<p>
+    @Html.ActionLink("Create a new user", "Create")
+</p>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>
+                Department
+            </th>
+            <th>
+                Role
+            </th>
+            <th>
+                ID
+            </th>
+            <th>
+                Username
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Created at
+            </th>
+            <th>Action</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.department.department_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.role.role_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.user_university_id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.user_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.created_at)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.user_id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.user_id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.user_id })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
 
-</table>
