@@ -71,10 +71,10 @@
     }
 </script>
 
+<h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
 <button style="margin-bottom: 30px;" "button" class="btn btn-primary">
     <a style="color: white;" href="@Url.Action("Create", "Idea")">Create</a>
 </button>
-<h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
 <p style="margin-bottom: 10px; cursor: pointer" onclick="clickToFilterIdeas()">Click here to filter ideas</p>
 @using (Html.BeginForm("Index", "Idea", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
 {
