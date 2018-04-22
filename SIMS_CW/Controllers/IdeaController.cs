@@ -264,11 +264,22 @@ namespace SIMS_CW.Controllers
             WebMail.UserName = "simscw2018@gmail.com";
             WebMail.Password = "abc123xyz";
 
+            //Get QA coordinator's email of the appropriate Department
+            user loggedIn = (user)Session["loggedIn"];
+            IEnumerable<user> userQA = dbData.users.Where(u => u.role_id == 3).Where(u => u.department_id == loggedIn.department_id);
+
+
+            
             //Sender email address.  
             WebMail.From = "simscw2018@gmail.com";
-            String ToEmail = "koolkido1412@gmail.com";
-            String EmailSubject = "abc";
-            String EMailBody = "lol";
+            String ToEmail = userQA.First().email;
+            String EmailSubject = "New Student Idea has been added!";
+            String EMailBody = "A student with <b> Student ID: "  + loggedIn.user_university_id + "</b>" +
+                                            " and <b> Username: " + loggedIn.user_name + "</b>" +
+                                            " has submitted the following idea to the SIMS system." + "<br><br>" +
+                                            " <b>Idea Title: </b>" + idea.idea_title + "<br><br>" +
+                                            " <b>Idea Content: </b>" + idea.idea_content + "<br><br>" +
+                                            " Please review this newly submitted idea and change its status in the SIMS.";
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 
