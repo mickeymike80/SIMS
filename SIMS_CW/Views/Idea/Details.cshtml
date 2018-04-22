@@ -12,90 +12,214 @@
     Show details the idea
 }
 
-<h2>@ViewBag.Idea.idea_title</h2>
+<style>
+    hr {
+        margin: 5px 0 15px 0;
+    }
 
-@if (ViewBag.Idea_user == null)
-{
-    <h4>Anonymous</h4>
-}
-else
-{
-    <h4>@ViewBag.Idea_user.user_name</h4>
-}
-<br />
-<p>@ViewBag.Idea.idea_content</p>
+    .panel-white {
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background-color: aliceblue;
+    }
+    .panel-gray {
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background-color: #f6f6f6;
+    }
+
+    .post .post-heading {
+        height: 70px;
+        padding: 20px 15px 0 15px;
+    }
+
+    .post .post-heading .meta .title {
+        margin-bottom: 0;
+    }
+
+    .post .post-heading .meta .title a {
+        color: black;
+    }
+
+    .post .post-heading .meta .title a:hover {
+        color: #aaaaaa;
+    }
+
+    .post .post-heading .meta .time {
+        margin-top: 8px;
+        color: #999;
+    }
+
+    .post .post-description {
+        padding: 15px;
+    }
+
+    .post .post-description p {
+        font-size: 14px;
+    }
+
+    .post .post-description .stats {
+        margin-top: 5px;
+    }
+
+    .post .post-description .stats .stat-item form {
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    .post .post-description .stats .stat-item .icon {
+        margin-right: 8px;
+    }
+</style>
+
+<h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
+
+<button style="margin-bottom: 10px;" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Index", "Idea")"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
+</button>
+
+<div class="row" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+        <div class="panel-white post">
+            <div class="post-heading">
+                <div class="pull-left meta">
+                    <div class="title h5">
+                        @if (ViewBag.Idea_user == null)
+                        {
+                            <b>Anonymous</b>
+                        }
+                        else
+                        {
+                            <b>@ViewBag.Idea_user.user_name</b>
+                        }
+                    </div>
+                    <h6 class="text-muted time">
+                        <span class="glyphicon glyphicon-calendar"> @ViewBag.idea.created_at</span>
+
+                        <!--Two spaces-->
+                        &nbsp&nbsp
+                        <span class="glyphicon glyphicon-eye-open"> @ViewBag.idea.viewed_count</span>
+
+                        <!--Two spaces-->
+                        &nbsp&nbsp
+                        <span class="glyphicon glyphicon-tag"> @ViewBag.idea.category.category_name</span>
+
+                    </h6>
+
+                </div>
+            </div>
+            <div class="post-description">
+                <div class="post-title" style="font-size: 20px;">
+                    <h2>
+                        @ViewBag.idea.idea_title
+                    </h2>
+                    <hr>
+                </div>
+                <p>
+                    @ViewBag.Idea.idea_content
+                </p>
+                <hr>
+                <div class="stats">
+                    @using (Html.BeginForm("Like", "Idea", FormMethod.Post, htmlAttributes: new { style = "margin-bottom: 10px; display: inline-block;" }))
+                    {
+                        if (ViewBag.rate == 1)
+                        {
+                            <button class="btn" type="submit" value="Like"
+                                    style="background-color:red; padding: 5px 8px 5px 8px; font-size: 14px;" disabled="disabled">
+                                <i class="glyphicon glyphicon-thumbs-up"> Like</i>
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn" type="submit" value="Like" style="padding: 5px 8px 5px 8px; font-size: 14px;">
+                                <i class="glyphicon glyphicon-thumbs-up"> Like</i>
+                            </button>
+                        }
+
+                        <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
+                    }
+                    @using (Html.BeginForm("Dislike", "Idea", FormMethod.Post, htmlAttributes: new { style = "margin-bottom: 10px; display: inline-block;" }))
+                    {
+                        if (ViewBag.rate == -1)
+                        {
+                            <button class="btn" type="submit" value="Dislike" style="background-color:red; padding: 5px 8px 5px 8px; font-size: 14px;" disabled="disabled">
+                                <i class="glyphicon glyphicon-thumbs-down"> Dislike</i>
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn" type="submit" value="Dislike" style="padding: 5px 8px 5px 8px; font-size: 14px;">
+                                <i class="glyphicon glyphicon-thumbs-down"> Dislike</i>
+                            </button>
+                        }
+
+                        <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <br />
 @foreach (var item in ViewBag.documents)
 {
     <a href="@Url.Action("DownloadAttachment", "Idea", new { @new_file_name = item.new_file_name, @old_file_name = item.old_file_name})">@item.old_file_name</a>
     <br />
 }
-<br />
-@using (Html.BeginForm("Like", "Idea", FormMethod.Post, htmlAttributes: new { style = "margin-bottom: 10px" }))
-{
-    if (ViewBag.rate == 1)
-    {
-        <input type="submit" value="Like" class="btn" style="background-color:red" disabled="disabled" />
-    }
-    else
-    {
-        <input type="submit" value="Like" class="btn" />
-    }
-    <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
-}
-@using (Html.BeginForm("Dislike", "Idea", FormMethod.Post))
-{
-    if (ViewBag.rate == -1)
-    {
-        <input type="submit" value="Dislike" class="btn" style="background-color:red" disabled="disabled" />
-    }
-    else
-    {
-        <input type="submit" value="Dislike" class="btn" />
-    }
-    <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
-}
+
 <br />
 @using (Html.BeginForm("Details", "Idea", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.Label("Post Comment", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextArea("comment_content", htmlAttributes: new { @class = "form-control" })
-            </div>
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.Label("Comment", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextArea("comment_content", htmlAttributes: new { @class = "form-control" })
         </div>
-        <div class="form-group">
-            @Html.Label("Post Anonymously", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="checkbox" name="isAnonymous" />
-            </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Post Anonymously", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="checkbox" name="isAnonymous" />
         </div>
-        <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Post Comment" class="btn btn-default" />
+    </div>
+    <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Post Comment" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+<br />
+<h3 style="margin-bottom: 10px;">Comments</h3>
+<hr>
+@for (int i = 0; i < Model.Comments.Count; i++)
+{
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-md-12">
+            <div class="panel-gray post">
+                <div class="post-heading">
+                    <div class="pull-left meta">
+                        <div class="title h5">
+                            <b>@Model.Comment_users[i].user_name</b>
+                        </div>
+                        <h6 class="text-muted time">
+                            <span class="glyphicon glyphicon-calendar"> @Model.Comments[i].created_at</span>
+                        </h6>
+
+                    </div>
+                </div>
+                <hr>
+                <div class="post-description">
+                    <p>
+                        @Model.Comments[i].comment_content
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 }
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Comment</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Model.Comments.Count; i++)
-            {
-                <tr>
-                    <td>@Model.Comment_users[i].user_name</td>
-                    <td>@Model.Comments[i].comment_content</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
