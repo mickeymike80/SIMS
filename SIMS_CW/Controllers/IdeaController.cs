@@ -272,7 +272,7 @@ namespace SIMS_CW.Controllers
             
             //Sender email address.  
             WebMail.From = "simscw2018@gmail.com";
-            String ToEmail = userQA.First().email;
+            String ToEmail = userQA.Single().email;
             String EmailSubject = "New Student Idea has been added!";
             String EMailBody = "A student with <b> Student ID: "  + loggedIn.user_university_id + "</b>" +
                                             " and <b> Username: " + loggedIn.user_name + "</b>" +
@@ -394,6 +394,40 @@ namespace SIMS_CW.Controllers
                 comment.isAnonymous = 0;
             }
             dbData.comments.Add(comment);
+
+
+
+            //Configuring webMail class to send emails  
+            //gmail smtp server  
+            WebMail.SmtpServer = "smtp.gmail.com";
+            //gmail port to send emails  
+            WebMail.SmtpPort = 587;
+            WebMail.SmtpUseDefaultCredentials = true;
+            //sending emails with secure protocol  
+            WebMail.EnableSsl = true;
+            //EmailId used to send emails from application  
+            WebMail.UserName = "simscw2018@gmail.com";
+            WebMail.Password = "abc123xyz";
+
+            //Get Original poster email
+            int user_id = Convert.ToInt32(Request.Form["user_id"].ToString());
+            String idea_Title = Request.Form["idea_Title"].ToString();
+            IEnumerable<user> ideaPoster = dbData.users.Where(u => u.user_id == user_id);
+
+            
+
+
+            //Sender email address.  
+            WebMail.From = "simscw2018@gmail.com";
+            String ToEmail = ideaPoster.Single().email;
+            String EmailSubject = "A comment to your idea has been submitted!";
+            String EMailBody = "A comment has been added to your idea with title: " + idea_Title + "!" + "<br><br>" +
+                                            "Comment: " + comment.comment_content;
+            //Send email  
+            WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
+
+
+
             dbData.SaveChanges();
 
             return Redirect(Url.Action("Details", "Idea", new { idea_id = idea_id }));
