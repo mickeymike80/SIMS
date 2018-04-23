@@ -15,6 +15,7 @@ namespace SIMS_CW.Models
 
         public int? idea_id { get; set; }
 
+        [Required(ErrorMessage ="Comment Box Cannot be Blank")]
         [Column(TypeName = "text")]
         public string comment_content { get; set; }
 
