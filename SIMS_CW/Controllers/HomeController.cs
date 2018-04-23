@@ -27,6 +27,11 @@ namespace SIMS_CW.Controllers
             return View();
         }
 
+        public ActionResult Terms()
+        {
+            return View();
+        }
+
         public ActionResult Error()
         {
             return View();

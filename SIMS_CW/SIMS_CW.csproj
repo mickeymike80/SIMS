@@ -198,6 +198,7 @@
     <Content Include="Assets\images\banner2.jpg" />
     <Content Include="Assets\images\banner3.jpg" />
     <Content Include="Assets\images\banner4.jpg" />
+    <Content Include="Assets\images\banner5.jpg" />
     <Content Include="Assets\images\c-arrows.png" />
     <Content Include="Assets\images\class.jpg" />
     <Content Include="Assets\images\class2.jpg" />
@@ -319,7 +320,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -355,6 +358,7 @@
     <Content Include="Views\ManagerCategory\Details.cshtml" />
     <Content Include="Views\ManagerCategory\Edit.cshtml" />
     <Content Include="Views\ManagerCategory\Index.cshtml" />
+    <Content Include="Views\Home\Terms.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
