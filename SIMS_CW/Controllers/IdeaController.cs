@@ -9,6 +9,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using PagedList;
+using System.Data.Entity.Validation;
 
 namespace SIMS_CW.Controllers
 {
@@ -251,7 +252,7 @@ namespace SIMS_CW.Controllers
                     dbData.documents.Add(document);
                 }
             }
-
+            
             //Configuring webMail class to send emails  
             //gmail smtp server  
             WebMail.SmtpServer = "smtp.gmail.com";
@@ -283,8 +284,24 @@ namespace SIMS_CW.Controllers
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 
-            dbData.SaveChanges();
+            //New Code: Validation Handling
+            try
+            {
+                dbData.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+                    {
+                        Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+                    }
+                }
+            }
             return Redirect(Url.Action("Index", "Idea", new { page = 1 }));
+            //End COde
+
         }
 
         [HttpGet]
@@ -427,10 +444,24 @@ namespace SIMS_CW.Controllers
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 
 
-
-            dbData.SaveChanges();
-
+            try
+            {
+                dbData.SaveChanges();
+            }
+            catch (DbEntityValidationException exe)
+            {
+                foreach (var entityValidationErrors in exe.EntityValidationErrors)
+                {
+                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+                    {
+                        Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+                    }
+                }
+            }
             return Redirect(Url.Action("Details", "Idea", new { idea_id = idea_id }));
+            //End COde
+
+
         }
 
         [HttpPost]

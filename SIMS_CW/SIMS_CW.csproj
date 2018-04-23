@@ -156,10 +156,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminAcademicYearController.cs" />
     <Compile Include="Controllers\AdminAccountController.cs" />
     <Compile Include="Controllers\CoordinatorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IdeaController.cs" />
+    <Compile Include="Controllers\ManagerCategoryController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Global.asax.cs">
@@ -196,6 +198,7 @@
     <Content Include="Assets\images\banner2.jpg" />
     <Content Include="Assets\images\banner3.jpg" />
     <Content Include="Assets\images\banner4.jpg" />
+    <Content Include="Assets\images\banner5.jpg" />
     <Content Include="Assets\images\c-arrows.png" />
     <Content Include="Assets\images\class.jpg" />
     <Content Include="Assets\images\class2.jpg" />
@@ -317,7 +320,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -343,6 +348,17 @@
     <Content Include="Views\AdminAccount\Details.cshtml" />
     <Content Include="Views\AdminAccount\Edit.cshtml" />
     <Content Include="Views\AdminAccount\Index.cshtml" />
+    <Content Include="Views\AdminAcademicYear\Create.cshtml" />
+    <Content Include="Views\AdminAcademicYear\Delete.cshtml" />
+    <Content Include="Views\AdminAcademicYear\Details.cshtml" />
+    <Content Include="Views\AdminAcademicYear\Edit.cshtml" />
+    <Content Include="Views\AdminAcademicYear\Index.cshtml" />
+    <Content Include="Views\ManagerCategory\Create.cshtml" />
+    <Content Include="Views\ManagerCategory\Delete.cshtml" />
+    <Content Include="Views\ManagerCategory\Details.cshtml" />
+    <Content Include="Views\ManagerCategory\Edit.cshtml" />
+    <Content Include="Views\ManagerCategory\Index.cshtml" />
+    <Content Include="Views\Home\Terms.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

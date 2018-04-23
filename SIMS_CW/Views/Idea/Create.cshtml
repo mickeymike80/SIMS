@@ -49,7 +49,7 @@
                     </div>
                     <div class="styled-input custom-margin-bottom-20px">
                         <label class="custom-margin-bottom-20px">Content:</label>
-                        <textarea class="form-control" rows="10" id="idea_content" name="idea_content"></textarea>
+                        <textarea class="form-control" rows="10" id="idea_content" name="idea_content" required=""></textarea>
                         @Html.ValidationMessageFor(model => model.idea_content, "", new { @class = "text-danger" })
                     </div>
                     <div class="styled-input custom-margin-bottom-20px" style="display: flex;">

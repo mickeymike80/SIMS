@@ -1,26 +1,95 @@
-﻿@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-
+﻿@model PagedList.IPagedList<SIMS_CW.Models.display_idea>
+@using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Indexx";
+    ViewBag.Title = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section title {
+    View all ideas
+}
+
+@section title_page {
+    View all ideas
+}
+<script>
+    $(function () {
+        $(".date-picker").datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+    });
+    function clickToFilterIdeas() {
+        $(".filterIdeasForm").toggle();
+    }
+</script>
 
 
-<h1>Admin</h1>
-<a href="#">Manage Users |</a>
-<a href="#">Manage Departments |</a>
-<a href="@Url.Action("Category", "Category")">Manage Category |</a>
-<a href="#">Manage Users Role |</a>
-<a href="#">Manage Ideas |</a>
-<a href="#">Manage Comments |</a>
-<a href="@Url.Action("Coordinator", "Statistics")">Manage Category |</a>
+<button style="margin-bottom: 30px;" "button" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Create", "Idea")">Create</a>
+</button>
 
+<h3 class="headerw3" style="margin-bottom: 30px;">Ideas</h3>
+<p style="margin-bottom: 10px; cursor: pointer" onclick="clickToFilterIdeas()">Click here to filter ideas</p>
+@using (Html.BeginForm("Index", "Idea", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
+{
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Title:")</div>
+        <div class="col-md-10">@Html.TextBox("idea_title", null, htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Name:")</div>
+        <div class="col-md-10"> @Html.TextBox("name", null, htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Category")</div>
+        <div class="col-md-10">@Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "None", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Publish Order")</div>
+        <div class="col-md-10">@Html.DropDownList("time_order", new SelectList(new List<String> { "Newest", "Oldest" }), htmlAttributes: new { @class = "form-control" })</div>
+    </div>
 
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Publish from")</div>
+        <div class="col-md-10" style="display: flex">
+            <input class="date-picker form-control" name="pubFrom" type="date" value="@ViewBag.pubFrom" />
+            @Html.Label("to", htmlAttributes: new { style = "margin: 5px 10px 0 10px" })
+            <input class="date-picker form-control" type="date" name="pubTo" value="@ViewBag.pubTo" />
+        </div>
+    </div>
 
+    @ViewBag.error
+    <input type="submit" value="Filter" class="btn" style="margin-bottom: 10px;" />
+}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Published at</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.user.user_name</td>
+                    <td>
+                        <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
+                    </td>
+                    <td>@item.idea.idea_content</td>
+                    <td>@item.idea.created_at</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@*Pagination*@
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+                new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))

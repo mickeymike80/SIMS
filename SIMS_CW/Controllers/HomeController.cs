@@ -27,6 +27,11 @@ namespace SIMS_CW.Controllers
             return View();
         }
 
+        public ActionResult Terms()
+        {
+            return View();
+        }
+
         public ActionResult Error()
         {
             return View();
@@ -50,6 +55,7 @@ namespace SIMS_CW.Controllers
                 if(user.email.ToLower().Equals(email.ToLower()) && user.password.Equals(password))
                 {
                     Session["loggedIn"] = user;
+                    Session["liRole"] = user.role_id;
                     switch (user.role_id)
                     {
                         case 1:
@@ -60,7 +66,7 @@ namespace SIMS_CW.Controllers
                             return Redirect(Url.Action("Index", "Manager"));
                         case 3:
                             // QA Coordinator
-                            break;
+                            return Redirect(Url.Action("Index", "Manager"));
                         case 4:
                             //Staff
                             return Redirect(Url.Action("Index", "Idea"));

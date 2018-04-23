@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SIMS_CW.Models.academic_years>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("Academic Year")
+        </th>
+        <th>
+            @Html.Label("Start At")
+        </th>
+        <th>
+            @Html.Label("End At")
+        </th>
+        <th>
+            @Html.Label("Closure Date")
+        </th>
+        <th>
+            @Html.Label("Final Closure")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.academic_year_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.started_at)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ended_at)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.deadline_ideas)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.deadline_comments)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.academic_year_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.academic_year_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.academic_year_id })
+        </td>
+    </tr>
+}
+
+</table>
