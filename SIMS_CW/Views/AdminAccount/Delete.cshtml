@@ -1,0 +1,57 @@
+﻿@model SIMS_CW.Models.user
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Delete</h2>
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Department
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.department.department_name)
+        </dd>
+        <dt>
+            Role
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.role.role_name)
+        </dd>
+        <dt>
+            ID
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.user_university_id)
+        </dd>
+        <dt>
+            Username
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.user_name)
+        </dd>
+        <dt>
+            Email
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.email)
+        </dd>     
+        <dt>
+            Created at
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.created_at)
+        </dd>
+    </dl>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

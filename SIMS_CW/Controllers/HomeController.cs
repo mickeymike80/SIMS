@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace SIMS_CW.Controllers
@@ -12,6 +11,7 @@ namespace SIMS_CW.Controllers
     {
         DbModel dbModel = new DbModel();
 
+      
         public ActionResult Index()
         {
             return View();
@@ -22,43 +22,20 @@ namespace SIMS_CW.Controllers
             return View();
         }
 
-        public ActionResult Contact() 
+        public ActionResult Contact()
         {
             return View();
         }
-   
 
         public ActionResult Error()
         {
             return View();
         }
 
-        public ActionResult MockedGraph()
+        [HttpGet]
+        public ActionResult LoginPage()
         {
-            List<string> department = new List<string>();
-            List<int> idealCount = new List<int>();
-
-            using (DbModel db = new DbModel())
-            {
-                foreach(department departmant in db.departments){
-                    department.Add(departmant.department_name);
-                    int numberofideas = 0;
-                    foreach(user user in departmant.users)
-                    {
-                        numberofideas += user.ideas.Count;
-                    }
-                    idealCount.Add(numberofideas);
-                }
-            }
-                var chart = new Chart(800, 400)
-                    .AddTitle("title")
-                    .AddSeries(
-                        name: "Mocked Graph",
-                        //chartType:"pie",
-                        xValue: department.ToArray(),
-                        yValues: idealCount.ToArray()
-                    ).Write("bmp");
-            return null;
+            return View("Login");
         }
 
         [HttpPost]
@@ -73,17 +50,18 @@ namespace SIMS_CW.Controllers
                 if(user.email.ToLower().Equals(email.ToLower()) && user.password.Equals(password))
                 {
                     Session["loggedIn"] = user;
+                    Session["liRole"] = user.role_id;
                     switch (user.role_id)
                     {
                         case 1:
                             //admin
-                            break;
+                            return Redirect(Url.Action("Index", "AdminAccount"));
                         case 2:
                             //QA Manager
-                            break;
+                            return Redirect(Url.Action("Index", "Manager"));
                         case 3:
                             // QA Coordinator
-                            break;
+                            return Redirect(Url.Action("Index", "Manager"));
                         case 4:
                             //Staff
                             return Redirect(Url.Action("Index", "Idea"));
@@ -94,9 +72,15 @@ namespace SIMS_CW.Controllers
                 }
                 
             }
-            return View();
+            ViewBag.error = "Incorrect email or password. Please check again!";
+            return View("Login");
+        }
 
-
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return View("Index");
         }
     }
 }

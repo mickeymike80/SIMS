@@ -1,78 +1,192 @@
 ﻿@model PagedList.IPagedList<SIMS_CW.Models.display_idea>
 @using PagedList.Mvc;
-
 @{
     ViewBag.Title = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 @section title {
-    Ideas
+    View all ideas
 }
-
 @section title_page {
-    Ideas
+    View all ideas
 }
 
-<h3 class="headerw3">Ideas</h3>
-
-<p>
-
-</p>
-
-<div class="container">
-    @foreach (var item in Model)
-    {
-        <div class="row">
-            <div class="col-sm-12">
-
-                <div class="panel-gray idea">
-
-                    <div class="idea-heading">
-                        <div>
-                            <div class="title">
-                                <a href="#">
-                                    <b>
-                                        @item.user.user_name
-                                    </b>
-                                </a>
-                            </div>
-                            <h6 class="created">
-                                @item.idea.created_at
-
-                            </h6>
-                        </div>
-                    </div>
-                    <div class="idea-description">
-                        <div class="idea-title">
-                            <h3>
-                                <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
-                            </h3>
-                            <hr>
-                        </div>
-                        <p>
-                            @item.idea.idea_content
-                        </p>
-                        <div class="votes">
-                            <a href="#" class="btn btn-default">
-                                <i class="icon-up"></i>
-                                vote count
-                            </a>
-                            <a href="#" class="btn btn-default">
-                                <i class="icon-down"></i>
-                                vote count
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
+<style>
+    .panel-white {
+        border: 1px solid #dddddd;
     }
-</div>
 
+    .post .post-heading {
+        height: 70px;
+        padding: 20px 15px 0 15px;
+    }
+
+        .post .post-heading .meta .title {
+            margin-bottom: 0;
+        }
+
+            .post .post-heading .meta .title a {
+                color: black;
+            }
+
+                .post .post-heading .meta .title a:hover {
+                    color: #aaaaaa;
+                }
+
+        .post .post-heading .meta .time {
+            margin-top: 8px;
+            color: #999;
+        }
+
+    .post .post-description {
+        padding: 15px;
+    }
+
+        .post .post-description p {
+            font-size: 14px;
+        }
+
+        .post .post-description .stats {
+            margin-top: 20px;
+        }
+
+            .post .post-description .stats .stat-item {
+                display: inline-block;
+                margin-right: 15px;
+            }
+
+                .post .post-description .stats .stat-item .icon {
+                    margin-right: 8px;
+                }
+</style>
+
+<script>
+    $(function () {
+        $(".date-picker").datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+    });
+    function clickToFilterIdeas() {
+        $(".filterIdeasForm").toggle();
+    }
+</script>
+
+<button style="margin-bottom: 30px;" "button" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Create", "Idea")">Create</a>
+</button>
+<h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
+<p style="margin-bottom: 10px; cursor: pointer" onclick="clickToFilterIdeas()">Click here to filter ideas</p>
+@using (Html.BeginForm("Index", "Idea", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
+{
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Title:")</div>
+        <div class="col-md-10">@Html.TextBox("idea_title", null, htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Name:")</div>
+        <div class="col-md-10"> @Html.TextBox("name", null, htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Category")</div>
+        <div class="col-md-10">@Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "None", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Publish Order")</div>
+        <div class="col-md-10">@Html.DropDownList("time_order", new SelectList(new List<String> { "Newest", "Oldest" }), htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Publish from")</div>
+        <div class="col-md-10" style="display: flex">
+            <input class="date-picker form-control" name="pubFrom" type="date" value="@ViewBag.pubFrom" />
+            @Html.Label("to", htmlAttributes: new { style = "margin: 5px 10px 0 10px" })
+            <input class="date-picker form-control" type="date" name="pubTo" value="@ViewBag.pubTo" />
+        </div>
+    </div>
+
+    @ViewBag.error
+    <input type="submit" value="Filter" class="btn" style="margin-bottom: 10px;" />
+}
+@*<div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>Published at</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.user.user_name</td>
+                        <td>
+                            <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
+                        </td>
+                        <td>@item.idea.idea_content</td>
+                        <td>@item.idea.created_at</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>*@
+
+@foreach (var item in Model)
+{
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-md-12">
+            <div class="panel-white post">
+                <div class="post-heading">
+                    <div class="pull-left meta">
+                        <div class="title h5">
+                            <a href="#">
+                                <b>
+                                    @item.user.user_name
+                                </b>
+                            </a>
+                        </div>
+                        <h6 class="text-muted time">
+                            @item.idea.created_at
+                        </h6>
+                    </div>
+                </div>
+                <div class="post-description">
+                    <div class="post-title">
+                        <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">
+                            @item.idea.idea_title
+                        </a>
+                        <hr>
+                    </div>
+                    <p>
+                        @item.idea.idea_content
+                    </p>
+                    <div class="stats">
+                        <a href="#" class="btn btn-info btn-lg">
+                            <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                        </a>
+                        <a href="#" class="btn btn-danger btn-lg">
+                            <span class="glyphicon glyphicon-thumbs-down"></span> Dislike
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@*Pagination*@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
     @Html.PagedListPager(Model, page => Url.Action("Index",
-            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                                            new
+                                            {
+                                                page,
+                                                idea_title = ViewBag.idea_title,
+                                                name = ViewBag.name,
+                                                categoryID = ViewBag.categoryID,
+                                                time_order = ViewBag.time_order,
+                                                pubFrom = ViewBag.pubFrom,
+                                                pubTo = ViewBag.pubTo
+                                            }))

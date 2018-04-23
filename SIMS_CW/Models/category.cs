@@ -18,6 +18,7 @@ namespace SIMS_CW.Models
         public int category_id { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "Category Name")]
         public string category_name { get; set; }
 
         public DateTime? created_at { get; set; }

@@ -1,0 +1,51 @@
+﻿@model SIMS_CW.Models.user
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Details</h2>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Department
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.department.department_name)
+        </dd>
+        <dt>
+            Role
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.role.role_name)
+        </dd>
+        <dt>
+            ID
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.user_university_id)
+        </dd>
+        <dt>
+            Username
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.user_name)
+        </dd>
+        <dt>
+            Email
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.email)
+        </dd>
+        <dt>
+            Created at
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.created_at)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.user_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
