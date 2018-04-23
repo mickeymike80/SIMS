@@ -28,6 +28,7 @@ namespace SIMS_CW.Models
         public string idea_title { get; set; }
 
         [Column(TypeName = "text")]
+        [Required(ErrorMessage = "Content Cannot be Blank")]
         public string idea_content { get; set; }
 
         public int? viewed_count { get; set; }

@@ -1,0 +1,65 @@
+﻿@model SIMS_CW.Models.academic_years
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>academic_years</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.academic_year_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.academic_year_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.started_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.started_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ended_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ended_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.deadline_ideas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.deadline_ideas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.deadline_comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.deadline_comments)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
