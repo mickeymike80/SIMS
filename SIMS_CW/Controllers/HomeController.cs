@@ -55,6 +55,7 @@ namespace SIMS_CW.Controllers
                 if(user.email.ToLower().Equals(email.ToLower()) && user.password.Equals(password))
                 {
                     Session["loggedIn"] = user;
+                    Session["role"] = user.role.role_name;
                     Session["liRole"] = user.role_id;
                     switch (user.role_id)
                     {
