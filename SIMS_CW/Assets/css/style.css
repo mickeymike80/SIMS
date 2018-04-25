@@ -91,6 +91,8 @@ label {
 	background: #222;
 	padding: 1em;
 	position: relative;
+    border-bottom: groove;
+    border-bottom-color: #bf5638;
 }
 
 .top-bar_sub_w3layouts_agile h6 {
@@ -179,7 +181,7 @@ nav.linkEffects.linkHoverEffect_12 ul {
 }
 
 a.active {
-	background: #00a78e;
+    text-decoration: none;
 }
 
 li.dropdown span.fa.fa-angle-down {
@@ -352,16 +354,21 @@ ul.dropdown-menu li a {
 .dropdown-menu>li>a:hover,
 .dropdown-menu>li>a:focus {
 	color: #333;
-	background-color: #00a78e;
+	background-color: #bf5638;
 }
 
+ul.top_nav li a:hover {
+    color: #bf5638;
+}
+
+ul.dropdown-menu li a:hover {
+    color: #fff;
+}
 /*-- //nav --*/
-
 /*-- search --*/
-
 .search {
-	float: right;
-	width: 12%;
+    float: right;
+    width: 12%;
 }
 
 .search h5 {
@@ -1019,7 +1026,7 @@ h3.sign {
 
 .signin-form input[type="submit"]:hover {
 	color: #fff;
-	background: #00a78e;
+	background: #bf5638;
 	transition: .5s all;
 	-webkit-transition: .5s all;
 	-moz-transition: .5s all;
@@ -1706,7 +1713,7 @@ h3.subheading {
 }
 
 .botttom-nav-w3ls-agileits ul li a {
-	color: #b1aeae;
+	color: #fff;
 	letter-spacing: 1px;
 	font-size: 14px;
 	text-decoration: none;
@@ -1717,8 +1724,8 @@ ul.f_links.thrd li a {
 }
 
 .botttom-nav-w3ls-agileits ul li a:hover {
-	color: #00a78e;
-	text-decoration: none;
+    color: #bf5638;
+    text-decoration: none;
 }
 
 .social-icons-wthree h6 {
@@ -1744,8 +1751,8 @@ ul.f_links.thrd li a {
 }
 
 .social-icons-wthree a:hover {
-	color: #00a78e;
-	border: 1px solid #00a78e;
+	color: #bf5638;
+	border: 1px solid #bf5638;
 	transition: 0.5s all;
 	-webkit-transition: 0.5s all;
 	-moz-transition: 0.5s all;
@@ -1769,7 +1776,7 @@ h2.footer-logo a span {
 
 h2.footer-logo a {
 	font-size: 1.2em;
-	color: #7d7d7d;
+	color: #fff;
 	display: inline-block;
 	text-decoration: none;
 }
@@ -1814,7 +1821,7 @@ h3.white-clr {
 /*-- /inner_banner --*/
 
 .inner_banner {
-	background: url(../images/banner3.jpg) no-repeat 0px 0px;
+	background: url(../images/bannerOwn1.jpg) no-repeat 0px 0px;
 	background-size: cover;
 	-webkit-background-size: cover;
 	-o-background-size: cover;
@@ -2421,6 +2428,9 @@ label.header {
 	.copy-w3-agileits {
 		padding: 1em 1em;
 	}
+    h2.footer-logo {
+        margin-left: 0;
+    }
 }
 
 @media(max-width:767px) {
