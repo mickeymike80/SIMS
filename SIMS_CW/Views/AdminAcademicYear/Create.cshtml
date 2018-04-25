@@ -5,18 +5,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+@section title {
+    Create a new academic year
+}
 
-@using (Html.BeginForm()) 
+@section title_page {
+    Create a new academic year
+}
+
+<h2>Create a new academic year</h2>
+
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
     <div class="form-horizontal">
-        <h4>academic_years</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.academic_year_name,"Academic Year", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.academic_year_name, "Academic year", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.academic_year_name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.academic_year_name, "", new { @class = "text-danger" })
@@ -24,33 +30,33 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.started_at, "Start at", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.started_at, "Started at", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.started_at, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.started_at, new { @type = "datetime-local", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.started_at, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ended_at,"End At", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ended_at, "Ended at", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ended_at, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.ended_at, new { @type = "datetime-local", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ended_at, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.deadline_ideas, "Closure Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.deadline_ideas, "Closure date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.deadline_ideas, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.deadline_ideas, new { @type = "datetime-local", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.deadline_ideas, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.deadline_comments, "Final Closure Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.deadline_comments, "Final closure date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.deadline_comments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.deadline_comments, new { @type = "datetime-local", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.deadline_comments, "", new { @class = "text-danger" })
             </div>
         </div>

@@ -78,7 +78,7 @@
 
 <h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
 <button style="margin-bottom: 10px;" class="btn btn-primary">
-    <a style="color: white;" href="@Url.Action("Create", "Idea")"><span class="glyphicon glyphicon-plus"></span> Create New Idea</a>
+    <a style="color: white;" href="@Url.Action("Create", "Idea")"><span class="glyphicon glyphicon-plus"></span> Create a new idea</a>
 </button>
 <div>
     <a href="@Url.Action("Index", "Idea")" class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
@@ -179,17 +179,8 @@
                     <p>
                         @item.idea.idea_content
                     </p>
-                    <hr>
-                    <div class="stats">
-                        <a href="#" class="btn btn-info btn-lg" style="padding: 5px 8px 5px 8px; font-size: 14px;">
-                            <span class="glyphicon glyphicon-thumbs-up"></span> Like
-                        </a>
-                        <a href="#" class="btn btn-danger btn-lg" style="padding: 5px 8px 5px 8px; font-size: 14px;">
-                            <span class="glyphicon glyphicon-thumbs-down"></span> Dislike
-                        </a>
-                    </div>
+                    <hr>                 
                 </div>
-
             </div>
         </div>
     </div>
