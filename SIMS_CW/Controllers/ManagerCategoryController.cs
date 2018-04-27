@@ -46,10 +46,11 @@ namespace SIMS_CW.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "category_id,category_name,created_at")] category category)
+        public ActionResult Create([Bind(Include = "category_id,category_name")] category category)
         {
             if (ModelState.IsValid)
             {
+                category.created_at = DateTime.Now;
                 db.categories.Add(category);
                 db.SaveChanges();
                 return RedirectToAction("Index");
