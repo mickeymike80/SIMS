@@ -13,19 +13,18 @@ namespace SIMS_CW.Controllers
     public class ManagerCategoryController : Controller
     {
         private DbModel db = new DbModel();
-        private user loggedIn;
 
         // GET: ManagerCategory
         public ActionResult Index()
         {
-            loggedIn = (user)Session["loggedIn"];
+            user loggedIn = (user)Session["loggedIn"];
 
             //check logged in?
             if (loggedIn == null)
             {
                 return Redirect("~/Home/LoginPage");
             }
-            if (loggedIn.role.role_id < 1 && loggedIn.role.role_id > 2)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
@@ -36,12 +35,14 @@ namespace SIMS_CW.Controllers
         // GET: ManagerCategory/Details/5
         public ActionResult Details(int? id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
             //check logged in?
             if (loggedIn == null)
             {
                 return Redirect("~/Home/LoginPage");
             }
-            if (loggedIn.role.role_id < 1 && loggedIn.role.role_id > 2)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
@@ -61,12 +62,14 @@ namespace SIMS_CW.Controllers
         // GET: ManagerCategory/Create
         public ActionResult Create()
         {
+            user loggedIn = (user)Session["loggedIn"];
+
             //check logged in?
             if (loggedIn == null)
             {
                 return Redirect("~/Home/LoginPage");
             }
-            if (loggedIn.role.role_id < 1 && loggedIn.role.role_id > 2)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
@@ -81,12 +84,14 @@ namespace SIMS_CW.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "category_id,category_name")] category category)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
             //check logged in?
             if (loggedIn == null)
             {
                 return Redirect("~/Home/LoginPage");
             }
-            if (loggedIn.role.role_id < 1 && loggedIn.role.role_id > 2)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
@@ -105,12 +110,14 @@ namespace SIMS_CW.Controllers
         // GET: ManagerCategory/Edit/5
         public ActionResult Edit(int? id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
             //check logged in?
             if (loggedIn == null)
             {
                 return Redirect("~/Home/LoginPage");
             }
-            if (loggedIn.role.role_id < 1 && loggedIn.role.role_id > 2)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
@@ -134,12 +141,14 @@ namespace SIMS_CW.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "category_id,category_name,created_at")] category category)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
             //check logged in?
             if (loggedIn == null)
             {
                 return Redirect("~/Home/LoginPage");
             }
-            if (loggedIn.role.role_id < 1 && loggedIn.role.role_id > 2)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
@@ -156,12 +165,14 @@ namespace SIMS_CW.Controllers
         // GET: ManagerCategory/Delete/5
         public ActionResult Delete(int? id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
             //check logged in?
             if (loggedIn == null)
             {
                 return Redirect("~/Home/LoginPage");
             }
-            if (loggedIn.role.role_id < 1 && loggedIn.role.role_id > 2)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
@@ -183,12 +194,14 @@ namespace SIMS_CW.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
             //check logged in?
             if (loggedIn == null)
             {
                 return Redirect("~/Home/LoginPage");
             }
-            if (loggedIn.role.role_id < 1 && loggedIn.role.role_id > 2)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
