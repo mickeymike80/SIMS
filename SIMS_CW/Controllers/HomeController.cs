@@ -36,7 +36,11 @@ namespace SIMS_CW.Controllers
         {
             return View();
         }
-
+        public ActionResult DeniedAccess()
+        {
+            return View();
+        }
+        
         [HttpGet]
         public ActionResult LoginPage()
         {
