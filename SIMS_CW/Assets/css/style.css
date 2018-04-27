@@ -91,8 +91,8 @@ label {
 	background: #222;
 	padding: 1em;
 	position: relative;
-    border-bottom: groove;
-    border-bottom-color: #bf5638;
+	border-bottom: groove;
+	border-bottom-color: #bf5638;
 }
 
 .top-bar_sub_w3layouts_agile h6 {
@@ -181,16 +181,15 @@ nav.linkEffects.linkHoverEffect_12 ul {
 }
 
 a.active {
-    text-decoration: none;
+	text-decoration: none;
 }
 
-li.dropdown span.fa.fa-angle-down {
-	margin-right: 10px;
-}
 
 /*-- //Info --*/
 
 /*-- //top-bar-agile --*/
+
+
 
 h6 {
 	margin: 0 auto;
@@ -317,7 +316,6 @@ ul.top_nav li a {
 	letter-spacing: 1px;
 	text-transform: uppercase;
 	font-weight: 400;
-	padding: 10px 20px;
 }
 
 nav.navbar.navbar-default {
@@ -358,17 +356,25 @@ ul.dropdown-menu li a {
 }
 
 ul.top_nav li a:hover {
-    color: #bf5638;
+	color: #bf5638;
 }
 
 ul.dropdown-menu li a:hover {
-    color: #fff;
+	color: #fff;
 }
+
+#ideasCount {
+    font-size: 16px;
+    line-height: 18px;
+    color: #fff;
+    text-align: center;
+}
+
 /*-- //nav --*/
 /*-- search --*/
 .search {
-    float: right;
-    width: 12%;
+	float: right;
+	width: 12%;
 }
 
 .search h5 {
@@ -1401,22 +1407,22 @@ p.paragraph.two {
 /*.carousel-indicators li {
 	background: #cecece;
 	display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin: 1px;
-    text-indent: -999px;
-    cursor: pointer;
-    background-color: #000 \9;
-    border: 1px solid #fff;
-    border-radius: 10px;
+	width: 10px;
+	height: 10px;
+	margin: 1px;
+	text-indent: -999px;
+	cursor: pointer;
+	background-color: #000 \9;
+	border: 1px solid #fff;
+	border-radius: 10px;
 
 }*/
 
 /*.carousel-indicators .active {
 background: #428bca;
-    width: 12px;
-    height: 12px;
-    margin: 0;
+	width: 12px;
+	height: 12px;
+	margin: 0;
 }*/
 
 .tabs-grids img {
@@ -1724,8 +1730,8 @@ ul.f_links.thrd li a {
 }
 
 .botttom-nav-w3ls-agileits ul li a:hover {
-    color: #bf5638;
-    text-decoration: none;
+	color: #bf5638;
+	text-decoration: none;
 }
 
 .social-icons-wthree h6 {
@@ -2428,9 +2434,9 @@ label.header {
 	.copy-w3-agileits {
 		padding: 1em 1em;
 	}
-    h2.footer-logo {
-        margin-left: 0;
-    }
+	h2.footer-logo {
+		margin-left: 0;
+	}
 }
 
 @media(max-width:767px) {
@@ -2516,6 +2522,12 @@ label.header {
 	.newsleft h3 {
 		margin-bottom: 1em;
 	}
+    #ideasCount {
+        font-size: 16px;
+        line-height: 18px;
+        color: #fff;
+        text-align: left;
+    }
 }
 
 @media(max-width:736px) {
@@ -2933,6 +2945,10 @@ label.header {
 		width: 60%;
 		letter-spacing: 1px;
 	}
+
+    #ideasCount {
+        font-size: 13px;
+    }
 }
 
 /*--//responsive--*/
