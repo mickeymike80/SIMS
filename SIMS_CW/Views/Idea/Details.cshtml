@@ -175,7 +175,9 @@
     @Html.AntiForgeryToken()
 <div class="form-horizontal">
     <div class="form-group">
-        @Html.Label("Comment", htmlAttributes: new { @class = "control-label col-md-2" })
+
+        @Html.Label("Post Comment", htmlAttributes: new { @class = "control-label col-md-2" })
+
         <div class="col-md-10">
             @Html.TextArea("comment_content", htmlAttributes: new { @class = "form-control" })
         </div>
@@ -187,6 +189,8 @@
         </div>
     </div>
     <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
+    <input type="hidden" value="@ViewBag.Idea.user_id" name="user_id" />
+    <input type="hidden" value="@ViewBag.Idea.idea_title" name="Idea_Title" />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Post Comment" class="btn btn-default" />

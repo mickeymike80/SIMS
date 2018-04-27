@@ -199,6 +199,7 @@
     <Content Include="Assets\images\banner3.jpg" />
     <Content Include="Assets\images\banner4.jpg" />
     <Content Include="Assets\images\banner5.jpg" />
+    <Content Include="Assets\images\bannerOwn1.jpg" />
     <Content Include="Assets\images\c-arrows.png" />
     <Content Include="Assets\images\class.jpg" />
     <Content Include="Assets\images\class2.jpg" />
@@ -359,6 +360,7 @@
     <Content Include="Views\ManagerCategory\Edit.cshtml" />
     <Content Include="Views\ManagerCategory\Index.cshtml" />
     <Content Include="Views\Home\Terms.cshtml" />
+    <Content Include="Views\Home\DeniedAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

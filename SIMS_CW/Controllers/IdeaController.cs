@@ -231,16 +231,7 @@ namespace SIMS_CW.Controllers
             {
                 idea.isAnonymous = 0;
             }
-            //check TC
-            if (Request.Form["termsCondition"] != null)
-            {
-                
-            }
-            else
-            {
-                ViewBag.error = "This is requried";
-            }
-            //End TC
+
             dbData.ideas.Add(idea);
             //file upload
             foreach (HttpPostedFileBase file in files)
@@ -261,7 +252,7 @@ namespace SIMS_CW.Controllers
                     dbData.documents.Add(document);
                 }
             }
-            /*
+            
             //Configuring webMail class to send emails  
             //gmail smtp server  
             WebMail.SmtpServer = "smtp.gmail.com";
@@ -274,18 +265,24 @@ namespace SIMS_CW.Controllers
             WebMail.UserName = "simscw2018@gmail.com";
             WebMail.Password = "abc123xyz";
 
+            //Get QA coordinator's email of the appropriate Department
+            user loggedIn = (user)Session["loggedIn"];
+            IEnumerable<user> userQA = dbData.users.Where(u => u.role_id == 3).Where(u => u.department_id == loggedIn.department_id);
+
+
+            
             //Sender email address.  
             WebMail.From = "simscw2018@gmail.com";
-            String ToEmail = "koolkido1412@gmail.com";
-            String EmailSubject = "abc";
-            String EMailBody = "lol";
+            String ToEmail = userQA.Single().email;
+            String EmailSubject = "New Student Idea has been added!";
+            String EMailBody = "A student with <b> Student ID: "  + loggedIn.user_university_id + "</b>" +
+                                            " and <b> Username: " + loggedIn.user_name + "</b>" +
+                                            " has submitted the following idea to the SIMS system." + "<br><br>" +
+                                            " <b>Idea Title: </b>" + idea.idea_title + "<br><br>" +
+                                            " <b>Idea Content: </b>" + idea.idea_content + "<br><br>" +
+                                            " Please review this newly submitted idea and change its status in the SIMS.";
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
-            */
-
-            //dbData.SaveChanges();
-            //return Redirect(Url.Action("Index", "Idea", new { page = 1 }));
-
 
             //New Code: Validation Handling
             try
@@ -414,12 +411,39 @@ namespace SIMS_CW.Controllers
                 comment.isAnonymous = 0;
             }
             dbData.comments.Add(comment);
-            /*********************************/
-            //dbData.SaveChanges();
 
-            //return Redirect(Url.Action("Details", "Idea", new { idea_id = idea_id }));
+
+
+            //Configuring webMail class to send emails  
+            //gmail smtp server  
+            WebMail.SmtpServer = "smtp.gmail.com";
+            //gmail port to send emails  
+            WebMail.SmtpPort = 587;
+            WebMail.SmtpUseDefaultCredentials = true;
+            //sending emails with secure protocol  
+            WebMail.EnableSsl = true;
+            //EmailId used to send emails from application  
+            WebMail.UserName = "simscw2018@gmail.com";
+            WebMail.Password = "abc123xyz";
+
+            //Get Original poster email
+            int user_id = Convert.ToInt32(Request.Form["user_id"].ToString());
+            String idea_Title = Request.Form["idea_Title"].ToString();
+            IEnumerable<user> ideaPoster = dbData.users.Where(u => u.user_id == user_id);
+
             
-            //New Code: Error Handling
+
+
+            //Sender email address.  
+            WebMail.From = "simscw2018@gmail.com";
+            String ToEmail = ideaPoster.Single().email;
+            String EmailSubject = "A comment to your idea has been submitted!";
+            String EMailBody = "A comment has been added to your idea with title: " + idea_Title + "!" + "<br><br>" +
+                                            "Comment: " + comment.comment_content;
+            //Send email  
+            WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
+
+
             try
             {
                 dbData.SaveChanges();

@@ -5,10 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section title {
+    Academic year
+}
+
+@section title_page {
+    Academic year
+}
+
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create a new academic year", "Create")
 </p>
 <table class="table">
     <tr>
@@ -30,29 +38,30 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.academic_year_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.started_at)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ended_at)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.deadline_ideas)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.deadline_comments)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.academic_year_id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.academic_year_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.academic_year_id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.academic_year_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.started_at)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ended_at)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.deadline_ideas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.deadline_comments)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.academic_year_id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.academic_year_id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.academic_year_id })
+            </td>
+        </tr>
+    }
 
 </table>

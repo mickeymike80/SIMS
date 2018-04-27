@@ -4,37 +4,49 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.Label("Category Name")
-        </th>
-        <th>
-            @Html.Label("Created At")
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.category_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.created_at)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.category_id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.category_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.category_id })
-        </td>
-    </tr>
+@section title {
+    View all Categories
 }
+@section title_page {
+    View all Categories
+}
+<h3 class="headerw3" style="margin-bottom: 30px;">View all Categories</h3>
+<button style="margin-bottom: 10px;" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Create", "ManagerCategory")"><span class="glyphicon glyphicon-plus"></span> Create a new Category</a>
+</button>
 
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.Label("Category Name")
+                </th>
+                <th>
+                    @Html.Label("Created At")
+                </th>
+                <th>
+                    @Html.Label("Action")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.category_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.created_at)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.category_id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.category_id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.category_id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
