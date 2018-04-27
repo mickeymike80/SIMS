@@ -18,6 +18,18 @@ namespace SIMS_CW.Controllers
         // GET: AdminAccount
         public ActionResult Index()
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             var users = db.users.Include(u => u.department).Include(u => u.role);
             return View(users.ToList());
         }
@@ -25,6 +37,18 @@ namespace SIMS_CW.Controllers
         // GET: AdminAccount/Details/5
         public ActionResult Details(int? id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -40,6 +64,18 @@ namespace SIMS_CW.Controllers
         // GET: AdminAccount/Create
         public ActionResult Create()
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             ViewBag.department_id = new SelectList(db.departments, "department_id", "department_name");
             ViewBag.role_id = new SelectList(db.roles, "role_id", "role_name");
             return View();
@@ -52,6 +88,18 @@ namespace SIMS_CW.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(user user)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (ModelState.IsValid)
             {
                 user.created_at = DateTime.Now;
@@ -76,9 +124,15 @@ namespace SIMS_CW.Controllers
 
                 //Sender email address.  
                 WebMail.From = "simscw2018@gmail.com";
-                String ToEmail = "koolkido1412@gmail.com";
+                String ToEmail = user.email;
                 String EmailSubject = "Account Details";
-                String EMailBody = "Email: " + user.email +"\nPassword: "+ password + "\nLink: <a href='http://localhost:52547/Home/LoginPage'>Click here</a>";
+                String EMailBody = "A new account has been created for you and added to the SIMS system." + "<br><br>" +
+                                            "Your login credentials are:" + "<br><br>" +
+                                            "<b>Username: " + user.email + "</b>" + "<br>" +
+                                            "<b>Password: " + user.password + "</b>" + "<br><br>" +
+                                            "Please <a href='http://simscw2018.somee.com/Home/LoginPage'>Click here</a> to login and access the SIMS system." + "<br><br>" +
+                                            "May you experience any difficulties, please send an email to simscw2018@gmail.com";
+
                 //Send email  
                 WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
                 return RedirectToAction("Index");
@@ -92,6 +146,18 @@ namespace SIMS_CW.Controllers
         // GET: AdminAccount/Edit/5
         public ActionResult Edit(int? id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -113,6 +179,18 @@ namespace SIMS_CW.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "user_id,user_university_id,department_id,role_id,user_name,email,password,created_at")] user user)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(user).State = EntityState.Modified;
@@ -127,6 +205,18 @@ namespace SIMS_CW.Controllers
         // GET: AdminAccount/Delete/5
         public ActionResult Delete(int? id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
