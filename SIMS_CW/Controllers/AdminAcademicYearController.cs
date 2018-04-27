@@ -17,12 +17,36 @@ namespace SIMS_CW.Controllers
         // GET: AdminAcademicYear
         public ActionResult Index()
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             return View(db.academic_years.ToList());
         }
 
         // GET: AdminAcademicYear/Details/5
         public ActionResult Details(int? id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -38,6 +62,18 @@ namespace SIMS_CW.Controllers
         // GET: AdminAcademicYear/Create
         public ActionResult Create()
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             return View();
         }
 
@@ -48,6 +84,18 @@ namespace SIMS_CW.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "academic_year_id,academic_year_name,started_at,ended_at,deadline_ideas,deadline_comments")] academic_years academic_years)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (ModelState.IsValid)
             {
                 db.academic_years.Add(academic_years);
@@ -61,6 +109,18 @@ namespace SIMS_CW.Controllers
         // GET: AdminAcademicYear/Edit/5
         public ActionResult Edit(int? id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -80,6 +140,18 @@ namespace SIMS_CW.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "academic_year_id,academic_year_name,started_at,ended_at,deadline_ideas,deadline_comments")] academic_years academic_years)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(academic_years).State = EntityState.Modified;
@@ -92,6 +164,18 @@ namespace SIMS_CW.Controllers
         // GET: AdminAcademicYear/Delete/5
         public ActionResult Delete(int? id)
         {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -123,5 +207,6 @@ namespace SIMS_CW.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }
