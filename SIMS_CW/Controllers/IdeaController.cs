@@ -231,7 +231,16 @@ namespace SIMS_CW.Controllers
             {
                 idea.isAnonymous = 0;
             }
-
+            //check TC
+            if (Request.Form["termsCondition"] != null)
+            {
+                
+            }
+            else
+            {
+                ViewBag.error = "This is requried";
+            }
+            //End TC
             dbData.ideas.Add(idea);
             //file upload
             foreach (HttpPostedFileBase file in files)
@@ -409,7 +418,8 @@ namespace SIMS_CW.Controllers
             //dbData.SaveChanges();
 
             //return Redirect(Url.Action("Details", "Idea", new { idea_id = idea_id }));
-
+            
+            //New Code: Error Handling
             try
             {
                 dbData.SaveChanges();
