@@ -359,6 +359,7 @@
     <Content Include="Views\ManagerCategory\Edit.cshtml" />
     <Content Include="Views\ManagerCategory\Index.cshtml" />
     <Content Include="Views\Home\Terms.cshtml" />
+    <Content Include="Views\Home\DeniedAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
