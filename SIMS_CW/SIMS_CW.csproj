@@ -187,6 +187,7 @@
     <Content Include="Assets\css\contact.css" />
     <Content Include="Assets\css\easy-responsive-tabs.css" />
     <Content Include="Assets\css\font-awesome.css" />
+    <Content Include="Assets\css\ownStyle.css" />
     <Content Include="Assets\css\style.css" />
     <Content Include="Assets\css\team.css" />
     <Content Include="Assets\fonts\fontawesome-webfont.svg" />

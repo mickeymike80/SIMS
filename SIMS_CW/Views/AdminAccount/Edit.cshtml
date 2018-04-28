@@ -5,14 +5,14 @@
 }
 
 @section title {
-    Edit user
+    Edit User
 }
 
 @section title_page {
-    Edit user
+    Edit User
 }
 
-<h2>Edit</h2>
+<h3 class="headerw3" style="margin-bottom: 30px;">Edit User</h3>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -22,7 +22,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.user_id)
         <div class="form-group">
-            @Html.LabelFor(model => model.user_university_id, "ID", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.user_university_id, "University ID", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.user_university_id, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.user_university_id, "", new { @class = "text-danger" })

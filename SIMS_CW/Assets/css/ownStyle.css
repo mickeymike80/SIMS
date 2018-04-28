@@ -1,0 +1,41 @@
+﻿.btn-adjust .btn {
+    /* padding: 1px 3px;*/
+    padding: 1px 0 1px 5px;
+}
+td{
+    font-size: 12px;
+}
+
+.btn-hint {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.btn-hint .hinttext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.btn-hint:hover .hinttext {
+    visibility: visible;
+}
+
+@media (min-width: 768px) {
+    .dl-horizontal dd {
+        margin-bottom: 15px;
+        margin-left: 195px;
+    }
+}
+
+.dl-horizontal dd {
+    margin-bottom: 15px;
+}

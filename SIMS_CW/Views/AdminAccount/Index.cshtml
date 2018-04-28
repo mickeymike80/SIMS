@@ -6,66 +6,66 @@
 }
 
 @section title {
-    Admin
+    View all Users
 }
 @section title_page {
-    Admin
+    View all Users
 }
-<h2>Index</h2>
-<p>
-    @Html.ActionLink("Create a new user", "Create")
-</p>
+<h3 class="headerw3" style="margin-bottom: 30px;">View all Users</h3>
+<button style="margin-bottom: 10px;" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Create", "AdminAccount")"><span class="glyphicon glyphicon-plus"></span> Create a new User</a>
+</button>
+
 <div class="table-responsive">
-    <table class="table">
-        <tr>
-            <th>
-                Department
-            </th>
-            <th>
-                Role
-            </th>
-            <th>
-                ID
-            </th>
-            <th>
-                Username
-            </th>
-            <th>
-                Email
-            </th>
-            <th>
-                Created at
-            </th>
-            <th>Action</th>
-        </tr>
-        @foreach (var item in Model)
-        {
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.department.department_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.role.role_name)
+                <th>Actions</th>
+                <th>Uni ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>Created at</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td class="btn-adjust">
+                    <button type="button" class="btn btn-warning">
+                        <a style="color: white;" href="@Url.Action("Edit", "AdminAccount", new { id = item.user_id })" title="Edit"><span style="margin-right: 5px" class="glyphicon glyphicon-pencil"></span></a>
+                    </button>
+
+                    <button type="button" class="btn btn-info">
+                        <a style="color: white;" href="@Url.Action("Details", "AdminAccount", new { id = item.user_id })" title="Details"><span style="margin-right: 5px" class="glyphicon glyphicon-align-justify"></span></a>
+                    </button>
+
+                    <button type="button" class="btn btn-danger">
+                        <a style="color: white;" href="@Url.Action("Delete", "AdminAccount", new { id = item.user_id })" title="Delete"><span style="margin-right: 5px" class="glyphicon glyphicon-trash"></span></a>
+                    </button>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.user_university_id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.user_name)
+                    @Html.ActionLink(item.user_name, "Details", new { id = item.user_id })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.email)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.created_at)
+                    @Html.DisplayFor(modelItem => item.role.role_name)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.user_id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.user_id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.user_id })
+                    @Html.DisplayFor(modelItem => item.department.department_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.created_at)
                 </td>
             </tr>
-        }
+            }
+        <tbody>
     </table>
 </div>
-
