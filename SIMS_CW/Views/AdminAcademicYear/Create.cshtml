@@ -6,14 +6,14 @@
 }
 
 @section title {
-    Create a new academic year
+    Create a new Academic Year
 }
 
 @section title_page {
-    Create a new academic year
+    Create a new Academic Year
 }
 
-<h2>Create a new academic year</h2>
+<h3 class="headerw3" style="margin-bottom: 30px;">Create new Academic Year</h3>
 
 @using (Html.BeginForm())
 {
@@ -46,7 +46,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.deadline_ideas, "Closure date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.deadline_ideas, "Ideas Closure Date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.deadline_ideas, new { @type = "datetime-local", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.deadline_ideas, "", new { @class = "text-danger" })
@@ -54,7 +54,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.deadline_comments, "Final closure date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.deadline_comments, "Comments Closure Date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.deadline_comments, new { @type = "datetime-local", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.deadline_comments, "", new { @class = "text-danger" })

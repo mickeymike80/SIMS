@@ -13,14 +13,13 @@
     Edit academic year
 }
 
-<h2>Edit</h2>
+<h3 class="headerw3" style="margin-bottom: 30px;">Edit Academic Year</h3>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>academic_years</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.academic_year_id)
@@ -50,7 +49,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.deadline_ideas, "Closure date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.deadline_ideas, "Ideas closure date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.deadline_ideas, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.deadline_ideas, "", new { @class = "text-danger" })
@@ -58,7 +57,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.deadline_comments, "Final closure date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.deadline_comments, "Comments closure date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.deadline_comments, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.deadline_comments, "", new { @class = "text-danger" })

@@ -13,55 +13,57 @@
     Academic year
 }
 
-<h2>Index</h2>
+<h3 class="headerw3" style="margin-bottom: 30px;">View Academic Year</h3>
+<button style="margin-bottom: 10px;" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Create", "AdminAcademicYear")"><span class="glyphicon glyphicon-plus"></span> Create a new Academic Year</a>
+</button>
 
-<p>
-    @Html.ActionLink("Create a new academic year", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.Label("Academic Year")
-        </th>
-        <th>
-            @Html.Label("Start At")
-        </th>
-        <th>
-            @Html.Label("End At")
-        </th>
-        <th>
-            @Html.Label("Closure Date")
-        </th>
-        <th>
-            @Html.Label("Final Closure")
-        </th>
-        <th></th>
-    </tr>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th>Academic Year</th>
+                <th>Start At</th>
+                <th>End At</th>
+                <th>Ideas Closure Date</th>
+                <th>Comments Closure Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="btn-adjust">
+                        <button type="button" class="btn btn-warning">
+                            <a style="color: white;" href="@Url.Action("Edit", "AdminAcademicYear", new { id = item.academic_year_id })" title="Edit"><span style="margin-right: 5px" class="glyphicon glyphicon-pencil"></span></a>
+                        </button>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.academic_year_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.started_at)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ended_at)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.deadline_ideas)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.deadline_comments)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.academic_year_id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.academic_year_id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.academic_year_id })
-            </td>
-        </tr>
-    }
+                        <button type="button" class="btn btn-info">
+                            <a style="color: white;" href="@Url.Action("Details", "AdminAcademicYear", new { id = item.academic_year_id })" title="Details"><span style="margin-right: 5px" class="glyphicon glyphicon-align-justify"></span></a>
+                        </button>
 
-</table>
+                        <button type="button" class="btn btn-danger">
+                            <a style="color: white;" href="@Url.Action("Delete", "AdminAcademicYear", new { id = item.academic_year_id })" title="Delete"><span style="margin-right: 5px" class="glyphicon glyphicon-trash"></span></a>
+                        </button>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.academic_year_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.started_at)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ended_at)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.deadline_ideas)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.deadline_comments)
+                    </td>
+                </tr>
+            }
+        <tbody>
+    </table>
+</div>
