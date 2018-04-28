@@ -25,6 +25,7 @@ namespace SIMS_CW.Models
         public int? academic_year_id { get; set; }
 
         [StringLength(50)]
+        [Required]
         public string idea_title { get; set; }
 
         [Column(TypeName = "text")]

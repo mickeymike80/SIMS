@@ -22,6 +22,7 @@
         border-radius: 5px;
         background-color: aliceblue;
     }
+
     .panel-gray {
         border: 1px solid #dddddd;
         border-radius: 5px;
@@ -33,43 +34,43 @@
         padding: 20px 15px 0 15px;
     }
 
-    .post .post-heading .meta .title {
-        margin-bottom: 0;
-    }
+        .post .post-heading .meta .title {
+            margin-bottom: 0;
+        }
 
-    .post .post-heading .meta .title a {
-        color: black;
-    }
+            .post .post-heading .meta .title a {
+                color: black;
+            }
 
-    .post .post-heading .meta .title a:hover {
-        color: #aaaaaa;
-    }
+                .post .post-heading .meta .title a:hover {
+                    color: #aaaaaa;
+                }
 
-    .post .post-heading .meta .time {
-        margin-top: 8px;
-        color: #999;
-    }
+        .post .post-heading .meta .time {
+            margin-top: 8px;
+            color: #999;
+        }
 
     .post .post-description {
         padding: 15px;
     }
 
-    .post .post-description p {
-        font-size: 14px;
-    }
+        .post .post-description p {
+            font-size: 14px;
+        }
 
-    .post .post-description .stats {
-        margin-top: 5px;
-    }
+        .post .post-description .stats {
+            margin-top: 5px;
+        }
 
-    .post .post-description .stats .stat-item form {
-        display: inline-block;
-        margin-right: 15px;
-    }
+            .post .post-description .stats .stat-item form {
+                display: inline-block;
+                margin-right: 15px;
+            }
 
-    .post .post-description .stats .stat-item .icon {
-        margin-right: 8px;
-    }
+            .post .post-description .stats .stat-item .icon {
+                margin-right: 8px;
+            }
 </style>
 
 <h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
@@ -170,33 +171,38 @@
 }
 
 <br />
+@if (ViewBag.error != null)
+{
+    <h2 style="color:red">The time for submitting new comment is over in this academic year. Submitting comments is not currently available.</h2>
+}
 @using (Html.BeginForm("Details", "Idea", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-<div class="form-horizontal">
-    <div class="form-group">
-
-        @Html.Label("Post Comment", htmlAttributes: new { @class = "control-label col-md-2" })
-
-        <div class="col-md-10">
-            @Html.TextArea("comment_content", htmlAttributes: new { @class = "form-control" })
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-2">Post Comment</label>
+            <div class="col-md-10">
+                <textarea class="form-control" name="comment_content" required></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Post Anonymously", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10" style="margin-top: 10px">
+                <input type="checkbox" name="isAnonymous" />
+            </div>
+        </div>
+        <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
+        <input type="hidden" value="@ViewBag.Idea.user_id" name="user_id" />
+        <input type="hidden" value="@ViewBag.Idea.idea_title" name="Idea_Title" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @if (ViewBag.error != null)
+                {<input type="submit" value="Post Comment" class="btn btn-default" disabled />}
+                else
+                {<input type="submit" value="Post Comment" class="btn btn-default" />}
+            </div>
         </div>
     </div>
-    <div class="form-group">
-        @Html.Label("Post Anonymously", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <input type="checkbox" name="isAnonymous" />
-        </div>
-    </div>
-    <input type="hidden" value="@ViewBag.Idea.idea_id" name="idea_id" />
-    <input type="hidden" value="@ViewBag.Idea.user_id" name="user_id" />
-    <input type="hidden" value="@ViewBag.Idea.idea_title" name="Idea_Title" />
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Post Comment" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 <br />
 <h3 style="margin-bottom: 10px;">Comments</h3>

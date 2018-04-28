@@ -29,13 +29,101 @@
         outline: none;
         margin-bottom: 18px;
     }
-</style>
 
+    .modal-body {
+        max-height: calc(100vh - 210px);
+        overflow-y: auto;
+    }
+
+    #custom-scoll-bar::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+        background-color: #F5F5F5;
+    }
+
+    #custom-scoll-bar::-webkit-scrollbar {
+        width: 12px;
+        background-color: #F5F5F5;
+    }
+
+    #custom-scoll-bar::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #555;
+    }
+</style>
+<script>
+    function yes_on_click() {
+        document.getElementById("add-idea-form").submit();
+    }
+</script>
+<!-- confirmation dialog -->
+<div class="modal fade" id="confirm-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 style="margin-left:10px; margin-top: 10px;" class="modal-title" id="myModalLabel">Confirm</h3>
+            </div>
+            <div class="modal-body" id="custom-scoll-bar" style="width:100%">
+                <h2>Terms & Conditions</h2>
+                <p>
+                    To agree with this ‘Terms & Conditions’ (T&C) document, you acknowledge that you have read and understood the information given below.
+                    We (…University) would like to improve our university and we need you (our students) to help us. In order to improve our university and create a pleasant environment for you, we would like to encourage all users of this Student Idea Submission System (SIMS) to contribute by submitting ideas and comments. We are very curious to hear from you.
+                    As the purpose of this SIMS is for sharing personal opinions and views, we would like to stress that these opinions and views are not ours; thus, we cannot be held responsible for any submitted content.
+                    To protect contributors from doing the wrong thing, we urge you to comply with the following guidelines and rules when submitting any content on this SIMS
+                </p>
+                <br />
+                <h2>Ideas & Comments</h2>
+                <p>
+                    Submitted ideas and comments should not contain
+                    •	Offensive and vulgar language (e.g. cursing, swearing, etc.)
+                    •	Offensive content to members of different gender, religion, race, nationality, ethnicity, or sexual orientation
+                    •	Bullying
+                    •	Advertisements or spam
+                    •	Personal information (e.g. phone numbers, email, etc.)
+
+                    We encourage contributors to stay respectful towards other’s opinions and take their views into consideration when commenting an idea. Disagreement with or disapproval of a particular opinion or view may lead to anger and conflicts; however, we urge contributors to restrain their anger and stay civilized. Treat others the way you want to be treated.
+
+                    Important Note: Ideas and comments can be submitted as ‘Anonymous’. The identity of contributors who have submitted their ideas and comments as anonymous will be hidden for other students to see; however, we will be able to retrieve identities of all anonymously submitted content.
+                </p>
+                <br />
+                <h2>Votes</h2>
+                <p>
+                    Votes help us to evaluate the popularity of ideas and are extremely important to us. Therefore, a vote given to a specific idea should only express your opinion regarding that related idea and should not reflect any other opinions not related to the idea, such as personal dislike of the owner of the idea.
+                </p>
+                <br />
+                <h2>Collected data</h2>
+                <p>
+                    All collected data, including student information, ideas, votes, and comments will be stored for further processing. This data will then be analyzed and appropriate ideas will be discussed in board meetings before implementation. In addition, the collected data will be kept confidential and will only be used for its initial intended purpose.
+                </p>
+                <br />
+                <h2>Violations</h2>
+                <p>
+                    Inappropriate content and behavior are unacceptable and we reserve the right to remove any submitted content in violation with this T&C document. Furthermore, extreme cases may result in disciplinary actions, direct suspension, or worse, and will be reviewed on a case-to-case basis.
+                </p>
+                <br />
+                <h2>Contact</h2>
+                <p> Any questions and comments regarding this T&C document can be sent to: SIMS@university.com </p>
+            </div>
+            <div class="modal-footer">
+                <b>By clicking yes, you agree with our Terms & Conditions</b>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <a class="btn btn-danger btn-ok" data-dismiss="modal" onclick="yes_on_click()">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end of confirmation dialog -->
 <div>
     <h3 class="headerw3">Create a new idea</h3>
+    @if (ViewBag.error != null)
+    {
+        <h2 style="color:red">The time for submitting new idea is over in this academic year. Creating ideas is not currently available.</h2>
+    }
     <div class="inner_sec_w3_agileinfo">
         <div class="register-form">
-            <form action="/Idea/Create" class="form-horizontal" enctype="multipart/form-data" method="post">
+            <form action="/Idea/Create" class="form-horizontal" id="add-idea-form" enctype="multipart/form-data" method="post">
                 @Html.AntiForgeryToken()
                 <div class="fields-grid">
                     <div class="styled-input agile-styled-input-top">
@@ -44,13 +132,13 @@
                     </div>
                     <div class="styled-input">
                         <label class="custom-margin-bottom-20px">Title:</label>
-                        <input type="text" name="idea_title" required="">
-                        @Html.ValidationMessageFor(model => model.idea_title, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.idea_title, new { @class = "form-control" })
+                        @Html.ValidationMessage("idea_title", new { @class = "text-danger" })
                     </div>
                     <div class="styled-input custom-margin-bottom-20px">
                         <label class="custom-margin-bottom-20px">Content:</label>
                         <textarea class="form-control" rows="10" id="idea_content" name="idea_content" required=""></textarea>
-                        @Html.ValidationMessageFor(model => model.idea_content, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("idea_content", new { @class = "text-danger" })
                     </div>
                     <div class="styled-input custom-margin-bottom-20px" style="display: flex;">
                         <label style="margin-right: 10px;">Attachment:</label>
@@ -60,15 +148,14 @@
                         <label style="margin-right: 5px;">Post Anonymously:</label>
                         <input type="checkbox" name="isAnonymous">
                     </div>
-                    @*New COde*@
-                    <div class="styled-input">
-                        <label style="margin-right: 5px;"> I Agree to the Terms and Condition:</label>
-                        <input type="checkbox" name="termsCondition">
-                    </div>
-                    @*End COde*@
                     <div class="clearfix"> </div>
                 </div>
-                <input type="submit" value="Create">
+                @if (ViewBag.error != null)
+                {
+                    <input class="btn btn-primary" type="button" data-toggle="modal" data-target="#confirm-dialog" value="Create" disabled />}
+                else
+                {
+                    <input class="btn btn-primary" type="button" data-toggle="modal" data-target="#confirm-dialog" value="Create" />}
             </form>
         </div>
     </div>

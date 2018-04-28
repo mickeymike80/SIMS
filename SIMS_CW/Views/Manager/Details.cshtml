@@ -1,0 +1,239 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section title {
+    Show details the idea
+}
+@section title_page {
+    Show details the idea
+}
+
+<style>
+    hr {
+        margin: 5px 0 15px 0;
+    }
+
+    .panel-white {
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background-color: aliceblue;
+    }
+
+    .panel-gray {
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background-color: #f6f6f6;
+    }
+
+    .post .post-heading {
+        height: 70px;
+        padding: 20px 15px 0 15px;
+    }
+
+        .post .post-heading .meta .title {
+            margin-bottom: 0;
+        }
+
+            .post .post-heading .meta .title a {
+                color: black;
+            }
+
+                .post .post-heading .meta .title a:hover {
+                    color: #aaaaaa;
+                }
+
+        .post .post-heading .meta .time {
+            margin-top: 8px;
+            color: #999;
+        }
+
+    .post .post-description {
+        padding: 15px;
+    }
+
+        .post .post-description p {
+            font-size: 14px;
+        }
+
+        .post .post-description .stats {
+            margin-top: 5px;
+        }
+
+            .post .post-description .stats .stat-item form {
+                display: inline-block;
+                margin-right: 15px;
+            }
+
+            .post .post-description .stats .stat-item .icon {
+                margin-right: 8px;
+            }
+</style>
+
+<h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
+
+<button style="margin-bottom: 10px;" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Index", "Idea")"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
+</button>
+
+<div class="row" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+        <div class="panel-white post">
+            <div class="post-heading">
+                <div class="pull-left meta">
+                    <div class="title h5">
+                        @if (ViewBag.Idea_user == null)
+                        {
+                            <b>Anonymous</b>
+                        }
+                        else
+                        {
+                            <b>@ViewBag.Idea_user.user_name</b>
+                        }
+                    </div>
+                    <h6 class="text-muted time">
+                        <span class="glyphicon glyphicon-calendar"> @ViewBag.idea.created_at</span>
+
+                        <!--Two spaces-->
+                        &nbsp&nbsp
+                        <span class="glyphicon glyphicon-eye-open"> @ViewBag.idea.viewed_count</span>
+
+                        <!--Two spaces-->
+                        &nbsp&nbsp
+                        <span class="glyphicon glyphicon-tag"> @ViewBag.idea.category.category_name</span>
+                        &nbsp&nbsp
+                        @if (@ViewBag.idea.status == 0)
+                        {
+                            <span class="glyphicon glyphicon-star">Pending</span>
+                        }
+                        else if (@ViewBag.idea.status == 1)
+                        {
+                            <span class="glyphicon glyphicon-star">Approved</span>
+                        }
+                        else if (@ViewBag.idea.status == 2)
+                        {
+                            <span class="glyphicon glyphicon-star">Denied</span>
+                        }
+
+                    </h6>
+
+                </div>
+            </div>
+            <div class="post-description">
+                <div class="post-title" style="font-size: 20px;">
+                    <h2>
+                        @ViewBag.idea.idea_title
+                    </h2>
+                    <hr>
+                </div>
+                <p>
+                    @ViewBag.idea.idea_content
+                </p>
+                <hr>
+                <div class="stats">
+                    <p>Likes: @ViewBag.likes</p>
+                    <p>Dislikes: @ViewBag.dislikes</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br />
+@foreach (var item in ViewBag.documents)
+{
+    <a href="@Url.Action("DownloadAttachment", "Idea", new { @new_file_name = item.new_file_name, @old_file_name = item.old_file_name})">@item.old_file_name</a>
+    <br />
+}
+
+<br />
+<script>
+    function approve() {
+        document.getElementById('approve-idea').submit();
+    }
+</script>
+<!--approve confirmation dialog -->
+<div class="modal fade" id="confirm-approve" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 style="margin-left:10px; margin-top: 10px;" class="modal-title" id="myModalLabel">Confirm</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to approve this idea?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <a class="btn btn-danger btn-ok" data-dismiss="modal" onclick="approve()">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end of confirmation dialog -->
+<!-- deny confirmation dialog -->
+<div class="modal fade" id="confirm-deny" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 style="margin-left:10px; margin-top: 10px;" class="modal-title" id="myModalLabel">Deny Idea</h3>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/Manager/Deny" id="deny-idea">
+                    <input type="hidden" name="idea_id" value="@ViewBag.idea.idea_id" />
+                    <p>Reason for denying idea:</p>
+                    <textarea class="form-control" rows="4" cols="8" name="reason" required></textarea>
+                    <br />
+                    <div class="clearfix"></div>
+                    <input class="btn btn-primary" type="submit" value="Deny" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end of confirmation dialog -->
+@if (ViewBag.mode == "approve")
+{
+    <form method="post" action="/Manager/Approve" id="approve-idea">
+        <input type="hidden" name="idea_id" value="@ViewBag.idea.idea_id" />
+        <input type="button" class="btn btn-primary" value="Approve" data-toggle="modal" data-target="#confirm-approve" />
+    </form>
+    <br />
+    <input type="button" class="btn btn-primary" value="Deny" data-toggle="modal" data-target="#confirm-deny" />
+}
+@if (ViewBag.mode == "viewall")
+{
+    <h3 style="margin-bottom: 10px;">Comments</h3>
+    <hr>
+    for (int i = 0; i < Model.Comments.Count; i++)
+    {
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-md-12">
+                <div class="panel-gray post">
+                    <div class="post-heading">
+                        <div class="pull-left meta">
+                            <div class="title h5">
+                                <b>@Model.Comment_users[i].user_name</b>
+                            </div>
+                            <h6 class="text-muted time">
+                                <span class="glyphicon glyphicon-calendar"> @Model.Comments[i].created_at</span>
+                            </h6>
+
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="post-description">
+                        <p>
+                            @Model.Comments[i].comment_content
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

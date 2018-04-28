@@ -16,8 +16,9 @@ namespace SIMS_CW.Controllers
     public class IdeaController : Controller
     {
         DbModel dbData = new DbModel();
+        private static academic_years current_year;
 
-        
+
         public ActionResult Index(int? page, string idea_title, string name, string categoryID, string time_order, string pubFrom, string pubTo)
         {
             //check logged in?
@@ -31,6 +32,7 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
+            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
             List<display_idea> display_Ideas = getAllDisplayIdeas();
 
             //filter with title
@@ -154,7 +156,7 @@ namespace SIMS_CW.Controllers
         private List<display_idea> getAllDisplayIdeas()
         {
             List<display_idea> display_Ideas = new List<display_idea>();
-            List<idea> ideas = dbData.ideas.ToList();
+            List<idea> ideas = dbData.ideas.Where(item=>item.academic_year_id == current_year.academic_year_id).Where(item=>item.isEnabled == 1).ToList();
             for (int i = 0; i < ideas.Count; i++)
             {
                 idea idea = ideas[i];
@@ -176,7 +178,7 @@ namespace SIMS_CW.Controllers
                 }
                 display_Ideas.Add(display_Idea);
             }
-
+            display_Ideas.OrderByDescending(item => item.idea.created_at);
             return display_Ideas;
         }
 
@@ -188,13 +190,17 @@ namespace SIMS_CW.Controllers
             {
                 return Redirect("~/Home/LoginPage");
             }
+            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
             if (Session["cateCbb"] == null)
             {
                 List<category> categories = dbData.categories.ToList();
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
-            
+            if (current_year.deadline_ideas < DateTime.Now)
+            {
+                ViewBag.error = "1";
+            }
             return View();
         }
 
@@ -206,21 +212,20 @@ namespace SIMS_CW.Controllers
             {
                 return Redirect("~/Home/LoginPage");
             }
-
+            if (!ModelState.IsValid)
+            {
+                List<category> categories = dbData.categories.ToList();
+                SelectList listItems = new SelectList(categories, "category_id", "category_name");
+                Session["cateCbb"] = listItems;
+                return View(idea);
+            }
             // 0 = false; 1 = true
             idea.category_id = Convert.ToInt32(Request.Form["categoryID"].ToString());
-            idea.isEnabled = 1;
+            idea.isEnabled = 0;
             idea.status = 0;
             idea.viewed_count = 0;
+            idea.academic_year_id = current_year.academic_year_id;
             idea.created_at = DateTime.Now;
-            List<academic_years> list = dbData.academic_years.ToList();
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (DateTime.Now < list[i].ended_at)
-                {
-                    idea.academic_year_id = list[i].academic_year_id;
-                }
-            }
             idea.user_id = ((user)Session["loggedIn"]).user_id;
             //check anonymous
             if (Request.Form["isAnonymous"] != null)
@@ -380,7 +385,10 @@ namespace SIMS_CW.Controllers
             mymodel.Comments = comments;
             mymodel.Comment_users = comment_users;
 
-            
+            if (current_year.deadline_comments < DateTime.Now)
+            {
+                ViewBag.error = "1";
+            }
             return View(mymodel);
         }
 
@@ -534,33 +542,6 @@ namespace SIMS_CW.Controllers
             string currentFile = "~/UploadedFiles/" + new_file_name;
             string contentType = "application/" + old_file_name.Split('.')[1];
             return File(currentFile, contentType, old_file_name);
-        }
-
-
-        public ActionResult Filter(int ? page, string idea_title)
-        {
-            //int category_id = Convert.ToInt32(Request.Form["categoryID"].ToString());
-            List<display_idea> display_Ideas = getAllDisplayIdeas();
-            if (idea_title != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach(display_idea item in display_Ideas)
-                {
-                    if (!item.idea.idea_title.Contains(idea_title))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach(display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.idea_title = idea_title;
-            }
-           
-            int pageSize = 5;
-            int pageNumber = (page ?? 1);
-            return View("Filter", display_Ideas.ToPagedList(pageNumber, pageSize));
         }
     }
 }

@@ -362,6 +362,8 @@
     <Content Include="Views\ManagerCategory\Index.cshtml" />
     <Content Include="Views\Home\Terms.cshtml" />
     <Content Include="Views\Home\DeniedAccess.cshtml" />
+    <Content Include="Views\Manager\ApproveIdeas.cshtml" />
+    <Content Include="Views\Manager\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

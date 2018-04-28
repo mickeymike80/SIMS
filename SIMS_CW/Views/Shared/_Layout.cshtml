@@ -128,8 +128,16 @@
                                         <li><a href="@Url.Action("Index", "Home")">Home</a></li>
                                         <li><a href="@Url.Action("About", "Home")">About</a></li>
 
-                                        <li><a href="@Url.Action("Index", "Manager")">Ideas</a></li>
-
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown" data-hover="Pages" role="button" aria-haspopup="true" aria-expanded="false">
+                                                Ideas
+                                                <span class="fa fa-angle-down"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="@Url.Action("Index", "Manager")">View all</a></li>
+                                                <li><a href="@Url.Action("Approve Ideas", "Manager")">Approve Ideas</a></li>
+                                            </ul>
+                                        </li>
 
                                         <li class="dropdown">
                                             <a href="#" class="dropdown-toggle active" data-toggle="dropdown" data-hover="Pages" role="button" aria-haspopup="true" aria-expanded="false">

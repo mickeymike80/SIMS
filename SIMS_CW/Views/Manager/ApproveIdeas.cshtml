@@ -2,16 +2,16 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "View";
+    ViewBag.Title = "Approve Ideas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section title {
-    View all ideas
+    Approve Ideas
 }
 
 @section title_page {
-    View all ideas
+    Approve Ideas
 }
 <script>
     $(function () {
@@ -78,7 +78,7 @@
                 <tr>
                     <td>@item.user.user_name</td>
                     <td>
-                        <a href="@Url.Action("Details", "Manager", new { idea_id =  item.idea.idea_id, mode="viewall"})">@item.idea.idea_title</a>
+                        <a href="@Url.Action("Details", "Manager", new { idea_id =  item.idea.idea_id, mode="approve"})">@item.idea.idea_title</a>
                     </td>
                     <td>@item.idea.idea_content</td>
                     @if (item.idea.status == 0)
@@ -88,7 +88,8 @@
                     else if (item.idea.status == 1)
                     {
                         <td style="color:green">Apprroved</td>
-                    }else 
+                    }
+                    else if (item.idea.status == 2)
                     {
                         <td style="color:red">Denied</td>
                     }
@@ -102,5 +103,5 @@
 @*Pagination*@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-    @Html.PagedListPager(Model, page => Url.Action("Index",
-                        new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))
+    @Html.PagedListPager(Model, page => Url.Action("ApproveIdeas",
+                                    new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))
