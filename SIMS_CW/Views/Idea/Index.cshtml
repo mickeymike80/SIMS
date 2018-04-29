@@ -15,10 +15,11 @@
     hr {
         margin: 5px 0 15px 0;
     }
+
     .panel-white {
         border: 1px solid #dddddd;
         border-radius: 5px;
-        background-color:aliceblue;
+        background-color: aliceblue;
     }
 
     .post .post-heading {
@@ -26,43 +27,43 @@
         padding: 20px 15px 0 15px;
     }
 
-    .post .post-heading .meta .title {
-        margin-bottom: 0;
-    }
+        .post .post-heading .meta .title {
+            margin-bottom: 0;
+        }
 
-    .post .post-heading .meta .title a {
-        color: black;
-    }
+            .post .post-heading .meta .title a {
+                color: black;
+            }
 
-    .post .post-heading .meta .title a:hover {
-        color: #aaaaaa;
-    }
+                .post .post-heading .meta .title a:hover {
+                    color: #aaaaaa;
+                }
 
-    .post .post-heading .meta .time {
-        margin-top: 8px;
-        color: #999;
-    }
+        .post .post-heading .meta .time {
+            margin-top: 8px;
+            color: #999;
+        }
 
     .post .post-description {
         padding: 15px;
     }
 
-    .post .post-description p {
-        font-size: 14px;
-    }
+        .post .post-description p {
+            font-size: 14px;
+        }
 
-    .post .post-description .stats {
-        margin-top: 5px;
-    }
+        .post .post-description .stats {
+            margin-top: 5px;
+        }
 
-    .post .post-description .stats .stat-item {
-        display: inline-block;
-        margin-right: 15px;
-    }
+            .post .post-description .stats .stat-item {
+                display: inline-block;
+                margin-right: 15px;
+            }
 
-    .post .post-description .stats .stat-item .icon {
-        margin-right: 8px;
-    }
+                .post .post-description .stats .stat-item .icon {
+                    margin-right: 8px;
+                }
 </style>
 
 <script>
@@ -96,7 +97,7 @@
     </div>
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Category")</div>
-        <div class="col-md-10">@Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "None", htmlAttributes: new { @class = "form-control" })</div>
+        <div class="col-md-10">@Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "All", htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Publish Order")</div>
@@ -164,9 +165,22 @@
                             <!--Two spaces-->
                             &nbsp&nbsp
                             <span class="glyphicon glyphicon-tag"> @item.idea.category.category_name</span>
-                            
+
+                            &nbsp&nbsp
+                            @if (item.idea.status == 0)
+                            {
+                                <span class="glyphicon glyphicon-star">Pending</span>
+                            }
+                            else if (item.idea.status == 1)
+                            {
+                                <span class="glyphicon glyphicon-star" style="color:green">Approved</span>
+                            }
+                            else if (item.idea.status == 2)
+                            {
+                                <span class="glyphicon glyphicon-star" style="color:red">Denied</span>
+                            }
                         </h6>
-                        
+
                     </div>
                 </div>
                 <div class="post-description">
@@ -179,7 +193,7 @@
                     <p>
                         @item.idea.idea_content
                     </p>
-                    <hr>                 
+                    <hr>
                 </div>
             </div>
         </div>
@@ -189,13 +203,13 @@
 @*Pagination*@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     @Html.PagedListPager(Model, page => Url.Action("Index",
-                                            new
-                                            {
-                                                page,
-                                                idea_title = ViewBag.idea_title,
-                                                name = ViewBag.name,
-                                                categoryID = ViewBag.categoryID,
-                                                time_order = ViewBag.time_order,
-                                                pubFrom = ViewBag.pubFrom,
-                                                pubTo = ViewBag.pubTo
-                                            }))
+                                                    new
+                                                    {
+                                                        page,
+                                                        idea_title = ViewBag.idea_title,
+                                                        name = ViewBag.name,
+                                                        categoryID = ViewBag.categoryID,
+                                                        time_order = ViewBag.time_order,
+                                                        pubFrom = ViewBag.pubFrom,
+                                                        pubTo = ViewBag.pubTo
+                                                    }))

@@ -98,6 +98,11 @@ namespace SIMS_CW.Controllers
 
             if (ModelState.IsValid)
             {
+                if (academic_years.ended_at <= academic_years.started_at)
+                {
+                    ViewBag.error = "End date must be after start date";
+                    return View(academic_years);
+                }
                 db.academic_years.Add(academic_years);
                 db.SaveChanges();
                 return RedirectToAction("Index");

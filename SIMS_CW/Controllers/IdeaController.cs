@@ -33,7 +33,7 @@ namespace SIMS_CW.Controllers
                 Session["cateCbb"] = listItems;
             }
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
-            List<display_idea> display_Ideas = getAllDisplayIdeas();
+            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.isEnabled == 1).ToList();
 
             //filter with title
             if (idea_title != null)
@@ -156,7 +156,7 @@ namespace SIMS_CW.Controllers
         private List<display_idea> getAllDisplayIdeas()
         {
             List<display_idea> display_Ideas = new List<display_idea>();
-            List<idea> ideas = dbData.ideas.Where(item=>item.academic_year_id == current_year.academic_year_id).Where(item=>item.isEnabled == 1).ToList();
+            List<idea> ideas = dbData.ideas.Where(item=>item.academic_year_id == current_year.academic_year_id).ToList();
             for (int i = 0; i < ideas.Count; i++)
             {
                 idea idea = ideas[i];
@@ -322,7 +322,7 @@ namespace SIMS_CW.Controllers
 
             idea idea = dbData.ideas.Where(i => i.idea_id == idea_id).First();
             int uid = Convert.ToInt32(idea.user_id);
-            List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).ToList();
+            List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).OrderByDescending(c=>c.created_at).ToList();
             List<comment> temp = new List<comment>();
             idea.viewed_count += 1;
             dbData.SaveChanges();
@@ -540,8 +540,25 @@ namespace SIMS_CW.Controllers
         public FileResult DownloadAttachment(string new_file_name, string old_file_name)
         {
             string currentFile = "~/UploadedFiles/" + new_file_name;
-            string contentType = "application/" + old_file_name.Split('.')[1];
+            string contentType = "application/" + old_file_name.Split('.').Last();
             return File(currentFile, contentType, old_file_name);
         }
+
+        public ActionResult MyIdeas(int? page)
+        {
+            //check logged in?
+            if (Session["loggedIn"] == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            user user = ((user)Session["loggedIn"]);
+            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
+            var display_Ideas = getAllDisplayIdeas().Where(item=>item.idea.user_id == user.user_id).OrderByDescending(item=>item.idea.created_at);            
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(display_Ideas.ToPagedList(pageNumber, pageSize));
+        }
+
     }
 }

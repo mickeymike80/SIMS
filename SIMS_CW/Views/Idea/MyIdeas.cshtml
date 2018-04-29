@@ -1,0 +1,128 @@
+﻿@model PagedList.IPagedList<SIMS_CW.Models.display_idea>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "My Ideas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section title {
+    View my ideas
+}
+@section title_page {
+    View my ideas
+}
+
+<style>
+    hr {
+        margin: 5px 0 15px 0;
+    }
+
+    .panel-white {
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background-color: aliceblue;
+    }
+
+    .post .post-heading {
+        height: 70px;
+        padding: 20px 15px 0 15px;
+    }
+
+        .post .post-heading .meta .title {
+            margin-bottom: 0;
+        }
+
+            .post .post-heading .meta .title a {
+                color: black;
+            }
+
+                .post .post-heading .meta .title a:hover {
+                    color: #aaaaaa;
+                }
+
+        .post .post-heading .meta .time {
+            margin-top: 8px;
+            color: #999;
+        }
+
+    .post .post-description {
+        padding: 15px;
+    }
+
+        .post .post-description p {
+            font-size: 14px;
+        }
+
+        .post .post-description .stats {
+            margin-top: 5px;
+        }
+
+            .post .post-description .stats .stat-item {
+                display: inline-block;
+                margin-right: 15px;
+            }
+
+                .post .post-description .stats .stat-item .icon {
+                    margin-right: 8px;
+                }
+</style>
+
+<h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
+@foreach (var item in Model)
+{
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-md-12">
+            <div class="panel-white post">
+                <div class="post-heading">
+                    <div class="pull-left meta">
+                        <div class="title h5">
+                            <b>
+                                @item.user.user_name
+                            </b>
+                        </div>
+                        <h6 class="text-muted time">
+                            <span class="glyphicon glyphicon-calendar"> @item.idea.created_at</span>
+
+                            <!--Two spaces-->
+                            &nbsp&nbsp
+                            <span class="glyphicon glyphicon-eye-open"> @item.idea.viewed_count</span>
+
+                            <!--Two spaces-->
+                            &nbsp&nbsp
+                            <span class="glyphicon glyphicon-tag"> @item.idea.category.category_name</span>
+                            &nbsp&nbsp
+                            @if (item.idea.status == 0)
+                            {
+                                <span class="glyphicon glyphicon-star">Pending</span>
+                            }
+                            else if (item.idea.status == 1)
+                            {
+                                <span class="glyphicon glyphicon-star" style="color:green">Approved</span>
+                            }
+                            else if (item.idea.status == 2)
+                            {
+                                <span class="glyphicon glyphicon-star" style="color:red">Denied</span>
+                            }
+                        </h6>
+
+                    </div>
+                </div>
+                <div class="post-description">
+                    <div class="post-title" style="font-size: 20px;">
+                        <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">
+                            @item.idea.idea_title
+                        </a>
+                        <hr>
+                    </div>
+                    <p>
+                        @item.idea.idea_content
+                    </p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("MyIdeas", new { page, }))

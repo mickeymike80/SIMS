@@ -65,6 +65,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -364,6 +366,7 @@
     <Content Include="Views\Home\DeniedAccess.cshtml" />
     <Content Include="Views\Manager\ApproveIdeas.cshtml" />
     <Content Include="Views\Manager\Details.cshtml" />
+    <Content Include="Views\Idea\MyIdeas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

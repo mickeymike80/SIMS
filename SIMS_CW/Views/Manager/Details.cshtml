@@ -76,7 +76,7 @@
 <h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
 
 <button style="margin-bottom: 10px;" class="btn btn-primary">
-    <a style="color: white;" href="@Url.Action("Index", "Idea")"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
+    <a style="color: white;" href="@Url.Action("Index", "Manager")"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
 </button>
 
 <div class="row" style="margin-bottom: 10px;">
@@ -111,11 +111,11 @@
                         }
                         else if (@ViewBag.idea.status == 1)
                         {
-                            <span class="glyphicon glyphicon-star">Approved</span>
+                            <span class="glyphicon glyphicon-star" style="color:green">Approved</span>
                         }
                         else if (@ViewBag.idea.status == 2)
                         {
-                            <span class="glyphicon glyphicon-star">Denied</span>
+                            <span class="glyphicon glyphicon-star" style="color:red">Denied</span>
                         }
 
                     </h6>

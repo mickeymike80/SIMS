@@ -3,6 +3,9 @@ using SIMS_CW.Models;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Web;
 using System.Web.Helpers;
@@ -15,7 +18,7 @@ namespace SIMS_CW.Controllers
         DbModel dbData = new DbModel();
         private static academic_years current_year;
 
-        public ActionResult Index(int? page, string idea_title, string name, string categoryID, string time_order, string pubFrom, string pubTo)
+        public ActionResult Index(int? page, string idea_title, string name, string categoryID, string time_order, string pubFrom, string pubTo, string other_filter)
         {
             //check logged in?
             if (Session["loggedIn"] == null)
@@ -28,7 +31,7 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
-            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
+            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now && item.ended_at >= DateTime.Now).Single();
             List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.isEnabled == 1).ToList();
 
             //filter with title
@@ -144,6 +147,24 @@ namespace SIMS_CW.Controllers
                 }
             }
 
+            //other filter
+            if (other_filter != null)
+            {
+                if(other_filter.Equals("Most Popular"))
+                {
+                    display_Ideas = display_Ideas.OrderByDescending(di => di.rate_point).ToList();
+                    ViewBag.time_order = "None";
+                    ViewBag.other_filter = other_filter;
+                }
+                else if(other_filter.Equals("Most Viewed"))
+                {
+                    display_Ideas = display_Ideas.OrderByDescending(di => di.idea.viewed_count).ToList();
+                    ViewBag.time_order = "None";
+                    ViewBag.other_filter = other_filter;
+                }
+            }
+            DateTime dt = current_year.deadline_comments ?? DateTime.Now;
+            ViewBag.closure_date = dt.ToString("yyyy/MM/dd");
             int pageSize = 10;
             int pageNumber = (page ?? 1);
             return View(display_Ideas.ToPagedList(pageNumber, pageSize));
@@ -153,6 +174,7 @@ namespace SIMS_CW.Controllers
         {
             List<display_idea> display_Ideas = new List<display_idea>();
             List<idea> ideas = dbData.ideas.Where(item => item.academic_year_id == current_year.academic_year_id).ToList();
+            
             for (int i = 0; i < ideas.Count; i++)
             {
                 idea idea = ideas[i];
@@ -172,6 +194,14 @@ namespace SIMS_CW.Controllers
                     u.user_name = "Anonymous";
                     display_Idea.user = u;
                 }
+
+                var rates = dbData.rates.Where(item => item.idea_id == idea.idea_id);
+                int rate_point = 0;
+                foreach(rate rate in rates)
+                {
+                    rate_point += Convert.ToInt32( rate.rate_point);
+                }
+                display_Idea.rate_point = rate_point;
                 display_Ideas.Add(display_Idea);
             }
             display_Ideas.OrderByDescending(item => item.idea.created_at);
@@ -326,7 +356,7 @@ namespace SIMS_CW.Controllers
 
             idea idea = dbData.ideas.Find(idea_id);
             int uid = Convert.ToInt32(idea.user_id);
-            List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).ToList();
+            List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).OrderByDescending(c=>c.created_at).ToList();
             List<comment> temp = new List<comment>();
             idea.viewed_count += 1;
             dbData.SaveChanges();
@@ -351,6 +381,7 @@ namespace SIMS_CW.Controllers
                     comment_users[i] = u;
                 }
             }
+
             //get attachment
             List<document> documents = dbData.documents.Where(d => d.idea_id == idea_id).ToList();
             ViewBag.documents = documents;
@@ -441,6 +472,25 @@ namespace SIMS_CW.Controllers
         public ActionResult LineChart()
         {
             return View();
+        }
+
+        public FileResult Download()
+        {
+            string fileSavePath = System.Web.Hosting.HostingEnvironment.MapPath("~/UploadedFiles");
+            DirectoryInfo dirInfo = new DirectoryInfo(fileSavePath);
+            
+            var documents = dbData.documents;
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var ziparchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    foreach(document document in documents)
+                    {
+                        ziparchive.CreateEntryFromFile(dirInfo.FullName +"/" + document.new_file_name, document.old_file_name);
+                    }
+                }
+                return File(memoryStream.ToArray(), "application/zip", "Attachments.zip");
+            }
         }
     }
 }
