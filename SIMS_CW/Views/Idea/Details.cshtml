@@ -95,15 +95,28 @@
                         }
                     </div>
                     <h6 class="text-muted time">
-                        <span class="glyphicon glyphicon-calendar"> @ViewBag.idea.created_at</span>
+                        <span class="glyphicon glyphicon-calendar" title="Created at"> @ViewBag.idea.created_at</span>
 
-                        <!--Two spaces-->
-                        &nbsp&nbsp
-                        <span class="glyphicon glyphicon-eye-open"> @ViewBag.idea.viewed_count</span>
+                        <!--Three spaces-->
+                        &nbsp&nbsp&nbsp
+                        @if (ViewBag.idea.viewed_count == null)
+                        {
+                            <span class="glyphicon glyphicon-eye-open" title="Views"> 0</span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-eye-open" title="Views"> @ViewBag.idea.viewed_count</span>
+                        }
 
-                        <!--Two spaces-->
-                        &nbsp&nbsp
-                        <span class="glyphicon glyphicon-tag"> @ViewBag.idea.category.category_name</span>
+                        <!--Three spaces-->
+                        &nbsp&nbsp&nbsp
+                        <span class="glyphicon glyphicon-paperclip" title="Attachments"> @ViewBag.documents.Count</span>
+
+                        <!--Three spaces-->
+                        &nbsp&nbsp&nbsp
+                        <span class="glyphicon glyphicon-tag" title="Category"> @ViewBag.idea.category.category_name</span>
+
+                        <br />
 
                     </h6>
 
@@ -207,6 +220,10 @@
 <br />
 <h3 style="margin-bottom: 10px;">Comments</h3>
 <hr>
+@if (Model.Comments.Count == 0)
+{
+    <h4 style="margin-bottom: 10px;">No Comments available</h4>
+}
 @for (int i = 0; i < Model.Comments.Count; i++)
 {
     <div class="row" style="margin-bottom: 10px;">

@@ -30,7 +30,7 @@
     <a href="@Url.Action("Index", "Manager")" class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
     <p class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;" cursor: pointer" onclick="clickToFilterIdeas()"><span class="glyphicon glyphicon-filter"></span> Filter ideas</p>
 </div>
-@using (Html.BeginForm("Index", "Idea", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
+@using (Html.BeginForm("Index", "Manager", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
 {
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Title:")</div>
@@ -62,12 +62,14 @@
     <input type="submit" value="Filter" class="btn" style="margin-bottom: 10px;" />
 }
 <div class="table-responsive">
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Actions</th>
+                <th>UserName</th>
                 <th>Title</th>
-                <th>Content</th>
+                <th><span class="glyphicon glyphicon-comment" title="Comments"></span></th>
+                <th><span class="glyphicon glyphicon-paperclip" title="Attachments"></span></th>
                 <th>Status</th>
                 <th>Published at</th>
             </tr>
@@ -76,21 +78,28 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.user.user_name</td>
-                    <td>
-                        <a href="@Url.Action("Details", "Manager", new { idea_id =  item.idea.idea_id, mode="viewall"})">@item.idea.idea_title</a>
+                    <td class="btn-adjust">
+                        <button type="button" class="btn btn-info">
+                            <a style="color: white;" href="@Url.Action("Details", "Manager", new { idea_id = item.idea.idea_id, mode = "viewall" })" title="Details"><span style="margin-right: 5px" class="glyphicon glyphicon-align-justify"></span></a>
+                        </button>
                     </td>
-                    <td>@item.idea.idea_content</td>
+
+                    <td>@item.user.user_name</td>
+                    <td> @item.idea.idea_title</td>
+                    <td> @item.idea.comments.Where(c => c.idea_id == item.idea.idea_id).Count()</td>
+                    <td> @item.idea.documents.Count()</td>
+
                     @if (item.idea.status == 0)
                     {
                         <td>Pending</td>
                     }
                     else if (item.idea.status == 1)
                     {
-                        <td style="color:green">Apprroved</td>
-                    }else 
+                        <td style="color:green">Approved</td>
+                    }
+                    else 
                     {
-                        <td style="color:red">Denied</td>
+                        <td style="color:red">Rejected</td>
                     }
                     <td>@item.idea.created_at</td>
                 </tr>

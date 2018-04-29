@@ -5,79 +5,103 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section title {
-    Show details the idea
+@if (ViewBag.mode == "approve")
+{
+    @section title {
+        Approve Idea
+    }
+    @section title_page {
+        Approve Idea
+    }
 }
-@section title_page {
-    Show details the idea
+@if (ViewBag.mode == "viewall")
+{
+    @section title {
+        Idea Details
+    }
+    @section title_page {
+        Idea Details
+    }
 }
+
 
 <style>
-    hr {
-        margin: 5px 0 15px 0;
-    }
+hr {
+    margin: 5px 0 15px 0;
+}
 
-    .panel-white {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: aliceblue;
-    }
+.panel-white {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: aliceblue;
+}
 
-    .panel-gray {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: #f6f6f6;
-    }
+.panel-gray {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: #f6f6f6;
+}
 
-    .post .post-heading {
-        height: 70px;
-        padding: 20px 15px 0 15px;
-    }
+.post .post-heading {
+    height: 70px;
+    padding: 20px 15px 0 15px;
+}
 
-        .post .post-heading .meta .title {
-            margin-bottom: 0;
-        }
+.post .post-heading .meta .title {
+    margin-bottom: 0;
+}
 
-            .post .post-heading .meta .title a {
-                color: black;
-            }
+.post .post-heading .meta .title a {
+    color: black;
+}
 
-                .post .post-heading .meta .title a:hover {
-                    color: #aaaaaa;
-                }
+.post .post-heading .meta .title a:hover {
+    color: #aaaaaa;
+}
 
-        .post .post-heading .meta .time {
-            margin-top: 8px;
-            color: #999;
-        }
+.post .post-heading .meta .time {
+    margin-top: 8px;
+    color: #999;
+}
 
-    .post .post-description {
-        padding: 15px;
-    }
+.post .post-description {
+    padding: 15px;
+}
 
-        .post .post-description p {
-            font-size: 14px;
-        }
+.post .post-description p {
+    font-size: 14px;
+}
 
-        .post .post-description .stats {
-            margin-top: 5px;
-        }
+.post .post-description .stats {
+    margin-top: 5px;
+}
 
-            .post .post-description .stats .stat-item form {
-                display: inline-block;
-                margin-right: 15px;
-            }
+.post .post-description .stats .stat-item form {
+    display: inline-block;
+    margin-right: 15px;
+}
 
-            .post .post-description .stats .stat-item .icon {
-                margin-right: 8px;
-            }
+.post .post-description .stats .stat-item .icon {
+    margin-right: 8px;
+}
 </style>
 
-<h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
+@if (ViewBag.mode == "approve")
+{
+    <h3 class="headerw3" style="margin-bottom: 30px;">Approve Idea</h3>
+}
+@if (ViewBag.mode == "viewall")
+{
+    <h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
+}
 
-<button style="margin-bottom: 10px;" class="btn btn-primary">
-    <a style="color: white;" href="@Url.Action("Index", "Idea")"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
-</button>
+<div>
+    <a href="@Url.Action("Index", "Manager")" class="btn btn-primary" style="color: white; padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
+    @if (ViewBag.idea.status == 0 && ViewBag.mode == "viewall")
+    {
+        <a href="@Url.Action("Details", "Manager", new { idea_id =  ViewBag.idea.idea_id, mode="approve"})" class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-check"></span> Approve</a>
+    }
+</div>
 
 <div class="row" style="margin-bottom: 10px;">
     <div class="col-md-12">
@@ -97,25 +121,27 @@
                     <h6 class="text-muted time">
                         <span class="glyphicon glyphicon-calendar"> @ViewBag.idea.created_at</span>
 
-                        <!--Two spaces-->
-                        &nbsp&nbsp
+                        <!--Three spaces-->
+                        &nbsp&nbsp&nbsp
                         <span class="glyphicon glyphicon-eye-open"> @ViewBag.idea.viewed_count</span>
 
-                        <!--Two spaces-->
-                        &nbsp&nbsp
+                        <!--Three spaces-->
+                        &nbsp&nbsp&nbsp
                         <span class="glyphicon glyphicon-tag"> @ViewBag.idea.category.category_name</span>
-                        &nbsp&nbsp
+
+                        <!--Three spaces-->
+                        &nbsp&nbsp&nbsp
                         @if (@ViewBag.idea.status == 0)
                         {
-                            <span class="glyphicon glyphicon-star">Pending</span>
+                            <span class="glyphicon glyphicon-star"> Pending</span>
                         }
                         else if (@ViewBag.idea.status == 1)
                         {
-                            <span class="glyphicon glyphicon-star">Approved</span>
+                            <span class="glyphicon glyphicon-star"> Approved</span>
                         }
                         else if (@ViewBag.idea.status == 2)
                         {
-                            <span class="glyphicon glyphicon-star">Denied</span>
+                            <span class="glyphicon glyphicon-star"> Rejected</span>
                         }
 
                     </h6>
@@ -134,8 +160,7 @@
                 </p>
                 <hr>
                 <div class="stats">
-                    <p>Likes: @ViewBag.likes</p>
-                    <p>Dislikes: @ViewBag.dislikes</p>
+                    <p><span class="glyphicon glyphicon-thumbs-up" style="color: green">@ViewBag.likes</span>   <span class="glyphicon glyphicon-thumbs-down" style="color: red">@ViewBag.dislikes</span></p>
                 </div>
             </div>
 
@@ -149,7 +174,6 @@
     <a href="@Url.Action("DownloadAttachment", "Idea", new { @new_file_name = item.new_file_name, @old_file_name = item.old_file_name})">@item.old_file_name</a>
     <br />
 }
-
 <br />
 <script>
     function approve() {
@@ -181,16 +205,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 style="margin-left:10px; margin-top: 10px;" class="modal-title" id="myModalLabel">Deny Idea</h3>
+                <h3 style="margin-left:10px; margin-top: 10px;" class="modal-title" id="myModalLabel">Reject Idea</h3>
             </div>
             <div class="modal-body">
                 <form method="post" action="/Manager/Deny" id="deny-idea">
                     <input type="hidden" name="idea_id" value="@ViewBag.idea.idea_id" />
-                    <p>Reason for denying idea:</p>
+                    <p>Reason for rejecting idea:</p>
                     <textarea class="form-control" rows="4" cols="8" name="reason" required></textarea>
                     <br />
                     <div class="clearfix"></div>
-                    <input class="btn btn-primary" type="submit" value="Deny" />
+                    <input class="btn btn-primary" type="submit" value="Reject" />
                 </form>
             </div>
         </div>
@@ -199,17 +223,20 @@
 <!-- end of confirmation dialog -->
 @if (ViewBag.mode == "approve")
 {
-    <form method="post" action="/Manager/Approve" id="approve-idea">
+    <form method="post" action="/Manager/Approve" id="approve-idea" style="width: 90px; margin: 0; display:inline">
         <input type="hidden" name="idea_id" value="@ViewBag.idea.idea_id" />
         <input type="button" class="btn btn-primary" value="Approve" data-toggle="modal" data-target="#confirm-approve" />
     </form>
-    <br />
-    <input type="button" class="btn btn-primary" value="Deny" data-toggle="modal" data-target="#confirm-deny" />
+    <input type="button" class="btn btn-primary" value="Reject" data-toggle="modal" data-target="#confirm-deny" />
 }
 @if (ViewBag.mode == "viewall")
 {
     <h3 style="margin-bottom: 10px;">Comments</h3>
     <hr>
+    if (Model.Comments.Count == 0)
+    {
+        <h4 style="margin-bottom: 10px;">No Comments available</h4>
+    }
     for (int i = 0; i < Model.Comments.Count; i++)
     {
         <div class="row" style="margin-bottom: 10px;">

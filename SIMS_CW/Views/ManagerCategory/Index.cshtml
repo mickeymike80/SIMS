@@ -16,34 +16,37 @@
 </button>
 
 <div class="table-responsive">
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
-                <th>
-                    @Html.Label("Category Name")
-                </th>
-                <th>
-                    @Html.Label("Created At")
-                </th>
-                <th>
-                    @Html.Label("Action")
-                </th>
+                <th>Actions</th>
+                <th>Category Name</th>
+                <th>Created At</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
+                    <td class="btn-adjust">
+                        <button type="button" class="btn btn-warning">
+                            <a style="color: white;" href="@Url.Action("Edit", "ManagerCategory", new { id = item.category_id })" title="Edit"><span style="margin-right: 5px" class="glyphicon glyphicon-pencil"></span></a>
+                        </button>
+
+                        <button type="button" class="btn btn-info">
+                            <a style="color: white;" href="@Url.Action("Details", "ManagerCategory", new { id = item.category_id })" title="Details"><span style="margin-right: 5px" class="glyphicon glyphicon-align-justify"></span></a>
+                        </button>
+
+                        <button type="button" class="btn btn-danger">
+                            <a style="color: white;" href="@Url.Action("Delete", "ManagerCategory", new { id = item.category_id })" title="Delete"><span style="margin-right: 5px" class="glyphicon glyphicon-remove"></span></a>
+                        </button>
+                    </td>
+
                     <td>
                         @Html.DisplayFor(modelItem => item.category_name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.created_at)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.category_id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.category_id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.category_id })
                     </td>
                 </tr>
             }

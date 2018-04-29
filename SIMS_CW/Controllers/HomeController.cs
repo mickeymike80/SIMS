@@ -61,6 +61,7 @@ namespace SIMS_CW.Controllers
                     Session["loggedIn"] = user;
                     Session["role"] = user.role.role_name;
                     Session["liRole"] = user.role_id;
+
                     switch (user.role_id)
                     {
                         case 1:

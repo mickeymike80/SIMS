@@ -13,6 +13,7 @@
             window.scrollTo(0, 1);
         }
     </script>
+    <link rel=icon href="~/Assets/images/light-bulb_48x48.ico">
     <link href="~/Assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="~/Assets/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/Assets/css/ownStyle.css" rel="stylesheet" type="text/css" />
@@ -121,9 +122,9 @@
                                         <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
                                     </ul>
                                 }
-                                else if (Convert.ToInt32(Session["liRole"]) == 2 || Convert.ToInt32(Session["liRole"]) == 3)
+                                else if (Convert.ToInt32(Session["liRole"]) == 2)
                                 {
-                                    <!-- manager + coordinator-->
+                                    <!-- manager-->
                                     <ul class="top_nav">
                                         <li><a href="@Url.Action("Index", "Home")">Home</a></li>
                                         <li><a href="@Url.Action("About", "Home")">About</a></li>
@@ -135,7 +136,7 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li><a href="@Url.Action("Index", "Manager")">View all</a></li>
-                                                <li><a href="@Url.Action("Approve Ideas", "Manager")">Approve Ideas</a></li>
+                                                <li><a href="@Url.Action("ApproveIdeas", "Manager")">Pending Ideas</a></li>
                                             </ul>
                                         </li>
 
@@ -149,6 +150,28 @@
                                                 <li><a href="@Url.Action("Create", "ManagerCategory")">Create</a></li>
                                             </ul>
                                         </li>
+                                        <li><a href="@Url.Action("Statistics", "Coordinator")">Statistics</a></li>
+                                        <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
+                                    </ul>
+                                }
+                                else if (Convert.ToInt32(Session["liRole"]) == 3)
+                                {
+                                    <!-- coordinator-->
+                                    <ul class="top_nav">
+                                        <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                                        <li><a href="@Url.Action("About", "Home")">About</a></li>
+
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown" data-hover="Pages" role="button" aria-haspopup="true" aria-expanded="false">
+                                                Ideas
+                                                <span class="fa fa-angle-down"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="@Url.Action("Index", "Manager")">View all</a></li>
+                                                <li><a href="@Url.Action("ApproveIdeas", "Manager")">Pending Ideas</a></li>
+                                            </ul>
+                                        </li>
+
                                         <li><a href="@Url.Action("Statistics", "Coordinator")">Statistics</a></li>
                                         <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
                                     </ul>

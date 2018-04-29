@@ -156,12 +156,15 @@ namespace SIMS_CW.Controllers
         private List<display_idea> getAllDisplayIdeas()
         {
             List<display_idea> display_Ideas = new List<display_idea>();
-            List<idea> ideas = dbData.ideas.Where(item=>item.academic_year_id == current_year.academic_year_id).Where(item=>item.isEnabled == 1).ToList();
+            /*List<idea> ideas = dbData.ideas.Where(item=>item.academic_year_id == current_year.academic_year_id).Where(item=>item.isEnabled == 1).ToList();*/
+            List<idea> ideas = dbData.ideas.Where(item => item.isEnabled == 1).ToList();
+
             for (int i = 0; i < ideas.Count; i++)
             {
                 idea idea = ideas[i];
                 int user_id = Convert.ToInt32(idea.user_id);
                 int isAnonymous = Convert.ToInt32(idea.isAnonymous);
+                int status = Convert.ToInt32(idea.status);
 
                 user user = dbData.users.Where(u => u.user_id == user_id).First();
                 display_idea display_Idea = new display_idea();
@@ -176,7 +179,12 @@ namespace SIMS_CW.Controllers
                     u.user_name = "Anonymous";
                     display_Idea.user = u;
                 }
-                display_Ideas.Add(display_Idea);
+
+                if (status == 1)
+                {
+                    display_Ideas.Add(display_Idea);
+                }
+                
             }
             display_Ideas.OrderByDescending(item => item.idea.created_at);
             return display_Ideas;
@@ -221,7 +229,8 @@ namespace SIMS_CW.Controllers
             }
             // 0 = false; 1 = true
             idea.category_id = Convert.ToInt32(Request.Form["categoryID"].ToString());
-            idea.isEnabled = 0;
+
+            idea.isEnabled = 1;
             idea.status = 0;
             idea.viewed_count = 0;
             idea.academic_year_id = current_year.academic_year_id;
@@ -280,12 +289,17 @@ namespace SIMS_CW.Controllers
             WebMail.From = "simscw2018@gmail.com";
             String ToEmail = userQA.Single().email;
             String EmailSubject = "New Student Idea has been added!";
-            String EMailBody = "A student with <b> Student ID: "  + loggedIn.user_university_id + "</b>" +
-                                            " and <b> Username: " + loggedIn.user_name + "</b>" +
-                                            " has submitted the following idea to the SIMS system." + "<br><br>" +
-                                            " <b>Idea Title: </b>" + idea.idea_title + "<br><br>" +
-                                            " <b>Idea Content: </b>" + idea.idea_content + "<br><br>" +
-                                            " Please review this newly submitted idea and change its status in the SIMS.";
+            String EMailBody = "A student with <b> Student ID: "  + loggedIn.user_university_id + "</b>"
+                                + " and <b> Username: " + loggedIn.user_name + "</b>"
+                                + " has submitted the following idea to the SIMS system." + "<br><br>"
+                                + "<b>Idea Title: </b>" + idea.idea_title + "<br><br>"
+                                + "<b>Idea Content: </b>" + idea.idea_content + "<br><br>"
+                                + "Please review this newly submitted idea and change its status in the SIMS." + "<br/>"
+
+                                + "Idea link: " + "<a href ='http://localhost:52547/Manager/Details?idea_id=" + idea.idea_id.ToString() + "&mode=approve'>click here</a>" + "<br/><br/>"
+
+            + "Best regards," + "<br/><br/>"
+                                + "Quality Assurance team";
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 
@@ -367,6 +381,7 @@ namespace SIMS_CW.Controllers
             List<document> documents = dbData.documents.Where(d => d.idea_id == idea_id).ToList();
             ViewBag.documents = documents;
 
+
             //get rate
             IQueryable<rate> rates = dbData.rates.Where(r => r.idea_id == idea_id).Where(r => r.user_id == loggedIn.user_id);
             if (rates.Any())
@@ -446,8 +461,10 @@ namespace SIMS_CW.Controllers
             WebMail.From = "simscw2018@gmail.com";
             String ToEmail = ideaPoster.Single().email;
             String EmailSubject = "A comment to your idea has been submitted!";
-            String EMailBody = "A comment has been added to your idea with title: " + idea_Title + "!" + "<br><br>" +
-                                            "Comment: " + comment.comment_content;
+            String EMailBody = "A comment has been added to your idea with title: " + idea_Title + "!" + "<br><br>" 
+                                + "Comment: " + comment.comment_content + "<br/>< br />"
+                                + "Best regards," + "<br/>< br />"
+                                + "Quality Assurance team"; ;
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 

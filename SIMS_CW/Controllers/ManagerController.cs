@@ -28,8 +28,13 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
+
+            Session["previousPage"] = Url.Action("Index", "Manager");
+            Session["currentPage"] = Url.Action("Index", "Manager");
+
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
-            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.isEnabled == 1).ToList();
+            /*List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.isEnabled == 1).ToList();*/
+            List<display_idea> display_Ideas = getAllDisplayIdeas().ToList();
 
             //filter with title
             if (idea_title != null)
@@ -96,7 +101,7 @@ namespace SIMS_CW.Controllers
                 DateTime pubToTime = DateTime.Parse(pubTo);
                 if (pubFromTime > pubToTime)
                 {
-                    ViewBag.error = "To time must be after from time ";
+                    ViewBag.error = "To time must be after 'From Time' ";
 
                 }
                 else
@@ -121,7 +126,7 @@ namespace SIMS_CW.Controllers
             catch (FormatException)
             {
                 if (pubTo != pubFrom)
-                    ViewBag.error = "Both from time and to time are required";
+                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
             }
 
 
@@ -152,7 +157,8 @@ namespace SIMS_CW.Controllers
         private List<display_idea> getAllDisplayIdeas()
         {
             List<display_idea> display_Ideas = new List<display_idea>();
-            List<idea> ideas = dbData.ideas.Where(item => item.academic_year_id == current_year.academic_year_id).ToList();
+            /*List<idea> ideas = dbData.ideas.Where(item => item.academic_year_id == current_year.academic_year_id).ToList();*/
+            List<idea> ideas = dbData.ideas.ToList();
             for (int i = 0; i < ideas.Count; i++)
             {
                 idea idea = ideas[i];
@@ -164,14 +170,14 @@ namespace SIMS_CW.Controllers
 
                 display_Idea.idea = idea;
                 display_Idea.user = user;
-                if (isAnonymous == 1)
+                /*if (isAnonymous == 1)
                 {
                     //true
                     user u = new user();
                     u.user_id = user.user_id;
                     u.user_name = "Anonymous";
                     display_Idea.user = u;
-                }
+                }*/
                 display_Ideas.Add(display_Idea);
             }
             display_Ideas.OrderByDescending(item => item.idea.created_at);
@@ -193,7 +199,7 @@ namespace SIMS_CW.Controllers
                 Session["cateCbb"] = listItems;
             }
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
-            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.status == 0 || item.idea.status == 2).ToList();
+            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.status == 0).ToList();
 
             //filter with title
             if (idea_title != null)
@@ -260,7 +266,7 @@ namespace SIMS_CW.Controllers
                 DateTime pubToTime = DateTime.Parse(pubTo);
                 if (pubFromTime > pubToTime)
                 {
-                    ViewBag.error = "To time must be after from time ";
+                    ViewBag.error = "'To Time' must be after 'From Time' ";
 
                 }
                 else
@@ -285,7 +291,7 @@ namespace SIMS_CW.Controllers
             catch (FormatException)
             {
                 if (pubTo != pubFrom)
-                    ViewBag.error = "Both from time and to time are required";
+                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
             }
 
 
@@ -328,7 +334,6 @@ namespace SIMS_CW.Controllers
             int uid = Convert.ToInt32(idea.user_id);
             List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).ToList();
             List<comment> temp = new List<comment>();
-            idea.viewed_count += 1;
             dbData.SaveChanges();
             
             //get all comments
@@ -342,14 +347,14 @@ namespace SIMS_CW.Controllers
 
                 user user = dbData.users.Where(u => u.user_id == user_id).First();
                 comment_users.Add(user);
-                if (isAnonymous == 1)
+                /*if (isAnonymous == 1)
                 {
                     //true
                     user u = new user();
                     u.user_id = user.user_id;
                     u.user_name = "Anonymous";
                     comment_users[i] = u;
-                }
+                }*/
             }
             //get attachment
             List<document> documents = dbData.documents.Where(d => d.idea_id == idea_id).ToList();
@@ -422,15 +427,23 @@ namespace SIMS_CW.Controllers
             WebMail.UserName = "simscw2018@gmail.com";
             WebMail.Password = "abc123xyz";
 
+
+            IQueryable<user> userDepartment = dbData.users.Where(q => q.department_id == idea.user.department_id);
+            user qaCoordinator = userDepartment.Where(q => q.role_id == 3).Single();
+
             //Sender email address.  
             WebMail.From = "simscw2018@gmail.com";
             String ToEmail = idea.user.email;
-            String EmailSubject = "One of your ideas have been denied!";
-            String EMailBody = "<h3>An idea has been denied!</h3> Idea title: " 
-                + idea.idea_title + "<br/>"
-                +"Reason: "+reason +"<br/>"
-                + "Idea link: <a href ='onlineexamproject2018.somee.com/Idea/Details?idea_id=" + idea.idea_id + "'>click here</a> <br/>" +
-                                            "For more information please contact the QA Manger.";
+            String EmailSubject = "Your idea submission has been rejected!";
+            String EMailBody = "<h3>Your idea submission has been rejected!</h3>" + "<br/><br/>"
+                                    + "<b>Idea title: </b>" + idea.idea_title + "<br/>"
+                                    + "<b>Idea Content: </b>" + idea.idea_content + "<br/><br/>"
+                                    + "<b>Reason: </b>" + reason + "<br/><br/>"
+                                    + "<a href ='onlineexamproject2018.somee.com/Idea/Details?idea_id=" + idea.idea_id + "'>Click here</a>" + " to access your submitted idea." + "<br/><br/>"
+
+                                    + "For more information, please contact the QA Coordinator at " + qaCoordinator.email + "." + "<br/>"
+                                    + "Best regards," + "<br/><br/>"
+                                    + "Quality Assurance team";
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 
