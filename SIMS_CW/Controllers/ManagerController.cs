@@ -199,13 +199,13 @@ namespace SIMS_CW.Controllers
                     u.user_name = "Anonymous";
                     display_Idea.user = u;
                 }*/
-                }
+
 
                 var rates = dbData.rates.Where(item => item.idea_id == idea.idea_id);
                 int rate_point = 0;
-                foreach(rate rate in rates)
+                foreach (rate rate in rates)
                 {
-                    rate_point += Convert.ToInt32( rate.rate_point);
+                    rate_point += Convert.ToInt32(rate.rate_point);
                 }
                 display_Idea.rate_point = rate_point;
                 display_Ideas.Add(display_Idea);

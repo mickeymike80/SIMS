@@ -296,7 +296,7 @@ namespace SIMS_CW.Controllers
                                 + "<b>Idea Content: </b>" + idea.idea_content + "<br><br>"
                                 + "Please review this newly submitted idea and change its status in the SIMS." + "<br/>"
 
-                                + "<b>Link Idea: </b> < a href ='onlineexamproject2018.somee.com/Manager/Details?mode=approve&idea_id=" + idea.idea_id + "'>" + "<br><br>" +
+                                + "<b>Link Idea: </b> < a href ='onlineexamproject2018.somee.com/Manager/Details?mode=approve&idea_id=" + idea.idea_id + "'>" + "<br><br>"
 
                                 + "Best regards," + "<br/><br/>"
                                 + "Quality Assurance team";
@@ -381,6 +381,7 @@ namespace SIMS_CW.Controllers
             List<document> documents = dbData.documents.Where(d => d.idea_id == idea_id).ToList();
             ViewBag.documents = documents;
 
+            ViewBag.currentUser = loggedIn;
 
             //get rate
             IQueryable<rate> rates = dbData.rates.Where(r => r.idea_id == idea_id).Where(r => r.user_id == loggedIn.user_id);
@@ -463,7 +464,7 @@ namespace SIMS_CW.Controllers
             String EmailSubject = "A comment to your idea has been submitted!";
             String EMailBody = "The following comment has been added to your idea with title: " + idea_Title + "!" + "<br><br>" 
                                 + "<b>Comment: </b>" + comment.comment_content + "<br/>< br/>"
-                                + "<b>Link Idea: </b> < a href ='onlineexamproject2018.somee.com/Idea/Details?idea_id=" + idea_id + "<br><br>" +
+                                + "<b>Link Idea: </b> < a href ='onlineexamproject2018.somee.com/Idea/Details?idea_id=" + idea_id + "<br><br>"
                                 + "Best regards," + "<br/><br/>"
                                 + "Quality Assurance team"; ;
             //Send email  

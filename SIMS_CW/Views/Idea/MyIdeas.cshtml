@@ -1,72 +1,78 @@
 ﻿@model PagedList.IPagedList<SIMS_CW.Models.display_idea>
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "My Ideas";
+    ViewBag.Title = "MyIdeas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section title {
-    View my ideas
+    My Submitted ideas
 }
 @section title_page {
-    View my ideas
+    My Submitted ideas
 }
 
 <style>
-    hr {
-        margin: 5px 0 15px 0;
-    }
+hr {
+    margin: 5px 0 15px 0;
+}
 
-    .panel-white {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: aliceblue;
-    }
+.panel-white {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: aliceblue;
+}
 
-    .post .post-heading {
-        height: 70px;
-        padding: 20px 15px 0 15px;
-    }
+.panel-gray {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: #f6f6f6;
+}
 
-        .post .post-heading .meta .title {
-            margin-bottom: 0;
-        }
+.post .post-heading {
+    height: 70px;
+    padding: 20px 15px 0 15px;
+}
 
-            .post .post-heading .meta .title a {
-                color: black;
-            }
+.post .post-heading .meta .title {
+    margin-bottom: 0;
+}
 
-                .post .post-heading .meta .title a:hover {
-                    color: #aaaaaa;
-                }
+.post .post-heading .meta .title a {
+    color: black;
+}
 
-        .post .post-heading .meta .time {
-            margin-top: 8px;
-            color: #999;
-        }
+.post .post-heading .meta .title a:hover {
+    color: #aaaaaa;
+}
 
-    .post .post-description {
-        padding: 15px;
-    }
+.post .post-heading .meta .time {
+    margin-top: 8px;
+    color: #999;
+}
 
-        .post .post-description p {
-            font-size: 14px;
-        }
+.post .post-description {
+    padding: 15px;
+}
 
-        .post .post-description .stats {
-            margin-top: 5px;
-        }
+.post .post-description p {
+    font-size: 14px;
+}
 
-            .post .post-description .stats .stat-item {
-                display: inline-block;
-                margin-right: 15px;
-            }
+.post .post-description .stats {
+    margin-top: 5px;
+}
 
-                .post .post-description .stats .stat-item .icon {
-                    margin-right: 8px;
-                }
+.post .post-description .stats .stat-item form {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.post .post-description .stats .stat-item .icon {
+    margin-right: 8px;
+}
 </style>
 
-<h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
+<h3 class="headerw3" style="margin-bottom: 30px;">My Submitted ideas</h3>
 @foreach (var item in Model)
 {
     <div class="row" style="margin-bottom: 10px;">
@@ -80,27 +86,44 @@
                             </b>
                         </div>
                         <h6 class="text-muted time">
-                            <span class="glyphicon glyphicon-calendar"> @item.idea.created_at</span>
+                            <span class="glyphicon glyphicon-calendar" title="Created at"> @item.idea.created_at</span>
 
-                            <!--Two spaces-->
-                            &nbsp&nbsp
-                            <span class="glyphicon glyphicon-eye-open"> @item.idea.viewed_count</span>
+                            <!--Three spaces-->
+                            &nbsp&nbsp&nbsp
+                            @if (item.idea.viewed_count == null)
+                            {
+                            <span class="glyphicon glyphicon-eye-open" title="Views"> 0</span>
+                            }
+                            else
+                            {
+                            <span class="glyphicon glyphicon-eye-open" title="Views"> @item.idea.viewed_count</span>
+                            }
 
-                            <!--Two spaces-->
-                            &nbsp&nbsp
-                            <span class="glyphicon glyphicon-tag"> @item.idea.category.category_name</span>
-                            &nbsp&nbsp
+                            <!--Three spaces-->
+                            &nbsp&nbsp&nbsp
+                            <span class="glyphicon glyphicon-paperclip" title="Attachments"> @item.idea.documents.Count()</span>
+
+                            <!--Three spaces-->
+                            &nbsp&nbsp&nbsp
+                            <span class="glyphicon glyphicon-comment" title="Comments"> @item.idea.comments.Where(c => c.idea_id == item.idea.idea_id).Where(c => c.user.role_id == 5).Count()</span>
+
+                            <!--Three spaces-->
+                            &nbsp&nbsp&nbsp
+                            <span class="glyphicon glyphicon-tag" title="Category"> @item.idea.category.category_name</span>
+
+                            <!--Three spaces-->
+                            &nbsp&nbsp&nbsp
                             @if (item.idea.status == 0)
                             {
-                                <span class="glyphicon glyphicon-star">Pending</span>
+                                <span class="glyphicon glyphicon-star"> Pending</span>
                             }
                             else if (item.idea.status == 1)
                             {
-                                <span class="glyphicon glyphicon-star" style="color:green">Approved</span>
+                                <span class="glyphicon glyphicon-star" style="color:green"> Approved</span>
                             }
                             else if (item.idea.status == 2)
                             {
-                                <span class="glyphicon glyphicon-star" style="color:red">Denied</span>
+                                <span class="glyphicon glyphicon-star" style="color:red"> Rejected</span>
                             }
                         </h6>
 
@@ -112,11 +135,10 @@
                             @item.idea.idea_title
                         </a>
                         <hr>
+                        <div class="stats">
+                            <p><span class="glyphicon glyphicon-thumbs-up" style="color: green"> @item.idea.rates.Where(r => r.idea_id == item.idea.idea_id).Where(r => r.rate_point == 1).Count()  </span>   <span class="glyphicon glyphicon-thumbs-down" style="color: red"> @item.idea.rates.Where(r => r.idea_id == item.idea.idea_id).Where(r => r.rate_point == -1).Count()</span></p>
+                        </div>
                     </div>
-                    <p>
-                        @item.idea.idea_content
-                    </p>
-                    <hr>
                 </div>
             </div>
         </div>

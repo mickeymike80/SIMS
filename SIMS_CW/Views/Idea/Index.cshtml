@@ -13,58 +13,64 @@
 }
 
 <style>
-    hr {
-        margin: 5px 0 15px 0;
-    }
+hr {
+    margin: 5px 0 15px 0;
+}
 
-    .panel-white {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: aliceblue;
-    }
+.panel-white {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: aliceblue;
+}
 
-    .post .post-heading {
-        height: 70px;
-        padding: 20px 15px 0 15px;
-    }
+.panel-gray {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: #f6f6f6;
+}
 
-        .post .post-heading .meta .title {
-            margin-bottom: 0;
-        }
+.post .post-heading {
+    height: 70px;
+    padding: 20px 15px 0 15px;
+}
 
-            .post .post-heading .meta .title a {
-                color: black;
-            }
+.post .post-heading .meta .title {
+    margin-bottom: 0;
+}
 
-                .post .post-heading .meta .title a:hover {
-                    color: #aaaaaa;
-                }
+.post .post-heading .meta .title a {
+    color: black;
+}
 
-        .post .post-heading .meta .time {
-            margin-top: 8px;
-            color: #999;
-        }
+.post .post-heading .meta .title a:hover {
+    color: #aaaaaa;
+}
 
-    .post .post-description {
-        padding: 15px;
-    }
+.post .post-heading .meta .time {
+    margin-top: 8px;
+    color: #999;
+}
 
-        .post .post-description p {
-            font-size: 14px;
-        }
+.post .post-description {
+    padding: 15px;
+}
 
-        .post .post-description .stats {
-            margin-top: 5px;
-        }
+.post .post-description p {
+    font-size: 14px;
+}
 
-            .post .post-description .stats .stat-item {
-                display: inline-block;
-                margin-right: 15px;
-            }
+.post .post-description .stats {
+    margin-top: 5px;
+}
 
-                .post .post-description .stats .stat-item .icon {
-                    margin-right: 8px;
-                }
+.post .post-description .stats .stat-item form {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.post .post-description .stats .stat-item .icon {
+    margin-right: 8px;
+}
 </style>
 
 <script>
@@ -117,31 +123,6 @@
     @ViewBag.error
     <input type="submit" value="Filter" class="btn" style="margin-bottom: 10px;" />
 }
-@*<div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Title</th>
-                    <th>Content</th>
-                    <th>Published at</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.user.user_name</td>
-                        <td>
-                            <a href="@Url.Action("Details", "Idea", new { idea_id =  item.idea.idea_id})">@item.idea.idea_title</a>
-                        </td>
-                        <td>@item.idea.idea_content</td>
-                        <td>@item.idea.created_at</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>*@
 
 @foreach (var item in Model)
 {
@@ -182,24 +163,6 @@
                             &nbsp&nbsp&nbsp
                             <span class="glyphicon glyphicon-tag" title="Category"> @item.idea.category.category_name</span>
 
-                            <br />
-
-
-
-                            <!--Three spaces-->
-                            &nbsp&nbsp&nbsp
-                            @if (item.idea.status == 0)
-                            {
-                            <span class="glyphicon glyphicon-star">Pending</span>
-                            }
-                            else if (item.idea.status == 1)
-                            {
-                            <span class="glyphicon glyphicon-star" style="color:green">Approved</span>
-                            }
-                            else if (item.idea.status == 2)
-                            {
-                            <span class="glyphicon glyphicon-star" style="color:red">Denied</span>
-                            }
                         </h6>
 
                     </div>

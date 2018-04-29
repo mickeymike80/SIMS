@@ -13,64 +13,64 @@
 }
 
 <style>
-    hr {
-        margin: 5px 0 15px 0;
-    }
+hr {
+    margin: 5px 0 15px 0;
+}
 
-    .panel-white {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: aliceblue;
-    }
+.panel-white {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: aliceblue;
+}
 
-    .panel-gray {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: #f6f6f6;
-    }
+.panel-gray {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: #f6f6f6;
+}
 
-    .post .post-heading {
-        height: 70px;
-        padding: 20px 15px 0 15px;
-    }
+.post .post-heading {
+    height: 70px;
+    padding: 20px 15px 0 15px;
+}
 
-        .post .post-heading .meta .title {
-            margin-bottom: 0;
-        }
+.post .post-heading .meta .title {
+    margin-bottom: 0;
+}
 
-            .post .post-heading .meta .title a {
-                color: black;
-            }
+.post .post-heading .meta .title a {
+    color: black;
+}
 
-                .post .post-heading .meta .title a:hover {
-                    color: #aaaaaa;
-                }
+.post .post-heading .meta .title a:hover {
+    color: #aaaaaa;
+}
 
-        .post .post-heading .meta .time {
-            margin-top: 8px;
-            color: #999;
-        }
+.post .post-heading .meta .time {
+    margin-top: 8px;
+    color: #999;
+}
 
-    .post .post-description {
-        padding: 15px;
-    }
+.post .post-description {
+    padding: 15px;
+}
 
-        .post .post-description p {
-            font-size: 14px;
-        }
+.post .post-description p {
+    font-size: 14px;
+}
 
-        .post .post-description .stats {
-            margin-top: 5px;
-        }
+.post .post-description .stats {
+    margin-top: 5px;
+}
 
-            .post .post-description .stats .stat-item form {
-                display: inline-block;
-                margin-right: 15px;
-            }
+.post .post-description .stats .stat-item form {
+    display: inline-block;
+    margin-right: 15px;
+}
 
-            .post .post-description .stats .stat-item .icon {
-                margin-right: 8px;
-            }
+.post .post-description .stats .stat-item .icon {
+    margin-right: 8px;
+}
 </style>
 
 <h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
@@ -115,22 +115,6 @@
                         <!--Three spaces-->
                         &nbsp&nbsp&nbsp
                         <span class="glyphicon glyphicon-tag" title="Category"> @ViewBag.idea.category.category_name</span>
-
-                        
-                        <!--Three spaces-->
-                        &nbsp&nbsp&nbsp
-                        @if (@ViewBag.idea.status == 0)
-                        {
-                            <span class="glyphicon glyphicon-star"> Pending</span>
-                        }
-                        else if (@ViewBag.idea.status == 1)
-                        {
-                            <span class="glyphicon glyphicon-star" style="color:green"> Approved</span>
-                        }
-                        else if (@ViewBag.idea.status == 2)
-                        {
-                        <span class="glyphicon glyphicon-star" style="color:red"> Rejected</span>
-                        }
                     </h6>
 
                 </div>
@@ -146,7 +130,7 @@
                     @ViewBag.Idea.idea_content
                 </p>
                 <hr>
-                @if (@ViewBag.idea.status == 1)
+                @if (ViewBag.idea.user_id != ViewBag.currentUser.user_id)
                 {
                     <div class="stats">
                         @using (Html.BeginForm("Like", "Idea", FormMethod.Post, htmlAttributes: new { style = "margin-bottom: 10px; display: inline-block;" }))

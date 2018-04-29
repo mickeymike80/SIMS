@@ -176,8 +176,31 @@
                                         <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
                                     </ul>
                                 }
-                                else
-                                {<ul class="top_nav">
+                                else if (Convert.ToInt32(Session["liRole"]) == 4)
+                                {
+                                    <!-- Staff-->
+                                    <ul class="top_nav">
+                                        <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                                        <li><a href="@Url.Action("About", "Home")">About</a></li>
+
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown" data-hover="Pages" role="button" aria-haspopup="true" aria-expanded="false">
+                                                Ideas
+                                                <span class="fa fa-angle-down"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="@Url.Action("Index", "Idea")">View</a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li><a href="@Url.Action("Statistics", "Coordinator")">Statistics</a></li>
+                                        <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
+                                    </ul>
+                                }
+                                else if (Convert.ToInt32(Session["liRole"]) == 5)
+                                {
+                                    <!-- Student-->
+                                    <ul class="top_nav">
                                         <li><a href="@Url.Action("Index", "Home")">Home</a></li>
                                         <li><a href="@Url.Action("About", "Home")">About</a></li>
                                         <li class="dropdown">
@@ -191,6 +214,13 @@
                                             </ul>
                                         </li>
                                         <li><a href="@Url.Action("MyIdeas", "Idea")">My Ideas</a></li>
+                                        <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
+                                    </ul>
+                                }
+                                else
+                                {<ul class="top_nav">
+                                        <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                                        <li><a href="@Url.Action("About", "Home")">About</a></li>
                                         <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
                                     </ul>}
                             }
