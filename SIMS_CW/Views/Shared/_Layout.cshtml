@@ -68,7 +68,7 @@
         </div>
         <div class="clearfix"> </div>
     </div>
-    <div class="header inner_banner" id="home" >
+    <div class="header inner_banner" id="home">
         <!--/top-bar-->
         <div class="top-bar">
             <div class="header-nav-agileits">
@@ -190,8 +190,10 @@
                                                 <li><a href="@Url.Action("Create", "Idea")">Create</a></li>
                                             </ul>
                                         </li>
+                                        <li><a href="@Url.Action("MyIdeas", "Idea")">My Ideas</a></li>
                                         <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
-                                    </ul>}}
+                                    </ul>}
+                            }
                             catch (NullReferenceException)
                             {
                                 <ul class="top_nav">

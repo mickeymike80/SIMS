@@ -9,5 +9,6 @@ namespace SIMS_CW.Models
     {
         public user user { get; set; }
         public idea idea { get; set; }
+        public int rate_point { get; set; }
     }
 }

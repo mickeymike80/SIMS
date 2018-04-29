@@ -19,17 +19,17 @@
     .headerw3 {
         margin-bottom: 30px;
     }
+
     .col-lg-6 {
         margin-bottom: 30px;
     }
-
 </style>
 
 
 
 
 <div class="container">
-    <h3 class="headerw3" >Statistic Reports</h3>
+    <h3 class="headerw3">Statistic Reports</h3>
     <div class="row">
         @foreach (department dept in dbData.departments.ToList())
         {
@@ -69,7 +69,7 @@
 
                             List<idea> id = dbData.ideas.ToList();
 
-                            int contributors = id.Where(i => i.user.department_id == dept.department_id).Distinct().Count();
+                            int contributors = id.Where(i => i.user.department_id == dept.department_id && i.status != 2).Distinct().Count();
 
                             <td style="text-align: right; "> @(contributors == 0 ? "0" : String.Format("{0:.#}", contributors))</td>
                             <td></td>

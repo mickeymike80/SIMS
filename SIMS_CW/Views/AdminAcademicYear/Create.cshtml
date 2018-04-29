@@ -32,7 +32,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.started_at, "Started at", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.started_at, new { @type = "datetime-local", @class = "form-control" })
+                @Html.TextBoxFor(model => model.started_at, new { @type = "date", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.started_at, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -40,7 +40,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ended_at, "Ended at", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.ended_at, new { @type = "datetime-local", @class = "form-control" })
+                @Html.TextBoxFor(model => model.ended_at, new { @type = "date", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ended_at, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -48,7 +48,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.deadline_ideas, "Ideas Closure Date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.deadline_ideas, new { @type = "datetime-local", @class = "form-control" })
+                @Html.TextBoxFor(model => model.deadline_ideas, new { @type = "date", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.deadline_ideas, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -56,11 +56,11 @@
         <div class="form-group">
             @Html.LabelFor(model => model.deadline_comments, "Comments Closure Date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.deadline_comments, new { @type = "datetime-local", @class = "form-control" })
+                @Html.TextBoxFor(model => model.deadline_comments, new { @type = "date", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.deadline_comments, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <p style="color:red">@ViewBag.error</p>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />

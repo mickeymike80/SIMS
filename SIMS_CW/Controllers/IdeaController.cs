@@ -33,7 +33,7 @@ namespace SIMS_CW.Controllers
                 Session["cateCbb"] = listItems;
             }
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
-            List<display_idea> display_Ideas = getAllDisplayIdeas();
+            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.isEnabled == 1).ToList();
 
             //filter with title
             if (idea_title != null)
@@ -230,7 +230,7 @@ namespace SIMS_CW.Controllers
             // 0 = false; 1 = true
             idea.category_id = Convert.ToInt32(Request.Form["categoryID"].ToString());
 
-            idea.isEnabled = 1;
+            idea.isEnabled = 0;
             idea.status = 0;
             idea.viewed_count = 0;
             idea.academic_year_id = current_year.academic_year_id;
@@ -296,9 +296,9 @@ namespace SIMS_CW.Controllers
                                 + "<b>Idea Content: </b>" + idea.idea_content + "<br><br>"
                                 + "Please review this newly submitted idea and change its status in the SIMS." + "<br/>"
 
-                                + "Idea link: " + "<a href ='http://localhost:52547/Manager/Details?idea_id=" + idea.idea_id.ToString() + "&mode=approve'>click here</a>" + "<br/><br/>"
+                                + "<b>Link Idea: </b> < a href ='onlineexamproject2018.somee.com/Manager/Details?mode=approve&idea_id=" + idea.idea_id + "'>" + "<br><br>" +
 
-            + "Best regards," + "<br/><br/>"
+                                + "Best regards," + "<br/><br/>"
                                 + "Quality Assurance team";
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
@@ -336,7 +336,7 @@ namespace SIMS_CW.Controllers
 
             idea idea = dbData.ideas.Where(i => i.idea_id == idea_id).First();
             int uid = Convert.ToInt32(idea.user_id);
-            List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).ToList();
+            List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).OrderByDescending(c=>c.created_at).ToList();
             List<comment> temp = new List<comment>();
             idea.viewed_count += 1;
             dbData.SaveChanges();
@@ -461,9 +461,10 @@ namespace SIMS_CW.Controllers
             WebMail.From = "simscw2018@gmail.com";
             String ToEmail = ideaPoster.Single().email;
             String EmailSubject = "A comment to your idea has been submitted!";
-            String EMailBody = "A comment has been added to your idea with title: " + idea_Title + "!" + "<br><br>" 
-                                + "Comment: " + comment.comment_content + "<br/>< br />"
-                                + "Best regards," + "<br/>< br />"
+            String EMailBody = "The following comment has been added to your idea with title: " + idea_Title + "!" + "<br><br>" 
+                                + "<b>Comment: </b>" + comment.comment_content + "<br/>< br/>"
+                                + "<b>Link Idea: </b> < a href ='onlineexamproject2018.somee.com/Idea/Details?idea_id=" + idea_id + "<br><br>" +
+                                + "Best regards," + "<br/><br/>"
                                 + "Quality Assurance team"; ;
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
@@ -557,8 +558,25 @@ namespace SIMS_CW.Controllers
         public FileResult DownloadAttachment(string new_file_name, string old_file_name)
         {
             string currentFile = "~/UploadedFiles/" + new_file_name;
-            string contentType = "application/" + old_file_name.Split('.')[1];
+            string contentType = "application/" + old_file_name.Split('.').Last();
             return File(currentFile, contentType, old_file_name);
         }
+
+        public ActionResult MyIdeas(int? page)
+        {
+            //check logged in?
+            if (Session["loggedIn"] == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            user user = ((user)Session["loggedIn"]);
+            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
+            var display_Ideas = getAllDisplayIdeas().Where(item=>item.idea.user_id == user.user_id).OrderByDescending(item=>item.idea.created_at);            
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(display_Ideas.ToPagedList(pageNumber, pageSize));
+        }
+
     }
 }

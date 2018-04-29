@@ -35,7 +35,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.started_at, "Started at", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.started_at, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.started_at, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.started_at, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -43,7 +43,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ended_at, "Ended at", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ended_at, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.ended_at, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ended_at, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -51,7 +51,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.deadline_ideas, "Ideas closure date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.deadline_ideas, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.deadline_ideas, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.deadline_ideas, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -59,7 +59,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.deadline_comments, "Comments closure date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.deadline_comments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.deadline_comments, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.deadline_comments, "", new { @class = "text-danger" })
             </div>
         </div>

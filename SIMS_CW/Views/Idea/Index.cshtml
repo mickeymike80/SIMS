@@ -98,7 +98,7 @@
     </div>
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Category")</div>
-        <div class="col-md-10">@Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "None", htmlAttributes: new { @class = "form-control" })</div>
+        <div class="col-md-10">@Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "All", htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Publish Order")</div>
@@ -163,11 +163,11 @@
                             &nbsp&nbsp&nbsp
                             @if (item.idea.viewed_count == null)
                             {
-                                <span class="glyphicon glyphicon-eye-open" title="Views"> 0</span>
+                            <span class="glyphicon glyphicon-eye-open" title="Views"> 0</span>
                             }
                             else
                             {
-                                <span class="glyphicon glyphicon-eye-open" title="Views"> @item.idea.viewed_count</span>
+                            <span class="glyphicon glyphicon-eye-open" title="Views"> @item.idea.viewed_count</span>
                             }
 
                             <!--Three spaces-->
@@ -185,6 +185,21 @@
                             <br />
 
 
+
+                            <!--Three spaces-->
+                            &nbsp&nbsp&nbsp
+                            @if (item.idea.status == 0)
+                            {
+                            <span class="glyphicon glyphicon-star">Pending</span>
+                            }
+                            else if (item.idea.status == 1)
+                            {
+                            <span class="glyphicon glyphicon-star" style="color:green">Approved</span>
+                            }
+                            else if (item.idea.status == 2)
+                            {
+                            <span class="glyphicon glyphicon-star" style="color:red">Denied</span>
+                            }
                         </h6>
 
                     </div>
@@ -209,13 +224,13 @@
 @*Pagination*@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     @Html.PagedListPager(Model, page => Url.Action("Index",
-                                                                    new
-                                                                    {
-                                                                        page,
-                                                                        idea_title = ViewBag.idea_title,
-                                                                        name = ViewBag.name,
-                                                                        categoryID = ViewBag.categoryID,
-                                                                        time_order = ViewBag.time_order,
-                                                                        pubFrom = ViewBag.pubFrom,
-                                                                        pubTo = ViewBag.pubTo
-                                                                    }))
+                                            new
+                                            {
+                                                page,
+                                                idea_title = ViewBag.idea_title,
+                                                name = ViewBag.name,
+                                                categoryID = ViewBag.categoryID,
+                                                time_order = ViewBag.time_order,
+                                                pubFrom = ViewBag.pubFrom,
+                                                pubTo = ViewBag.pubTo
+                                            }))

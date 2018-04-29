@@ -93,7 +93,7 @@ namespace SIMS_CW.Controllers
 
             foreach (department dept in dbData.departments.ToList())
             {
-                int numIdeas = ideaa.Where(i => i.user.department_id == dept.department_id).Distinct().Count();
+                int numIdeas = ideaa.Where(i => i.user.department_id == dept.department_id && i.status != 2).Distinct().Count();
                 int numComments = cmt.Where(c => c.user.department_id == dept.department_id).Distinct().Count();
                 int numContribute = numIdeas + numComments;
                 xvalues += dept.department_name + " \n" + numIdeas + " - " + numComments + ",";

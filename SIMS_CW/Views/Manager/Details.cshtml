@@ -95,13 +95,9 @@ hr {
     <h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
 }
 
-<div>
-    <a href="@Url.Action("Index", "Manager")" class="btn btn-primary" style="color: white; padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
-    @if (ViewBag.idea.status == 0 && ViewBag.mode == "viewall")
-    {
-        <a href="@Url.Action("Details", "Manager", new { idea_id =  ViewBag.idea.idea_id, mode="approve"})" class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-check"></span> Approve</a>
-    }
-</div>
+<button style="margin-bottom: 10px;" class="btn btn-primary">
+    <a style="color: white;" href="@Url.Action("Index", "Idea")"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
+</button>
 
 <div class="row" style="margin-bottom: 10px;">
     <div class="col-md-12">
