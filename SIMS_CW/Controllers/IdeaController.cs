@@ -285,6 +285,7 @@ namespace SIMS_CW.Controllers
                                             " has submitted the following idea to the SIMS system." + "<br><br>" +
                                             " <b>Idea Title: </b>" + idea.idea_title + "<br><br>" +
                                             " <b>Idea Content: </b>" + idea.idea_content + "<br><br>" +
+                                            " <b>Link Idea:</b> <a href ='onlineexamproject2018.somee.com/Manager/Details?mode=approve&idea_id=" + idea.idea_id + "<br><br>" +
                                             " Please review this newly submitted idea and change its status in the SIMS.";
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
@@ -447,7 +448,8 @@ namespace SIMS_CW.Controllers
             String ToEmail = ideaPoster.Single().email;
             String EmailSubject = "A comment to your idea has been submitted!";
             String EMailBody = "A comment has been added to your idea with title: " + idea_Title + "!" + "<br><br>" +
-                                            "Comment: " + comment.comment_content;
+                                            "Comment: " + comment.comment_content+
+                                            " <b>Link Idea:</b> <a href ='onlineexamproject2018.somee.com/Idea/Details?idea_id=" + idea_id;
             //Send email  
             WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
 
