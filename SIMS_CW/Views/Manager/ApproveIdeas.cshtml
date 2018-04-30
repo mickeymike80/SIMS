@@ -32,11 +32,11 @@
 @using (Html.BeginForm("ApproveIdeas", "Manager", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
 {
     <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-2">@Html.Label("Title:")</div>
+        <div class="col-md-2">@Html.Label("Title")</div>
         <div class="col-md-10">@Html.TextBox("idea_title", null, htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-2">@Html.Label("Name:")</div>
+        <div class="col-md-2">@Html.Label("Name")</div>
         <div class="col-md-10"> @Html.TextBox("name", null, htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
@@ -94,7 +94,7 @@
                     {
                         <td style="color:red">Rejected</td>
                     }
-                    <td>@item.idea.created_at</td>
+                    <td class="column-create_at">@item.idea.created_at</td>
                 </tr>
             }
         </tbody>

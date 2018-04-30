@@ -2,16 +2,16 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "MostViewed";
+    ViewBag.Title = "MostPopular";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section title {
-    Most Viewed Ideas
+    Most Popular Ideas
 }
 
 @section title_page {
-    Most Viewed Ideas
+    Most Popular Ideas
 }
 <script>
     $(function () {
@@ -24,12 +24,12 @@
     }
 </script>
 
-<h3 class="headerw3" style="margin-bottom: 30px;">Most Viewed Ideas</h3>
+<h3 class="headerw3" style="margin-bottom: 30px;">Most Popular Ideas</h3>
 <div>
-    <a href="@Url.Action("MostViewed", "Manager")" class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+    <a href="@Url.Action("MostPopular", "Manager")" class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
     <p class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;" cursor: pointer" onclick="clickToFilterIdeas()"><span class="glyphicon glyphicon-filter"></span> Filter ideas</p>
 </div>
-@using (Html.BeginForm("MostViewed", "Manager", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
+@using (Html.BeginForm("MostPopular", "Manager", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
 {
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Title")</div>
@@ -67,7 +67,8 @@
                 <th>Actions</th>
                 <th>Name</th>
                 <th>Title</th>
-                <th><span class="glyphicon glyphicon-eye-open" title="Views"></span></th>
+                <th><span class="glyphicon glyphicon-thumbs-up" title="Likes"></span></th>
+                <th><span class="glyphicon glyphicon-thumbs-down" title="Dislikes"></span></th>
                 <th>Published at</th>
             </tr>
         </thead>
@@ -82,7 +83,8 @@
                     </td>
                     <td>@item.user.user_name</td>
                     <td> @item.idea.idea_title</td>
-                    <td>@item.idea.viewed_count</td>
+                    <td>@item.idea.rates.Where(r => r.rate_point == 1).Count()</td>
+                    <td>@item.idea.rates.Where(r => r.rate_point == -1).Count()</td>
                     <td class="column-create_at">@item.idea.created_at</td>
                 </tr>
             }
@@ -93,5 +95,5 @@
 @*Pagination*@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-    @Html.PagedListPager(Model, page => Url.Action("MostViewed",
-                                            new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))
+    @Html.PagedListPager(Model, page => Url.Action("MostPopular",
+                                                    new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))

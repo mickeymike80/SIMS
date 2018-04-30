@@ -151,6 +151,8 @@ namespace SIMS_CW.Controllers
                     ViewBag.time_order = time_order;
                 }
             }
+            user loggedIn = ((user)Session["loggedIn"]);
+            ViewBag.role_id = loggedIn.role_id;
 
             int pageSize = 5;
             int pageNumber = (page ?? 1);
@@ -342,7 +344,12 @@ namespace SIMS_CW.Controllers
             int uid = Convert.ToInt32(idea.user_id);
             List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).OrderByDescending(c=>c.created_at).ToList();
             List<comment> temp = new List<comment>();
-            idea.viewed_count += 1;
+
+            //Views not added for own ideas
+            if (idea.user.user_id != loggedIn.user_id)
+            {
+                idea.viewed_count += 1;
+            }
             dbData.SaveChanges();
             //student can't see staff comments
             if (loggedIn.role_id == 5)

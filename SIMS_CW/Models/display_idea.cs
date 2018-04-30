@@ -10,5 +10,7 @@ namespace SIMS_CW.Models
         public user user { get; set; }
         public idea idea { get; set; }
         public int rate_point { get; set; }
+        public int rate_point_up { get; set; }
+        public int rate_point_down { get; set; }
     }
 }
