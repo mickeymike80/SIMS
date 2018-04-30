@@ -32,6 +32,10 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
+
+            //store page to return to proper page when visited Details page
+            Session["previousPage"] = Url.Action("Index", "Idea");
+
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
             List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.isEnabled == 1).ToList();
 
@@ -571,6 +575,10 @@ namespace SIMS_CW.Controllers
                 return Redirect("~/Home/LoginPage");
             }
             user user = ((user)Session["loggedIn"]);
+
+            //store page to return to proper page when visited Details page
+            Session["previousPage"] = Url.Action("MyIdeas", "Idea");
+
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
             var display_Ideas = getAllDisplayIdeas().Where(item=>item.idea.user_id == user.user_id).OrderByDescending(item=>item.idea.created_at);            
 

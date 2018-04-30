@@ -62,6 +62,9 @@ namespace SIMS_CW.Controllers
                     Session["role"] = user.role.role_name;
                     Session["liRole"] = user.role_id;
 
+                    Session["previousPage"] = Url.Action("LoginPage", "Home");
+                    Session["currentPage"] = Url.Action("LoginPage", "Home");
+
                     switch (user.role_id)
                     {
                         case 1:

@@ -368,6 +368,7 @@
     <Content Include="Views\Manager\ApproveIdeas.cshtml" />
     <Content Include="Views\Manager\Details.cshtml" />
     <Content Include="Views\Idea\MyIdeas.cshtml" />
+    <Content Include="Views\Manager\MostViewed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
