@@ -81,10 +81,10 @@
                             <a style="color: white;" href="@Url.Action("Details", "Manager", new { idea_id =  item.idea.idea_id, mode="viewall"})" title="Details"><span style="margin-right: 5px" class="glyphicon glyphicon-align-justify"></span></a>
                         </button>
                     </td>
-                    <td>@item.user.user_name</td>
+                    <td style="width: 150px">@item.user.user_name</td>
                     <td> @item.idea.idea_title</td>
-                    <td>@item.idea.rates.Where(r => r.rate_point == 1).Count()</td>
-                    <td>@item.idea.rates.Where(r => r.rate_point == -1).Count()</td>
+                    <td style="width: 50px">@item.idea.rates.Where(r => r.rate_point == 1).Count()</td>
+                    <td style="width: 50px">@item.idea.rates.Where(r => r.rate_point == -1).Count()</td>
                     <td class="column-create_at">@item.idea.created_at</td>
                 </tr>
             }

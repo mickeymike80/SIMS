@@ -370,10 +370,12 @@
     <Content Include="Views\Idea\MyIdeas.cshtml" />
     <Content Include="Views\Manager\MostViewed.cshtml" />
     <Content Include="Views\Manager\MostPopular.cshtml" />
+    <Content Include="Views\Manager\IdeasWithoutComments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="UploadedFiles\" />
+    <Folder Include="Views\ManagerAdditionalReports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

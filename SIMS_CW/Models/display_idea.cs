@@ -12,5 +12,6 @@ namespace SIMS_CW.Models
         public int rate_point { get; set; }
         public int rate_point_up { get; set; }
         public int rate_point_down { get; set; }
+        public int number_of_comments { get; set; }
     }
 }
