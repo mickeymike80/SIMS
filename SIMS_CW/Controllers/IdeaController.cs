@@ -95,7 +95,9 @@ namespace SIMS_CW.Controllers
                     ViewBag.categoryID = filter_categoryID;
                 }
             }
-            catch (FormatException) { }
+            catch (FormatException exx) {
+                ViewBag.error = ("There was an error: " + exx.Message);
+            }
 
             // filter publish from to
             try
@@ -125,7 +127,9 @@ namespace SIMS_CW.Controllers
                     ViewBag.pubTo = pubTo;
                 }
             }
-            catch (ArgumentNullException) { }
+            catch (ArgumentNullException ex) {
+                ViewBag.error = ("There was an error: " + ex.Message);
+            }
             catch (FormatException)
             {
                 if (pubTo != pubFrom)
@@ -264,24 +268,34 @@ namespace SIMS_CW.Controllers
 
             dbData.ideas.Add(idea);
             //file upload
-            foreach (HttpPostedFileBase file in files)
+            try
             {
-                //Checking file is available to save.  
-                if (file != null)
+                foreach (HttpPostedFileBase file in files)
                 {
-                    string oldfileName = Path.GetFileName(file.FileName);
-                    string sessionID = HttpContext.Session.SessionID;
-                    string newfilename = sessionID + Guid.NewGuid().ToString() + oldfileName;
-                    string path = Path.Combine(Server.MapPath("~/UploadedFiles"), newfilename);
-                    file.SaveAs(path);
-                    document document = new document();
-                    document.new_file_name = newfilename;
-                    document.old_file_name = oldfileName;
-                    document.created_at = DateTime.Now;
-                    document.idea_id = idea.idea_id;
-                    dbData.documents.Add(document);
+                    //Checking file is available to save.  
+                    if (file != null)
+                    {
+                        string oldfileName = Path.GetFileName(file.FileName);
+                        string sessionID = HttpContext.Session.SessionID;
+                        string newfilename = sessionID + Guid.NewGuid().ToString() + oldfileName;
+                        string path = Path.Combine(Server.MapPath("~/UploadedFiles"), newfilename);
+                        file.SaveAs(path);
+                        document document = new document();
+                        document.new_file_name = newfilename;
+                        document.old_file_name = oldfileName;
+                        document.created_at = DateTime.Now;
+                        document.idea_id = idea.idea_id;
+                        dbData.documents.Add(document);
+                    }
                 }
+
             }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ("There was an error: " + ex.Message);
+            }
+          
             
             //Configuring webMail class to send emails  
             //gmail smtp server  
@@ -300,25 +314,29 @@ namespace SIMS_CW.Controllers
             IEnumerable<user> userQA = dbData.users.Where(u => u.role_id == 3).Where(u => u.department_id == loggedIn.department_id);
 
 
-            
+
             //Sender email address.  
-            WebMail.From = "simscw2018@gmail.com";
-            String ToEmail = userQA.Single().email;
-            String EmailSubject = "New Student Idea has been added!";
-            String EMailBody = "A student with <b> Student ID: "  + loggedIn.user_university_id + "</b>"
-                                + " and <b> Username: " + loggedIn.user_name + "</b>"
-                                + " has submitted the following idea to the SIMS system." + "<br><br>"
-                                + "<b>Idea Title: </b>" + idea.idea_title + "<br><br>"
-                                + "<b>Idea Content: </b>" + idea.idea_content + "<br><br>"
-                                + "Please review this newly submitted idea and change its status in the SIMS." + "<br/>"
+            try
+            {
 
-                                + "<b>Link Idea: </b> < a href ='onlineexamproject2018.somee.com/Manager/Details?mode=approve&idea_id=" + idea.idea_id + "'>" + "<br><br>"
+                WebMail.From = "simscw2018@gmail.com";
+                String ToEmail = userQA.Single().email;
+                String EmailSubject = "New Student Idea has been added!";
+                String EMailBody = "A student with <b> Student ID: " + loggedIn.user_university_id + "</b>"
+                                    + " and <b> Username: " + loggedIn.user_name + "</b>"
+                                    + " has submitted the following idea to the SIMS system." + "<br><br>"
+                                    + "<b>Idea Title: </b>" + idea.idea_title + "<br><br>"
+                                    + "<b>Idea Content: </b>" + idea.idea_content + "<br><br>"
+                                    + "Please review this newly submitted idea and change its status in the SIMS." + "<br/>"
 
-                                + "Best regards," + "<br/><br/>"
-                                + "Quality Assurance team";
-            //Send email  
-            WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
+                                    + "<b>Link Idea: </b> < a href ='onlineexamproject2018.somee.com/Manager/Details?mode=approve&idea_id=" + idea.idea_id + "'>" + "<br><br>"
 
+                                    + "Best regards," + "<br/><br/>"
+                                    + "Quality Assurance team";
+                //Send email  
+                WebMail.Send(to: ToEmail, subject: EmailSubject, body: EMailBody, isBodyHtml: true);
+            }
+            catch(Exception ex) {ViewBag.error = ("There was an error sending email : " + ex.Message);}
             //New Code: Validation Handling
             try
             {
