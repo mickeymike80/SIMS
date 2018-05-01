@@ -95,7 +95,9 @@ namespace SIMS_CW.Controllers
                     ViewBag.categoryID = filter_categoryID;
                 }
             }
-            catch (FormatException) { }
+            catch (FormatException ex) {
+                ViewBag.error = ("There was an error: " + ex.Message);
+            }
 
             // filter publish from to
             try
@@ -125,7 +127,9 @@ namespace SIMS_CW.Controllers
                     ViewBag.pubTo = pubTo;
                 }
             }
-            catch (ArgumentNullException) { }
+            catch (ArgumentNullException ex) {
+                ViewBag.error = ("There was an error: " + ex.Message);
+            }
             catch (FormatException)
             {
                 if (pubTo != pubFrom)
@@ -252,24 +256,34 @@ namespace SIMS_CW.Controllers
 
             dbData.ideas.Add(idea);
             //file upload
-            foreach (HttpPostedFileBase file in files)
+            try
             {
-                //Checking file is available to save.  
-                if (file != null)
+                foreach (HttpPostedFileBase file in files)
                 {
-                    string oldfileName = Path.GetFileName(file.FileName);
-                    string sessionID = HttpContext.Session.SessionID;
-                    string newfilename = sessionID + Guid.NewGuid().ToString() + oldfileName;
-                    string path = Path.Combine(Server.MapPath("~/UploadedFiles"), newfilename);
-                    file.SaveAs(path);
-                    document document = new document();
-                    document.new_file_name = newfilename;
-                    document.old_file_name = oldfileName;
-                    document.created_at = DateTime.Now;
-                    document.idea_id = idea.idea_id;
-                    dbData.documents.Add(document);
+                    //Checking file is available to save.  
+                    if (file != null)
+                    {
+                        string oldfileName = Path.GetFileName(file.FileName);
+                        string sessionID = HttpContext.Session.SessionID;
+                        string newfilename = sessionID + Guid.NewGuid().ToString() + oldfileName;
+                        string path = Path.Combine(Server.MapPath("~/UploadedFiles"), newfilename);
+                        file.SaveAs(path);
+                        document document = new document();
+                        document.new_file_name = newfilename;
+                        document.old_file_name = oldfileName;
+                        document.created_at = DateTime.Now;
+                        document.idea_id = idea.idea_id;
+                        dbData.documents.Add(document);
+                    }
                 }
+
             }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = ("There was an error: " + ex.Message);
+            }
+          
             
             //Configuring webMail class to send emails  
             //gmail smtp server  
