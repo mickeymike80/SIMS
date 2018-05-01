@@ -105,9 +105,10 @@ hr {
             <div class="post-heading">
                 <div class="pull-left meta">
                     <div class="title h5">
+                        
                         @if (ViewBag.Idea_user == null)
                         {
-                            <b>Anonymous</b>
+                            <b>@ViewBag.Idea.user.user_name (Anonymous)</b>
                         }
                         else
                         {

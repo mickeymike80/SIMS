@@ -1,0 +1,95 @@
+﻿@model PagedList.IPagedList<SIMS_CW.Models.display_comment>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "AnonymousComments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section title {
+    Anonymous Comments
+}
+
+@section title_page {
+    Anonymous Comments
+}
+<script>
+    $(function () {
+        $(".date-picker").datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+    });
+    function clickToFilterComments() {
+        $(".filterCommentsForm").toggle();
+    }
+</script>
+
+<h3 class="headerw3" style="margin-bottom: 30px;">Anonymous Comments</h3>
+<div>
+    <a href="@Url.Action("AnonymousComments", "Manager")" class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+    <p class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;" cursor: pointer" onclick="clickToFilterComments()"><span class="glyphicon glyphicon-filter"></span> Filter ideas</p>
+</div>
+@using (Html.BeginForm("AnonymousComments", "Manager", new { page = 1 }, FormMethod.Post, new { @class = "filterCommentsForm", style = "display: none" }))
+{
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Name")</div>
+        <div class="col-md-10"> @Html.TextBox("name", null, htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Publish Order")</div>
+        <div class="col-md-10">@Html.DropDownList("time_order", new SelectList(new List<String> { "Newest", "Oldest" }), htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Publish from")</div>
+        <div class="col-md-10" style="display: flex">
+            <input class="date-picker form-control" name="pubFrom" type="date" value="@ViewBag.pubFrom" />
+            @Html.Label("to", htmlAttributes: new { style = "margin: 5px 10px 0 10px" })
+            <input class="date-picker form-control" type="date" name="pubTo" value="@ViewBag.pubTo" />
+        </div>
+    </div>
+
+    @ViewBag.error
+    <input type="submit" value="Filter" class="btn" style="margin-bottom: 10px;" />
+}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th>Name</th>
+                <th>Content</th>
+                <th>Idea ID</th>
+                <th><span class="glyphicon glyphicon-eye-close" title="Anonymous"></span></th>
+                <th>Published at</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="btn-adjust">
+                        <button type="button" class="btn btn-info">
+                            <a style="color: white;" href="@Url.Action("Details", "Manager", new { idea_id =  item.comment.idea_id, mode="viewall"})" title="See Idea">See Idea</a>
+                        </button>
+                    </td>
+                    <td style="width: 150px">@item.user.user_name</td>
+                    <td>@item.comment.comment_content</td>
+                    <td></td>
+
+                    @if (item.comment.isAnonymous == 1)
+                    {
+                        <td style="width: 50px">Yes</td>
+                    }
+                    <td class="column-create_at">@item.comment.created_at</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@*Pagination*@
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("AnonymousComments",
+                                                            new { page, name = ViewBag.name, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))

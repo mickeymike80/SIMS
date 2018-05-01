@@ -155,6 +155,8 @@ namespace SIMS_CW.Controllers
                     ViewBag.time_order = time_order;
                 }
             }
+            user loggedIn = ((user)Session["loggedIn"]);
+            ViewBag.role_id = loggedIn.role_id;
 
             int pageSize = 5;
             int pageNumber = (page ?? 1);
@@ -166,6 +168,8 @@ namespace SIMS_CW.Controllers
             List<display_idea> display_Ideas = new List<display_idea>();
             /*List<idea> ideas = dbData.ideas.Where(item=>item.academic_year_id == current_year.academic_year_id).Where(item=>item.isEnabled == 1).ToList();*/
             List<idea> ideas = dbData.ideas.Where(item => item.isEnabled == 1).ToList();
+
+            user loggedIn = (user)Session["loggedIn"];
 
             for (int i = 0; i < ideas.Count; i++)
             {
@@ -179,7 +183,15 @@ namespace SIMS_CW.Controllers
 
                 display_Idea.idea = idea;
                 display_Idea.user = user;
-                if (isAnonymous == 1)
+                if (user_id == loggedIn.user_id && isAnonymous == 1)
+                {
+                    //true
+                    user u = new user();
+                    u.user_id = user.user_id;
+                    u.user_name = idea.user.user_name + " (Anonymous)";
+                    display_Idea.user = u;
+                }
+                else if (user_id != loggedIn.user_id && isAnonymous == 1)
                 {
                     //true
                     user u = new user();
@@ -356,7 +368,12 @@ namespace SIMS_CW.Controllers
             int uid = Convert.ToInt32(idea.user_id);
             List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).OrderByDescending(c=>c.created_at).ToList();
             List<comment> temp = new List<comment>();
-            idea.viewed_count += 1;
+
+            //Views not added for own ideas
+            if (idea.user.user_id != loggedIn.user_id)
+            {
+                idea.viewed_count += 1;
+            }
             dbData.SaveChanges();
             //student can't see staff comments
             if (loggedIn.role_id == 5)
@@ -386,7 +403,15 @@ namespace SIMS_CW.Controllers
 
                 user user = dbData.users.Where(u => u.user_id == user_id).First();
                 comment_users.Add(user);
-                if (isAnonymous == 1)
+                if (user_id == loggedIn.user_id && isAnonymous == 1)
+                {
+                    //true
+                    user u = new user();
+                    u.user_id = user.user_id;
+                    u.user_name = idea.user.user_name + " (Anonymous)";
+                    comment_users[i] = u;
+                }
+                else if (user_id != loggedIn.user_id && isAnonymous == 1)
                 {
                     //true
                     user u = new user();
@@ -394,6 +419,9 @@ namespace SIMS_CW.Controllers
                     u.user_name = "Anonymous";
                     comment_users[i] = u;
                 }
+
+
+
             }
             //get attachment
             List<document> documents = dbData.documents.Where(d => d.idea_id == idea_id).ToList();
@@ -414,6 +442,7 @@ namespace SIMS_CW.Controllers
             {
                 ViewBag.Idea_user = dbData.users.Where(u => u.user_id == uid).First();
             }
+            
 
             dynamic mymodel = new ExpandoObject();
             mymodel.Comments = comments;

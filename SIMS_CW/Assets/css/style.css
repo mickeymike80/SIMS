@@ -181,19 +181,13 @@ nav.linkEffects.linkHoverEffect_12 ul {
 }
 
 a.active {
-	text-decoration: none;
+    text-decoration: none;
 }
-
-
 /*-- //Info --*/
-
 /*-- //top-bar-agile --*/
-
-
-
 h6 {
-	margin: 0 auto;
-	z-index: 999;
+    margin: 0 auto;
+    z-index: 999;
 }
 
 h6 a {
@@ -346,7 +340,7 @@ ul.dropdown-menu li {
 
 ul.dropdown-menu li a {
 	color: #555;
-	padding: 10px 0;
+	padding: 10px 5px;
 }
 
 .dropdown-menu>li>a:hover,
@@ -1120,7 +1114,7 @@ h3.sign {
 /*-- /banner_bottom --*/
 
 .banner_bottom {
-	padding: 7em 0;
+	padding: 3em 0;
 }
 
 h3.headerw3 {
@@ -1862,8 +1856,8 @@ ul.short li {
 }
 
 ul.short li a {
-	color: #00a78e;
-	text-decoration: none;
+    color: #bf5638;
+    text-decoration: none;
 }
 
 /*-- Gallery Section --*/

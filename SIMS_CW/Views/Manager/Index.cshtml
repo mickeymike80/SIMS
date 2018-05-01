@@ -99,24 +99,24 @@
                         </button>
                     </td>
 
-                    <td>@item.user.user_name</td>
+                    <td style="width: 150px">@item.user.user_name</td>
                     <td> @item.idea.idea_title</td>
-                    <td> @item.idea.comments.Where(c => c.idea_id == item.idea.idea_id).Count()</td>
-                    <td> @item.idea.documents.Count()</td>
+                    <td style="width: 50px"> @item.idea.comments.Where(c => c.idea_id == item.idea.idea_id).Count()</td>
+                    <td style="width: 50px"> @item.idea.documents.Count()</td>
 
                     @if (item.idea.status == 0)
                     {
-                        <td>Pending</td>
+                        <td style="width: 100px">Pending</td>
                     }
                     else if (item.idea.status == 1)
                     {
-                        <td style="color:green">Approved</td>
+                        <td style="color:green; width: 100px">Approved</td>
                     }
                     else 
                     {
-                        <td style="color:red">Rejected</td>
+                        <td style="color:red; width: 100px">Rejected</td>
                     }
-                    <td>@item.idea.created_at</td>
+                    <td class="column-create_at">@item.idea.created_at</td>
                 </tr>
             }
         </tbody>

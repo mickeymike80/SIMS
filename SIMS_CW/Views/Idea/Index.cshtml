@@ -13,64 +13,64 @@
 }
 
 <style>
-hr {
-    margin: 5px 0 15px 0;
-}
+    hr {
+        margin: 5px 0 15px 0;
+    }
 
-.panel-white {
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    background-color: aliceblue;
-}
+    .panel-white {
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background-color: aliceblue;
+    }
 
-.panel-gray {
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    background-color: #f6f6f6;
-}
+    .panel-gray {
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background-color: #f6f6f6;
+    }
 
-.post .post-heading {
-    height: 70px;
-    padding: 20px 15px 0 15px;
-}
+    .post .post-heading {
+        height: 70px;
+        padding: 20px 15px 0 15px;
+    }
 
-.post .post-heading .meta .title {
-    margin-bottom: 0;
-}
+        .post .post-heading .meta .title {
+            margin-bottom: 0;
+        }
 
-.post .post-heading .meta .title a {
-    color: black;
-}
+            .post .post-heading .meta .title a {
+                color: black;
+            }
 
-.post .post-heading .meta .title a:hover {
-    color: #aaaaaa;
-}
+                .post .post-heading .meta .title a:hover {
+                    color: #aaaaaa;
+                }
 
-.post .post-heading .meta .time {
-    margin-top: 8px;
-    color: #999;
-}
+        .post .post-heading .meta .time {
+            margin-top: 8px;
+            color: #999;
+        }
 
-.post .post-description {
-    padding: 15px;
-}
+    .post .post-description {
+        padding: 15px;
+    }
 
-.post .post-description p {
-    font-size: 14px;
-}
+        .post .post-description p {
+            font-size: 14px;
+        }
 
-.post .post-description .stats {
-    margin-top: 5px;
-}
+        .post .post-description .stats {
+            margin-top: 5px;
+        }
 
-.post .post-description .stats .stat-item form {
-    display: inline-block;
-    margin-right: 15px;
-}
+            .post .post-description .stats .stat-item form {
+                display: inline-block;
+                margin-right: 15px;
+            }
 
-.post .post-description .stats .stat-item .icon {
-    margin-right: 8px;
-}
+            .post .post-description .stats .stat-item .icon {
+                margin-right: 8px;
+            }
 </style>
 
 <script>
@@ -85,9 +85,13 @@ hr {
 </script>
 
 <h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
-<button style="margin-bottom: 10px;" class="btn btn-primary">
-    <a style="color: white;" href="@Url.Action("Create", "Idea")"><span class="glyphicon glyphicon-plus"></span> Create a new idea</a>
-</button>
+@if (ViewBag.role_id == 5)
+{
+    <button style="margin-bottom: 10px" class="btn btn-primary">
+        <a style="color: white;" href="@Url.Action("Create", "Idea")"><span class="glyphicon glyphicon-plus"></span> Create a new idea</a>
+    </button>
+}
+
 <div>
     <a href="@Url.Action("Index", "Idea")" class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
     <p class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;" cursor: pointer" onclick="clickToFilterIdeas()"><span class="glyphicon glyphicon-filter"></span> Filter ideas</p>
@@ -144,11 +148,11 @@ hr {
                             &nbsp&nbsp&nbsp
                             @if (item.idea.viewed_count == null)
                             {
-                            <span class="glyphicon glyphicon-eye-open" title="Views"> 0</span>
+                                <span class="glyphicon glyphicon-eye-open" title="Views"> 0</span>
                             }
                             else
                             {
-                            <span class="glyphicon glyphicon-eye-open" title="Views"> @item.idea.viewed_count</span>
+                                <span class="glyphicon glyphicon-eye-open" title="Views"> @item.idea.viewed_count</span>
                             }
 
                             <!--Three spaces-->
@@ -187,13 +191,13 @@ hr {
 @*Pagination*@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     @Html.PagedListPager(Model, page => Url.Action("Index",
-                                            new
-                                            {
-                                                page,
-                                                idea_title = ViewBag.idea_title,
-                                                name = ViewBag.name,
-                                                categoryID = ViewBag.categoryID,
-                                                time_order = ViewBag.time_order,
-                                                pubFrom = ViewBag.pubFrom,
-                                                pubTo = ViewBag.pubTo
-                                            }))
+                                                new
+                                                {
+                                                    page,
+                                                    idea_title = ViewBag.idea_title,
+                                                    name = ViewBag.name,
+                                                    categoryID = ViewBag.categoryID,
+                                                    time_order = ViewBag.time_order,
+                                                    pubFrom = ViewBag.pubFrom,
+                                                    pubTo = ViewBag.pubTo
+                                                }))
