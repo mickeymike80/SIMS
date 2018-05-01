@@ -59,7 +59,7 @@
                 <th>Actions</th>
                 <th>Name</th>
                 <th>Content</th>
-                <th>Idea ID</th>
+                <th>Idea</th>
                 <th><span class="glyphicon glyphicon-eye-close" title="Anonymous"></span></th>
                 <th>Published at</th>
             </tr>
@@ -75,7 +75,7 @@
                     </td>
                     <td style="width: 150px">@item.user.user_name</td>
                     <td>@item.comment.comment_content</td>
-                    <td></td>
+                    <td style="width: 100px"><a href="@Url.Action("Details", "Manager", new { idea_id = item.comment.idea_id, mode = "viewall" })" title="Idea ID">ID @item.comment.idea_id</a></td>
 
                     @if (item.comment.isAnonymous == 1)
                     {

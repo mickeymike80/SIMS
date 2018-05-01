@@ -34,43 +34,43 @@
         padding: 20px 15px 0 15px;
     }
 
-        .post .post-heading .meta .title {
-            margin-bottom: 0;
-        }
+    .post .post-heading .meta .title {
+        margin-bottom: 0;
+    }
 
-            .post .post-heading .meta .title a {
-                color: black;
-            }
+    .post .post-heading .meta .title a {
+        color: black;
+    }
 
-                .post .post-heading .meta .title a:hover {
-                    color: #aaaaaa;
-                }
+    .post .post-heading .meta .title a:hover {
+        color: #aaaaaa;
+    }
 
-        .post .post-heading .meta .time {
-            margin-top: 8px;
-            color: #999;
-        }
+    .post .post-heading .meta .time {
+        margin-top: 8px;
+        color: #999;
+    }
 
     .post .post-description {
         padding: 15px;
     }
 
-        .post .post-description p {
-            font-size: 14px;
-        }
+    .post .post-description p {
+        font-size: 14px;
+    }
 
-        .post .post-description .stats {
-            margin-top: 5px;
-        }
+    .post .post-description .stats {
+        margin-top: 5px;
+    }
 
-            .post .post-description .stats .stat-item form {
-                display: inline-block;
-                margin-right: 15px;
-            }
+    .post .post-description .stats .stat-item form {
+        display: inline-block;
+        margin-right: 15px;
+    }
 
-            .post .post-description .stats .stat-item .icon {
-                margin-right: 8px;
-            }
+    .post .post-description .stats .stat-item .icon {
+        margin-right: 8px;
+    }
 </style>
 
 <h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
@@ -85,9 +85,9 @@
             <div class="post-heading">
                 <div class="pull-left meta">
                     <div class="title h5">
-                        @if (ViewBag.Idea_user == null)
+                        @if (ViewBag.Idea.user_id == ViewBag.currentUser.user_id && ViewBag.Idea_user == null)
                         {
-                            <b>Anonymous</b>
+                            <b>@ViewBag.Idea.user.user_name (Anonymous)</b>
                         }
                         else
                         {

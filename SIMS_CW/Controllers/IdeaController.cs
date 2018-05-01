@@ -446,7 +446,7 @@ namespace SIMS_CW.Controllers
             {
                 ViewBag.Idea_user = dbData.users.Where(u => u.user_id == uid).First();
             }
-            
+            /*ViewBag.Idea_user = dbData.users.Where(u => u.user_id == uid).First();*/
 
             dynamic mymodel = new ExpandoObject();
             mymodel.Comments = comments;
