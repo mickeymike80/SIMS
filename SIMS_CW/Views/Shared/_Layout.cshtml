@@ -135,6 +135,7 @@
                                                 <li><a href="@Url.Action("MostPopular", "Manager")">Most Popular Ideas</a></li>
                                                 <li><a href="@Url.Action("MostViewed", "Manager")">Most Viewed Ideas</a></li>
                                                 <li><a href="@Url.Action("IdeasWithoutComments", "Manager")">Ideas Without Comments</a></li>
+                                                <li><a href="@Url.Action("AnonymousIdeas", "Manager")">Anonymous Ideas</a></li>
                                             </ul>
                                         </li>
                                         <li class="dropdown">
@@ -143,7 +144,7 @@
                                                 <span class="fa fa-angle-down"></span>
                                             </a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="@Url.Action("Index", "Manager")">View all</a></li>
+                                                <li><a href="@Url.Action("AnonymousComments", "Manager")">Anonymous Comments</a></li>
                                             </ul>
                                         </li>
 
@@ -177,13 +178,22 @@
                                                 <li><a href="@Url.Action("MostPopular", "Manager")">Most Popular Ideas</a></li>
                                                 <li><a href="@Url.Action("MostViewed", "Manager")">Most Viewed Ideas</a></li>
                                                 <li><a href="@Url.Action("IdeasWithoutComments", "Manager")">Ideas Without Comments</a></li>
+                                                <li><a href="@Url.Action("AnonymousIdeas", "Manager")">Anonymous Ideas</a></li>
                                             </ul>
                                         </li>
-
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown" data-hover="Pages" role="button" aria-haspopup="true" aria-expanded="false">
+                                                Comments
+                                                <span class="fa fa-angle-down"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="@Url.Action("AnonymousComments", "Manager")">Anonymous Comments</a></li>
+                                            </ul>
+                                        </li>
                                         <li>
                                             <a href="@Url.Action("Statistics", "Coordinator")">Statistics</a>
                                         </li>
-                                        
+
                                     </ul>
                                 }
                                 else if (Convert.ToInt32(Session["liRole"]) == 4)

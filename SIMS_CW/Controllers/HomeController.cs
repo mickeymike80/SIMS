@@ -94,7 +94,7 @@ namespace SIMS_CW.Controllers
         public ActionResult Logout()
         {
             Session.Clear();
-            return View("Index");
+            return View("Login");
         }
     }
 }
