@@ -35,9 +35,18 @@
         <div class="col-md-2">@Html.Label("UserName")</div>
         <div class="col-md-10"> @Html.TextBox("name", null, htmlAttributes: new { @class = "form-control" })</div>
     </div>
+    
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Roles")</div>
+        <div class="col-md-10">@Html.DropDownList("roleID", Session["roleCbb"] as SelectList, "None", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Department")</div>
+        <div class="col-md-10">@Html.DropDownList("departmentID", Session["deptCbb"] as SelectList, "None", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Publish Order")</div>
-        <div class="col-md-10">@Html.DropDownList("time_order", new SelectList(new List<String> { "Newest", "Oldest" }), htmlAttributes: new { @class = "form-control" })</div>
+        <div class="col-md-10">@Html.DropDownList("time_order", new SelectList(new List<String> { "Newest", "Oldest" }), "None", htmlAttributes: new { @class = "form-control" })</div>
     </div>
 
     <div class="row" style="margin-bottom: 10px">
@@ -92,4 +101,4 @@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
     @Html.PagedListPager(Model, page => Url.Action("AnonymousComments",
-                                                            new { page, name = ViewBag.name, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))
+                                                                new { page, name = ViewBag.name, roleID = ViewBag.roleID, departmentID = ViewBag.departmentID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))

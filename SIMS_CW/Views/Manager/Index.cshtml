@@ -61,12 +61,16 @@
         <div class="col-md-10">@Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "All", htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-2">@Html.Label("Publish Order")</div>
-        <div class="col-md-10">@Html.DropDownList("time_order", new SelectList(new List<String> { "Newest", "Oldest" }), "None", htmlAttributes: new { @class = "form-control" })</div>
+        <div class="col-md-2">@Html.Label("Department")</div>
+        <div class="col-md-10">@Html.DropDownList("departmentID", Session["deptCbb"] as SelectList, "None", htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-2">@Html.Label("Other")</div>
-        <div class="col-md-10">@Html.DropDownList("other_filter", new SelectList(new List<String> { "Most Popular", "Most Viewed" }), "None", htmlAttributes: new { @class = "form-control" })</div>
+        <div class="col-md-2">@Html.Label("Status")</div>
+        <div class="col-md-10">@Html.DropDownList("ideaStatus", new SelectList(new List<String> { "Pending", "Approved", "Rejected" }), "None", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Publish Order")</div>
+        <div class="col-md-10">@Html.DropDownList("time_order", new SelectList(new List<String> { "Newest", "Oldest" }), "None", htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Publish from")</div>
@@ -138,4 +142,4 @@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
     @Html.PagedListPager(Model, page => Url.Action("Index",
-                                new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo, other_filter = ViewBag.other_filter }))
+                                        new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, departmentID = ViewBag.departmentID, ideaStatus = ViewBag.ideaStatus, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))

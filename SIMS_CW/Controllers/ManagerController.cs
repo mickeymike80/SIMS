@@ -18,7 +18,7 @@ namespace SIMS_CW.Controllers
         DbModel dbData = new DbModel();
         private static academic_years current_year;
 
-        public ActionResult Index(int? page, string idea_title, string name, string categoryID, string time_order, string pubFrom, string pubTo, string other_filter)
+        public ActionResult Index(int? page, string idea_title, string name, string categoryID, string departmentID, string ideaStatus, string time_order, string pubFrom, string pubTo)
         {
 
             user loggedIn = (user)Session["loggedIn"];
@@ -34,6 +34,12 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
+            }
             if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 3)
             {
                 return Redirect("~/Home/DeniedAccess");
@@ -46,135 +52,32 @@ namespace SIMS_CW.Controllers
             /*List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.isEnabled == 1).ToList();*/
             List<display_idea> display_Ideas = getAllDisplayIdeas().ToList();
 
+            //--------filtering-------
+
             //filter with title
-            if (idea_title != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.idea.idea_title.ToLower().Contains(idea_title.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.idea_title = idea_title;
-            }
+            display_Ideas = TitleFilter(display_Ideas, idea_title);
+
             // filter with published user name
-            if (name != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.user.user_name.ToLower().Contains(name.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.name = name;
-            }
+            display_Ideas = UsernameFilter(display_Ideas, name);
 
             //filter with category
-            try
-            {
-                int filter_categoryID = Convert.ToInt32(categoryID);
-                if (filter_categoryID != 0)
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (!(item.idea.category_id == filter_categoryID))
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.categoryID = filter_categoryID;
-                }
-            }
-            catch (FormatException) { }
+            display_Ideas = CategoryFilter(display_Ideas, categoryID);
+
+            //filter with department
+            display_Ideas = DepartmentFilter(display_Ideas, departmentID);
+
+            // filter for status
+            display_Ideas = StatusFilter(display_Ideas, ideaStatus);
 
             // filter publish from to
-            try
-            {
-                DateTime pubFromTime = DateTime.Parse(pubFrom);
-                DateTime pubToTime = DateTime.Parse(pubTo);
-                if (pubFromTime > pubToTime)
-                {
-                    ViewBag.error = "To time must be after 'From Time' ";
+            display_Ideas = PublishFromFilter(display_Ideas, pubFrom, pubTo);
 
-                }
-                else
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (item.idea.created_at < pubFromTime || item.idea.created_at > pubToTime)
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.pubFrom = pubFrom;
-                    ViewBag.pubTo = pubTo;
-                }
-            }
-            catch (ArgumentNullException) { }
-            catch (FormatException)
-            {
-                if (pubTo != pubFrom)
-                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
-            }
+            // filter for order
+            display_Ideas = OrderFilter(display_Ideas, time_order);
 
 
-            // order
-            if (time_order == null)
-            {
-                display_Ideas = display_Ideas.OrderByDescending(di => di.idea.created_at).ToList();
-            }
-            else
-            {
-                if (time_order.Equals("Newest"))
-                {
-                    display_Ideas = display_Ideas.OrderByDescending(di => di.idea.created_at).ToList();
-                    ViewBag.time_order = time_order;
-                }
-                else if (time_order.Equals("Oldest"))
-                {
-                    display_Ideas = display_Ideas.OrderBy(di => di.idea.created_at).ToList();
-                    ViewBag.time_order = time_order;
-                }
-            }
+            //--------End filtering-------
 
-            //other filter
-            if (other_filter != null)
-            {
-                if(other_filter.Equals("Most Popular"))
-                {
-                    display_Ideas = display_Ideas.OrderByDescending(di => di.rate_point).ToList();
-                    ViewBag.time_order = "None";
-                    ViewBag.other_filter = other_filter;
-                }
-                else if(other_filter.Equals("Most Viewed"))
-                {
-                    display_Ideas = display_Ideas.OrderByDescending(di => di.idea.viewed_count).ToList();
-                    ViewBag.time_order = "None";
-                    ViewBag.other_filter = other_filter;
-                }
-            }
             ViewBag.currentUser = loggedIn;
 
             DateTime dt = current_year.deadline_comments ?? DateTime.Now;
@@ -272,7 +175,7 @@ namespace SIMS_CW.Controllers
 
 
         //GET
-        public ActionResult ApproveIdeas(int? page, string idea_title, string name, string categoryID, string time_order, string pubFrom, string pubTo)
+        public ActionResult ApproveIdeas(int? page, string idea_title, string name, string categoryID, string departmentID, string time_order, string pubFrom, string pubTo)
         {
             user loggedIn = (user)Session["loggedIn"];
 
@@ -286,6 +189,12 @@ namespace SIMS_CW.Controllers
                 List<category> categories = dbData.categories.ToList();
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
+            }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
             }
             if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 3)
             {
@@ -307,102 +216,26 @@ namespace SIMS_CW.Controllers
             {
                 display_Ideas = getAllDisplayIdeas().Where(item => item.idea.status == 0).Where(item => item.user.department_id == loggedIn.department_id).ToList();
             }
+            
+            //--------filtering-------
 
             //filter with title
-            if (idea_title != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.idea.idea_title.ToLower().Contains(idea_title.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.idea_title = idea_title;
-            }
+            display_Ideas = TitleFilter(display_Ideas, idea_title);
+
             // filter with published user name
-            if (name != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.user.user_name.ToLower().Contains(name.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.name = name;
-            }
+            display_Ideas = UsernameFilter(display_Ideas, name);
 
             //filter with category
-            try
-            {
-                int filter_categoryID = Convert.ToInt32(categoryID);
-                if (filter_categoryID != 0)
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (!(item.idea.category_id == filter_categoryID))
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.categoryID = filter_categoryID;
-                }
-            }
-            catch (FormatException) { }
+            display_Ideas = CategoryFilter(display_Ideas, categoryID);
+
+            //filter with department
+            display_Ideas = DepartmentFilter(display_Ideas, departmentID);
 
             // filter publish from to
-            try
-            {
-                DateTime pubFromTime = DateTime.Parse(pubFrom);
-                DateTime pubToTime = DateTime.Parse(pubTo);
-                if (pubFromTime > pubToTime)
-                {
-                    ViewBag.error = "'To Time' must be after 'From Time' ";
+            display_Ideas = PublishFromFilter(display_Ideas, pubFrom, pubTo);
 
-                }
-                else
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (item.idea.created_at < pubFromTime || item.idea.created_at > pubToTime)
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.pubFrom = pubFrom;
-                    ViewBag.pubTo = pubTo;
-                }
-            }
-            catch (ArgumentNullException) { }
-            catch (FormatException)
-            {
-                if (pubTo != pubFrom)
-                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
-            }
-
-
-            // order
+            // filter for order
+            // filter for order
             if (time_order == null)
             {
                 display_Ideas = display_Ideas.OrderByDescending(di => di.idea.created_at).ToList();
@@ -421,6 +254,8 @@ namespace SIMS_CW.Controllers
                 }
             }
 
+            //--------End filtering-------
+
             int pageSize = 10;
             int pageNumber = (page ?? 1);
             return View(display_Ideas.ToPagedList(pageNumber, pageSize));
@@ -428,7 +263,7 @@ namespace SIMS_CW.Controllers
 
 
         //GET
-        public ActionResult MostViewed(int? page, string idea_title, string name, string categoryID, string time_order, string pubFrom, string pubTo)
+        public ActionResult MostViewed(int? page, string idea_title, string name, string categoryID, string departmentID, string time_order, string pubFrom, string pubTo)
         {
             user loggedIn = (user)Session["loggedIn"];
 
@@ -443,6 +278,12 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
+            }
             if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 4)
             {
                 return Redirect("~/Home/DeniedAccess");
@@ -454,101 +295,24 @@ namespace SIMS_CW.Controllers
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
             List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.viewed_count > 0).ToList();
 
+            //--------filtering-------
+
             //filter with title
-            if (idea_title != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.idea.idea_title.ToLower().Contains(idea_title.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.idea_title = idea_title;
-            }
+            display_Ideas = TitleFilter(display_Ideas, idea_title);
+
             // filter with published user name
-            if (name != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.user.user_name.ToLower().Contains(name.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.name = name;
-            }
+            display_Ideas = UsernameFilter(display_Ideas, name);
 
             //filter with category
-            try
-            {
-                int filter_categoryID = Convert.ToInt32(categoryID);
-                if (filter_categoryID != 0)
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (!(item.idea.category_id == filter_categoryID))
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.categoryID = filter_categoryID;
-                }
-            }
-            catch (FormatException) { }
+            display_Ideas = CategoryFilter(display_Ideas, categoryID);
+
+            //filter with department
+            display_Ideas = DepartmentFilter(display_Ideas, departmentID);
 
             // filter publish from to
-            try
-            {
-                DateTime pubFromTime = DateTime.Parse(pubFrom);
-                DateTime pubToTime = DateTime.Parse(pubTo);
-                if (pubFromTime > pubToTime)
-                {
-                    ViewBag.error = "'To Time' must be after 'From Time' ";
+            display_Ideas = PublishFromFilter(display_Ideas, pubFrom, pubTo);
 
-                }
-                else
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (item.idea.created_at < pubFromTime || item.idea.created_at > pubToTime)
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.pubFrom = pubFrom;
-                    ViewBag.pubTo = pubTo;
-                }
-            }
-            catch (ArgumentNullException) { }
-            catch (FormatException)
-            {
-                if (pubTo != pubFrom)
-                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
-            }
-
-
-            // order
+            // filter for order
             if (time_order == null)
             {
                 display_Ideas = display_Ideas.OrderByDescending(di => di.idea.viewed_count).ToList();
@@ -567,6 +331,8 @@ namespace SIMS_CW.Controllers
                 }
             }
 
+            //--------End filtering-------
+
             int pageSize = 10;
             int pageNumber = (page ?? 1);
             return View(display_Ideas.ToPagedList(pageNumber, pageSize));
@@ -574,7 +340,7 @@ namespace SIMS_CW.Controllers
 
 
         //GET
-        public ActionResult MostPopular(int? page, string idea_title, string name, string categoryID, string time_order, string pubFrom, string pubTo)
+        public ActionResult MostPopular(int? page, string idea_title, string name, string categoryID, string departmentID, string time_order, string pubFrom, string pubTo)
         {
             user loggedIn = (user)Session["loggedIn"];
 
@@ -589,6 +355,12 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
+            }
             if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 4)
             {
                 return Redirect("~/Home/DeniedAccess");
@@ -600,98 +372,22 @@ namespace SIMS_CW.Controllers
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
             List<display_idea> display_Ideas = getAllDisplayIdeas().ToList();
 
+            //--------filtering-------
+
             //filter with title
-            if (idea_title != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.idea.idea_title.ToLower().Contains(idea_title.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.idea_title = idea_title;
-            }
+            display_Ideas = TitleFilter(display_Ideas, idea_title);
+
             // filter with published user name
-            if (name != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.user.user_name.ToLower().Contains(name.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.name = name;
-            }
+            display_Ideas = UsernameFilter(display_Ideas, name);
 
             //filter with category
-            try
-            {
-                int filter_categoryID = Convert.ToInt32(categoryID);
-                if (filter_categoryID != 0)
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (!(item.idea.category_id == filter_categoryID))
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.categoryID = filter_categoryID;
-                }
-            }
-            catch (FormatException) { }
+            display_Ideas = CategoryFilter(display_Ideas, categoryID);
+
+            //filter with department
+            display_Ideas = DepartmentFilter(display_Ideas, departmentID);
 
             // filter publish from to
-            try
-            {
-                DateTime pubFromTime = DateTime.Parse(pubFrom);
-                DateTime pubToTime = DateTime.Parse(pubTo);
-                if (pubFromTime > pubToTime)
-                {
-                    ViewBag.error = "'To Time' must be after 'From Time' ";
-
-                }
-                else
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (item.idea.created_at < pubFromTime || item.idea.created_at > pubToTime)
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.pubFrom = pubFrom;
-                    ViewBag.pubTo = pubTo;
-                }
-            }
-            catch (ArgumentNullException) { }
-            catch (FormatException)
-            {
-                if (pubTo != pubFrom)
-                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
-            }
+            display_Ideas = PublishFromFilter(display_Ideas, pubFrom, pubTo);
 
 
             // order
@@ -720,7 +416,7 @@ namespace SIMS_CW.Controllers
 
 
         //GET
-        public ActionResult IdeasWithoutComments(int? page, string idea_title, string name, string categoryID, string time_order, string pubFrom, string pubTo)
+        public ActionResult IdeasWithoutComments(int? page, string idea_title, string name, string categoryID, string departmentID, string ideaStatus, string time_order, string pubFrom, string pubTo)
         {
             user loggedIn = (user)Session["loggedIn"];
 
@@ -734,6 +430,12 @@ namespace SIMS_CW.Controllers
                 List<category> categories = dbData.categories.ToList();
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
+            }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
             }
             if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 3)
             {
@@ -866,7 +568,7 @@ namespace SIMS_CW.Controllers
 
 
         //GET
-        public ActionResult AnonymousIdeas(int? page, string idea_title, string name, string categoryID, string time_order, string pubFrom, string pubTo)
+        public ActionResult AnonymousIdeas(int? page, string idea_title, string name, string categoryID, string departmentID, string time_order, string pubFrom, string pubTo)
         {
             user loggedIn = (user)Session["loggedIn"];
 
@@ -881,6 +583,12 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
+            }
             if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 3)
             {
                 return Redirect("~/Home/DeniedAccess");
@@ -890,120 +598,29 @@ namespace SIMS_CW.Controllers
             Session["previousPage"] = Url.Action("AnonymousIdeas", "Manager");
 
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
-            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(di => di.idea.isAnonymous == 0).ToList();
+            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(di => di.idea.isAnonymous == 0).Where(di => di.idea.status == 1).ToList();
+
+
+
+            //--------filtering-------
 
             //filter with title
-            if (idea_title != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.idea.idea_title.ToLower().Contains(idea_title.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.idea_title = idea_title;
-            }
+            display_Ideas = TitleFilter(display_Ideas, idea_title);
+
             // filter with published user name
-            if (name != null)
-            {
-                List<display_idea> temp = new List<display_idea>();
-                foreach (display_idea item in display_Ideas)
-                {
-                    if (!item.user.user_name.ToLower().Contains(name.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_idea item in temp)
-                {
-                    display_Ideas.Remove(item);
-                }
-                ViewBag.name = name;
-            }
+            display_Ideas = UsernameFilter(display_Ideas, name);
 
             //filter with category
-            try
-            {
-                int filter_categoryID = Convert.ToInt32(categoryID);
-                if (filter_categoryID != 0)
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (!(item.idea.category_id == filter_categoryID))
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.categoryID = filter_categoryID;
-                }
-            }
-            catch (FormatException) { }
+            display_Ideas = CategoryFilter(display_Ideas, categoryID);
+
+            //filter with department
+            display_Ideas = DepartmentFilter(display_Ideas, departmentID);
 
             // filter publish from to
-            try
-            {
-                DateTime pubFromTime = DateTime.Parse(pubFrom);
-                DateTime pubToTime = DateTime.Parse(pubTo);
-                if (pubFromTime > pubToTime)
-                {
-                    ViewBag.error = "'To Time' must be after 'From Time' ";
+            display_Ideas = PublishFromFilter(display_Ideas, pubFrom, pubTo);
 
-                }
-                else
-                {
-                    List<display_idea> temp = new List<display_idea>();
-                    foreach (display_idea item in display_Ideas)
-                    {
-                        if (item.idea.created_at < pubFromTime || item.idea.created_at > pubToTime)
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_idea item in temp)
-                    {
-                        display_Ideas.Remove(item);
-                    }
-                    ViewBag.pubFrom = pubFrom;
-                    ViewBag.pubTo = pubTo;
-                }
-            }
-            catch (ArgumentNullException) { }
-            catch (FormatException)
-            {
-                if (pubTo != pubFrom)
-                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
-            }
-
-
-            // order
-            if (time_order == null)
-            {
-                display_Ideas = display_Ideas.OrderByDescending(di => di.idea.created_at).ToList();
-            }
-            else
-            {
-                if (time_order.Equals("Newest"))
-                {
-                    display_Ideas = display_Ideas.OrderByDescending(di => di.idea.created_at).ToList();
-                    ViewBag.time_order = time_order;
-                }
-                else if (time_order.Equals("Oldest"))
-                {
-                    display_Ideas = display_Ideas.OrderBy(di => di.idea.created_at).ToList();
-                    ViewBag.time_order = time_order;
-                }
-            }
+            // filter for order
+            display_Ideas = OrderFilter(display_Ideas, time_order);
 
             int pageSize = 10;
             int pageNumber = (page ?? 1);
@@ -1012,7 +629,7 @@ namespace SIMS_CW.Controllers
 
 
         //GET
-        public ActionResult AnonymousComments(int? page, string name, string time_order, string pubFrom, string pubTo)
+        public ActionResult AnonymousComments(int? page, string name, string roleID, string departmentID, string time_order, string pubFrom, string pubTo)
         {
             user loggedIn = (user)Session["loggedIn"];
 
@@ -1020,6 +637,18 @@ namespace SIMS_CW.Controllers
             if (loggedIn == null)
             {
                 return Redirect("~/Home/LoginPage");
+            }
+            if (Session["roleCbb"] == null)
+            {
+                List<role> roles = dbData.roles.ToList();
+                SelectList listItems = new SelectList(roles, "role_id", "role_name");
+                Session["roleCbb"] = listItems;
+            }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
             }
             if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 3)
             {
@@ -1031,80 +660,42 @@ namespace SIMS_CW.Controllers
 
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
             List<display_comment> display_Comments = getAllDisplayComments().Where(dc => dc.comment.isAnonymous == 1).ToList();
+
+
+            //--------filtering-------
+
+            //filter for username
+            display_Comments = UsernameFilterComment(display_Comments, name);
+
+            display_Comments = RoleFilterComment(display_Comments, roleID);
+
+            //filter for departments
+            display_Comments = DepartmentFilterComment(display_Comments, departmentID);
+
+            //filter for 'Publish from to ..'
+            display_Comments = PublishFromFilterComment(display_Comments, pubFrom, pubTo);
             
-            // filter with published user name
-            if (name != null)
-            {
-                List<display_comment> temp = new List<display_comment>();
-                foreach (display_comment item in display_Comments)
-                {
-                    if (!item.user.user_name.ToLower().Contains(name.ToLower()))
-                    {
-                        temp.Add(item);
-                    }
-                }
-                foreach (display_comment item in temp)
-                {
-                    display_Comments.Remove(item);
-                }
-                ViewBag.name = name;
-            }
-
-            
-            // filter publish from to
-            try
-            {
-                DateTime pubFromTime = DateTime.Parse(pubFrom);
-                DateTime pubToTime = DateTime.Parse(pubTo);
-                if (pubFromTime > pubToTime)
-                {
-                    ViewBag.error = "'To Time' must be after 'From Time' ";
-
-                }
-                else
-                {
-                    List<display_comment> temp = new List<display_comment>();
-                    foreach (display_comment item in display_Comments)
-                    {
-                        if (item.comment.created_at < pubFromTime || item.comment.created_at > pubToTime)
-                        {
-                            temp.Add(item);
-                        }
-                    }
-                    foreach (display_comment item in temp)
-                    {
-                        display_Comments.Remove(item);
-                    }
-                    ViewBag.pubFrom = pubFrom;
-                    ViewBag.pubTo = pubTo;
-                }
-            }
-            catch (ArgumentNullException) { }
-            catch (FormatException)
-            {
-                if (pubTo != pubFrom)
-                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
-            }
-
-
-            // order
+            // filter for order
             if (time_order == null)
             {
-                display_Comments = display_Comments.OrderByDescending(di => di.comment.created_at).ToList();
+                display_Comments = display_Comments.OrderByDescending(dc => dc.comment.created_at).ToList();
             }
             else
             {
                 if (time_order.Equals("Newest"))
                 {
-                    display_Comments = display_Comments.OrderByDescending(di => di.comment.created_at).ToList();
+                    display_Comments = display_Comments.OrderByDescending(dc => dc.comment.created_at).ToList();
                     ViewBag.time_order = time_order;
                 }
                 else if (time_order.Equals("Oldest"))
                 {
-                    display_Comments = display_Comments.OrderBy(di => di.comment.created_at).ToList();
+                    display_Comments = display_Comments.OrderBy(dc => dc.comment.created_at).ToList();
                     ViewBag.time_order = time_order;
                 }
             }
+
+            //--------End filtering-------
+
 
             int pageSize = 10;
             int pageNumber = (page ?? 1);
@@ -1277,5 +868,343 @@ namespace SIMS_CW.Controllers
                 return File(memoryStream.ToArray(), "application/zip", "Attachments.zip");
             }
         }
+
+
+
+
+
+
+
+        //-----------Filter Ideas----------
+
+        //filter for title
+        private List<display_idea> TitleFilter(List<display_idea> display_Ideas, string idea_title)
+        {
+            if (idea_title != null)
+            {
+                List<display_idea> temp = new List<display_idea>();
+                foreach (display_idea item in display_Ideas)
+                {
+                    if (!item.idea.idea_title.ToLower().Contains(idea_title.ToLower()))
+                    {
+                        temp.Add(item);
+                    }
+                }
+                foreach (display_idea item in temp)
+                {
+                    display_Ideas.Remove(item);
+                }
+                ViewBag.idea_title = idea_title;
+            }
+            return display_Ideas;
+        }
+
+        //filter for username
+        private List<display_idea> UsernameFilter(List<display_idea> display_Ideas, string name)
+        {
+            if (name != null)
+            {
+                List<display_idea> temp = new List<display_idea>();
+                foreach (display_idea item in display_Ideas)
+                {
+                    if (!item.user.user_name.ToLower().Contains(name.ToLower()))
+                    {
+                        temp.Add(item);
+                    }
+                }
+                foreach (display_idea item in temp)
+                {
+                    display_Ideas.Remove(item);
+                }
+                ViewBag.name = name;
+            }
+            return display_Ideas;
+        }
+
+        //filter for caregory
+        private List<display_idea> CategoryFilter(List<display_idea> display_Ideas, string categoryID)
+        {
+            try
+            {
+                int filter_categoryID = Convert.ToInt32(categoryID);
+                if (filter_categoryID != 0)
+                {
+                    List<display_idea> temp = new List<display_idea>();
+                    foreach (display_idea item in display_Ideas)
+                    {
+                        if (!(item.idea.category_id == filter_categoryID))
+                        {
+                            temp.Add(item);
+                        }
+                    }
+                    foreach (display_idea item in temp)
+                    {
+                        display_Ideas.Remove(item);
+                    }
+                    ViewBag.categoryID = filter_categoryID;
+                }
+            }
+            catch (FormatException) { }
+            return display_Ideas;
+        }
+
+        //filter for departments
+        private List<display_idea> DepartmentFilter(List<display_idea> display_Ideas, string departmentID)
+        {
+            try
+            {
+                int filter_departmentID = Convert.ToInt32(departmentID);
+                if (filter_departmentID != 0)
+                {
+                    List<display_idea> temp = new List<display_idea>();
+                    foreach (display_idea item in display_Ideas)
+                    {
+                        if (!(item.idea.user.department_id == filter_departmentID))
+                        {
+                            temp.Add(item);
+                        }
+                    }
+                    foreach (display_idea item in temp)
+                    {
+                        display_Ideas.Remove(item);
+                    }
+                    ViewBag.departmentID = filter_departmentID;
+                }
+            }
+            catch (FormatException) { }
+            return display_Ideas;
+        }
+
+        //filter for status
+        private List<display_idea> StatusFilter(List<display_idea> display_Ideas, string ideaStatus)
+        {
+            if (ideaStatus == null)
+            {
+                display_Ideas = display_Ideas.OrderByDescending(di => di.idea.created_at).ToList();
+            }
+            else
+            {
+                if (ideaStatus == "Pending")
+                {
+                    display_Ideas = display_Ideas.Where(di => di.idea.status == 0).ToList();
+                    ViewBag.ideaStatus = ideaStatus;
+                }
+                else if (ideaStatus == "Approved")
+                {
+                    display_Ideas = display_Ideas.Where(di => di.idea.status == 1).ToList();
+                    ViewBag.ideaStatus = ideaStatus;
+                }
+                else if (ideaStatus == "Rejected")
+                {
+                    display_Ideas = display_Ideas.Where(di => di.idea.status == 2).ToList();
+                    ViewBag.ideaStatus = ideaStatus;
+                }
+            }
+            return display_Ideas;
+        }
+
+        //filter for order
+        private List<display_idea> OrderFilter(List<display_idea> display_Ideas, string time_order)
+        {
+            if (time_order == null)
+            {
+                display_Ideas = display_Ideas.OrderByDescending(di => di.idea.created_at).ToList();
+            }
+            else
+            {
+                if (time_order.Equals("Newest"))
+                {
+                    display_Ideas = display_Ideas.OrderByDescending(di => di.idea.created_at).ToList();
+                    ViewBag.time_order = time_order;
+                }
+                else if (time_order.Equals("Oldest"))
+                {
+                    display_Ideas = display_Ideas.OrderBy(di => di.idea.created_at).ToList();
+                    ViewBag.time_order = time_order;
+                }
+            }
+            return display_Ideas;
+        }
+
+        //filter for 'Publish from to ..'
+        private List<display_idea> PublishFromFilter(List<display_idea> display_Ideas, string pubFrom, string pubTo)
+        {
+            try
+            {
+                DateTime pubFromTime = DateTime.Parse(pubFrom);
+                DateTime pubToTime = DateTime.Parse(pubTo);
+                if (pubFromTime > pubToTime)
+                {
+                    ViewBag.error = "To time must be after 'From Time' ";
+
+                }
+                else
+                {
+                    List<display_idea> temp = new List<display_idea>();
+                    foreach (display_idea item in display_Ideas)
+                    {
+                        if (item.idea.created_at < pubFromTime || item.idea.created_at > pubToTime)
+                        {
+                            temp.Add(item);
+                        }
+                    }
+                    foreach (display_idea item in temp)
+                    {
+                        display_Ideas.Remove(item);
+                    }
+                    ViewBag.pubFrom = pubFrom;
+                    ViewBag.pubTo = pubTo;
+                }
+
+            }
+            catch (ArgumentNullException) { }
+            catch (FormatException)
+            {
+                if (pubTo != pubFrom)
+                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
+            }
+            return display_Ideas;
+        }
+
+        //filter for other arguments
+        private List<display_idea> OtherFilter(List<display_idea> display_Ideas, string other_filter)
+        {
+            if (other_filter != null)
+            {
+                if (other_filter.Equals("Most Popular"))
+                {
+                    display_Ideas = display_Ideas.OrderByDescending(di => di.rate_point).ToList();
+                    ViewBag.time_order = "None";
+                    ViewBag.other_filter = other_filter;
+                }
+                else if (other_filter.Equals("Most Viewed"))
+                {
+                    display_Ideas = display_Ideas.OrderByDescending(di => di.idea.viewed_count).ToList();
+                    ViewBag.time_order = "None";
+                    ViewBag.other_filter = other_filter;
+                }
+            }
+            return display_Ideas;
+        }
+
+
+        //-----------Filter Comments----------
+
+        //filter for username
+        private List<display_comment> UsernameFilterComment(List<display_comment> display_Comments, string name)
+        {
+            if (name != null)
+            {
+                List<display_comment> temp = new List<display_comment>();
+                foreach (display_comment item in display_Comments)
+                {
+                    if (!item.user.user_name.ToLower().Contains(name.ToLower()))
+                    {
+                        temp.Add(item);
+                    }
+                }
+                foreach (display_comment item in temp)
+                {
+                    display_Comments.Remove(item);
+                }
+                ViewBag.name = name;
+            }
+            return display_Comments;
+        }
+
+        //filter for departments
+        private List<display_comment> RoleFilterComment(List<display_comment> display_Comments, string roleID)
+        {
+            try
+            {
+                int filter_roleID = Convert.ToInt32(roleID);
+                if (filter_roleID != 0)
+                {
+                    List<display_comment> temp = new List<display_comment>();
+                    foreach (display_comment item in display_Comments)
+                    {
+                        if (!(item.comment.user.role_id == filter_roleID))
+                        {
+                            temp.Add(item);
+                        }
+                    }
+                    foreach (display_comment item in temp)
+                    {
+                        display_Comments.Remove(item);
+                    }
+                    ViewBag.roleID = filter_roleID;
+                }
+            }
+            catch (FormatException) { }
+            return display_Comments;
+        }
+
+        //filter for departments
+        private List<display_comment> DepartmentFilterComment(List<display_comment> display_Comments, string departmentID)
+        {
+            try
+            {
+                int filter_departmentID = Convert.ToInt32(departmentID);
+                if (filter_departmentID != 0)
+                {
+                    List<display_comment> temp = new List<display_comment>();
+                    foreach (display_comment item in display_Comments)
+                    {
+                        if (!(item.comment.user.department_id == filter_departmentID))
+                        {
+                            temp.Add(item);
+                        }
+                    }
+                    foreach (display_comment item in temp)
+                    {
+                        display_Comments.Remove(item);
+                    }
+                    ViewBag.departmentID = filter_departmentID;
+                }
+            }
+            catch (FormatException) { }
+            return display_Comments;
+        }
+
+        //filter for 'Publish from to ..'
+        private List<display_comment> PublishFromFilterComment(List<display_comment> display_Comments, string pubFrom, string pubTo)
+        {
+            try
+            {
+                DateTime pubFromTime = DateTime.Parse(pubFrom);
+                DateTime pubToTime = DateTime.Parse(pubTo);
+                if (pubFromTime > pubToTime)
+                {
+                    ViewBag.error = "To time must be after 'From Time' ";
+
+                }
+                else
+                {
+                    List<display_comment> temp = new List<display_comment>();
+                    foreach (display_comment item in display_Comments)
+                    {
+                        if (item.comment.created_at < pubFromTime || item.comment.created_at > pubToTime)
+                        {
+                            temp.Add(item);
+                        }
+                    }
+                    foreach (display_comment item in temp)
+                    {
+                        display_Comments.Remove(item);
+                    }
+                    ViewBag.pubFrom = pubFrom;
+                    ViewBag.pubTo = pubTo;
+                }
+
+            }
+            catch (ArgumentNullException) { }
+            catch (FormatException)
+            {
+                if (pubTo != pubFrom)
+                    ViewBag.error = "Both 'From Time' and 'To Time' are required";
+            }
+            return display_Comments;
+        }
+
     }
 }
