@@ -136,7 +136,7 @@ hr {
                         </a>
                         <hr>
                         <div class="stats">
-                            <p><span class="glyphicon glyphicon-thumbs-up" style="color: green"> @item.idea.rates.Where(r => r.idea_id == item.idea.idea_id).Where(r => r.rate_point == 1).Count()  </span>   <span class="glyphicon glyphicon-thumbs-down" style="color: red"> @item.idea.rates.Where(r => r.idea_id == item.idea.idea_id).Where(r => r.rate_point == -1).Count()</span></p>
+                            <p><span class="glyphicon glyphicon-thumbs-up" style="color: green">@item.idea.rates.Where(r => r.idea_id == item.idea.idea_id).Where(r => r.rate_point == 1).Count()</span>   <span class="glyphicon glyphicon-thumbs-down" style="color: red">@item.idea.rates.Where(r => r.idea_id == item.idea.idea_id).Where(r => r.rate_point == -1).Count()</span></p>
                         </div>
                     </div>
                 </div>

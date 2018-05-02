@@ -26,64 +26,64 @@
 
 
 <style>
-hr {
-    margin: 5px 0 15px 0;
-}
+    hr {
+        margin: 5px 0 15px 0;
+    }
 
-.panel-white {
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    background-color: aliceblue;
-}
+    .panel-white {
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background-color: aliceblue;
+    }
 
-.panel-gray {
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    background-color: #f6f6f6;
-}
+    .panel-gray {
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background-color: #f6f6f6;
+    }
 
-.post .post-heading {
-    height: 70px;
-    padding: 20px 15px 0 15px;
-}
+    .post .post-heading {
+        height: 70px;
+        padding: 20px 15px 0 15px;
+    }
 
-.post .post-heading .meta .title {
-    margin-bottom: 0;
-}
+        .post .post-heading .meta .title {
+            margin-bottom: 0;
+        }
 
-.post .post-heading .meta .title a {
-    color: black;
-}
+            .post .post-heading .meta .title a {
+                color: black;
+            }
 
-.post .post-heading .meta .title a:hover {
-    color: #aaaaaa;
-}
+                .post .post-heading .meta .title a:hover {
+                    color: #aaaaaa;
+                }
 
-.post .post-heading .meta .time {
-    margin-top: 8px;
-    color: #999;
-}
+        .post .post-heading .meta .time {
+            margin-top: 8px;
+            color: #999;
+        }
 
-.post .post-description {
-    padding: 15px;
-}
+    .post .post-description {
+        padding: 15px;
+    }
 
-.post .post-description p {
-    font-size: 14px;
-}
+        .post .post-description p {
+            font-size: 14px;
+        }
 
-.post .post-description .stats {
-    margin-top: 5px;
-}
+        .post .post-description .stats {
+            margin-top: 5px;
+        }
 
-.post .post-description .stats .stat-item form {
-    display: inline-block;
-    margin-right: 15px;
-}
+            .post .post-description .stats .stat-item form {
+                display: inline-block;
+                margin-right: 15px;
+            }
 
-.post .post-description .stats .stat-item .icon {
-    margin-right: 8px;
-}
+            .post .post-description .stats .stat-item .icon {
+                margin-right: 8px;
+            }
 </style>
 
 @if (ViewBag.mode == "approve")
@@ -95,9 +95,18 @@ hr {
     <h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
 }
 
-<button style="margin-bottom: 10px;" class="btn btn-primary">
+<!--<button style="margin-bottom: 10px;" class="btn btn-primary">
     <a style="color: white;" href="@Session["previousPage"]"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
-</button>
+</button>-->
+
+<div>
+    <a style="color: white; margin-bottom: 10px;" class="btn btn-primary" href="@Session["previousPage"]"><span class="glyphicon glyphicon-arrow-left"></span> Return</a>
+
+    @if ((ViewBag.Idea.status != 1 && ViewBag.mode == "viewall") && (ViewBag.idea.user.department_id == ViewBag.currentUser.department_id || ViewBag.currentUser.role_id == 2))
+    {
+        <a class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;" href="@Url.Action("Details", "Manager", new { idea_id =  ViewBag.idea.idea_id, mode="approve"})"><span class="glyphicon glyphicon-check"></span> To Approve page</a>
+    }
+</div>
 
 <div class="row" style="margin-bottom: 10px;">
     <div class="col-md-12">
@@ -105,7 +114,7 @@ hr {
             <div class="post-heading">
                 <div class="pull-left meta">
                     <div class="title h5">
-                        
+
                         @if (ViewBag.Idea_user == null)
                         {
                             <b>@ViewBag.Idea.user.user_name (Anonymous)</b>

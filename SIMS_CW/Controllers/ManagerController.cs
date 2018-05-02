@@ -34,7 +34,7 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
-            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 2)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 3)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
@@ -175,6 +175,8 @@ namespace SIMS_CW.Controllers
                     ViewBag.other_filter = other_filter;
                 }
             }
+            ViewBag.currentUser = loggedIn;
+
             DateTime dt = current_year.deadline_comments ?? DateTime.Now;
             ViewBag.closure_date = dt.ToString("yyyy/MM/dd");
             int pageSize = 10;
@@ -285,7 +287,7 @@ namespace SIMS_CW.Controllers
                 SelectList listItems = new SelectList(categories, "category_id", "category_name");
                 Session["cateCbb"] = listItems;
             }
-            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 4)
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 3)
             {
                 return Redirect("~/Home/DeniedAccess");
             }
@@ -294,7 +296,17 @@ namespace SIMS_CW.Controllers
             Session["previousPage"] = Url.Action("ApproveIdeas", "Manager");
 
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
-            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(item => item.idea.status == 0).ToList();
+
+            List<display_idea> display_Ideas;
+            //show all records to QA Manager
+            if (loggedIn.role_id == 1 || loggedIn.role_id == 2)
+            {
+                display_Ideas = getAllDisplayIdeas().Where(item => item.idea.status == 0).ToList();
+            }
+            else
+            {
+                display_Ideas = getAllDisplayIdeas().Where(item => item.idea.status == 0).Where(item => item.user.department_id == loggedIn.department_id).ToList();
+            }
 
             //filter with title
             if (idea_title != null)
@@ -1115,6 +1127,7 @@ namespace SIMS_CW.Controllers
                 return Redirect("~/Home/DeniedAccess");
             }
 
+            ViewBag.currentUser = loggedIn;
             idea idea = dbData.ideas.Find(idea_id);
             int uid = Convert.ToInt32(idea.user_id);
             List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).OrderByDescending(c=>c.created_at).ToList();

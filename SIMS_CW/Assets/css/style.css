@@ -65,6 +65,17 @@ label {
 
 /*-- header --*/
 
+
+
+@media (max-width:590px){
+    .ownLogin {
+        width: 100%;
+        margin: auto;
+    }
+}
+
+
+
 /*-- Index-Page-Styling --*/
 
 /*-- top-bar-w3-agile --*/
@@ -2305,10 +2316,19 @@ label.header {
 }
 
 @media(max-width:991px) {
-	.b_left {
-		padding: 0;
-		float: left;
-	}
+    .f_links {
+        text-align: center;
+    }
+    .social-icons-wthree {
+        text-align: center;
+    }
+    .social-icons-wthree a{
+        margin-bottom: 1em;
+    }
+    .b_left {
+        padding: 0;
+        float: left;
+    }
 	.news-right {
 		padding: 0;
 		margin-top: 1em;
@@ -2595,7 +2615,7 @@ label.header {
 }
 
 @media(max-width:640px) {
-	.banner-info-w3ls-agileinfo h3 {
+    .banner-info-w3ls-agileinfo h3 {
 		font-size: 3em;
 	}
 	h2.footer-logo {
@@ -2644,7 +2664,12 @@ label.header {
 }
 
 @media(max-width:568px) {
-	.banner-info-w3ls-agileinfo {
+    .ownLogin {
+        width: 100% !important;
+        margin: auto;
+    }
+    
+    .banner-info-w3ls-agileinfo {
 		padding: 10em 5em 0 2em;
 		width: 92%;
 	}
@@ -2655,7 +2680,6 @@ label.header {
 	.search {
 		float: right;
 		width: 100%;
-		margin-top: 1em;
 	}
 	.cd-header-buttons {
 		position: absolute;
@@ -2718,7 +2742,6 @@ label.header {
 	.search {
 		float: right;
 		width: 100%;
-		margin-top: 1.5em;
 	}
 	.icon_info {
 		padding: 2em 1.5em;
@@ -2750,10 +2773,10 @@ label.header {
 }
 
 @media(max-width:414px) {
-	.banner-info-w3ls-agileinfo {
-		padding: 7em 5em 0 1em;
-		width: 99%;
-	}
+    .banner-info-w3ls-agileinfo {
+        padding: 7em 5em 0 1em;
+        width: 99%;
+    }
 	.banner-top,
 	.banner-top1,
 	.banner-top2,

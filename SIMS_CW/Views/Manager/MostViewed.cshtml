@@ -32,12 +32,12 @@
 @using (Html.BeginForm("MostViewed", "Manager", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
 {
     <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-2">@Html.Label("Title")</div>
-        <div class="col-md-10">@Html.TextBox("idea_title", null, htmlAttributes: new { @class = "form-control" })</div>
+        <div class="col-md-2">@Html.Label("UserName")</div>
+        <div class="col-md-10"> @Html.TextBox("name", null, htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-2">@Html.Label("Name")</div>
-        <div class="col-md-10"> @Html.TextBox("name", null, htmlAttributes: new { @class = "form-control" })</div>
+        <div class="col-md-2">@Html.Label("Title")</div>
+        <div class="col-md-10">@Html.TextBox("idea_title", null, htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Category")</div>
@@ -65,7 +65,7 @@
         <thead>
             <tr>
                 <th>Actions</th>
-                <th>Name</th>
+                <th>UserName</th>
                 <th>Title</th>
                 <th><span class="glyphicon glyphicon-eye-open" title="Views"></span></th>
                 <th>Published at</th>
@@ -94,4 +94,4 @@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
     @Html.PagedListPager(Model, page => Url.Action("MostViewed",
-                                            new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))
+                                                new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))

@@ -32,7 +32,7 @@
 @using (Html.BeginForm("AnonymousComments", "Manager", new { page = 1 }, FormMethod.Post, new { @class = "filterCommentsForm", style = "display: none" }))
 {
     <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-2">@Html.Label("Name")</div>
+        <div class="col-md-2">@Html.Label("UserName")</div>
         <div class="col-md-10"> @Html.TextBox("name", null, htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
@@ -57,7 +57,7 @@
         <thead>
             <tr>
                 <th>Actions</th>
-                <th>Name</th>
+                <th>UserName</th>
                 <th>Content</th>
                 <th>Idea</th>
                 <th><span class="glyphicon glyphicon-eye-close" title="Anonymous"></span></th>
@@ -75,7 +75,7 @@
                     </td>
                     <td style="width: 150px">@item.user.user_name</td>
                     <td>@item.comment.comment_content</td>
-                    <td style="width: 100px"><a href="@Url.Action("Details", "Manager", new { idea_id = item.comment.idea_id, mode = "viewall" })" title="Idea ID">ID @item.comment.idea_id</a></td>
+                    <td style="width: 100px"><a href="@Url.Action("Details", "Manager", new { idea_id = item.comment.idea_id, mode = "viewall" })" title="Idea ID" style="text-decoration: underline">ID @item.comment.idea_id</a></td>
 
                     @if (item.comment.isAnonymous == 1)
                     {
