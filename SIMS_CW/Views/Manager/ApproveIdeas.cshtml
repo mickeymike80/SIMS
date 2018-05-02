@@ -88,7 +88,7 @@
                     <td>@item.idea.idea_title</td>
                     @if (item.idea.status == 0)
                     {
-                        <td style="width: 100px">Pending</td>
+                        <td style="width: 100px"><a href="@Url.Action("Details", "Manager", new { idea_id =  item.idea.idea_id, mode="approve"})" title="Approve" style="text-decoration: underline">Pending</a></td>
                     }
                     else if (item.idea.status == 1)
                     {

@@ -12,66 +12,6 @@
     View all ideas
 }
 
-<style>
-    hr {
-        margin: 5px 0 15px 0;
-    }
-
-    .panel-white {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: aliceblue;
-    }
-
-    .panel-gray {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: #f6f6f6;
-    }
-
-    .post .post-heading {
-        height: 70px;
-        padding: 20px 15px 0 15px;
-    }
-
-    .post .post-heading .meta .title {
-        margin-bottom: 0;
-    }
-
-    .post .post-heading .meta .title a {
-        color: black;
-    }
-
-    .post .post-heading .meta .title a:hover {
-        color: #aaaaaa;
-    }
-
-    .post .post-heading .meta .time {
-        margin-top: 8px;
-        color: #999;
-    }
-
-    .post .post-description {
-        padding: 15px;
-    }
-
-    .post .post-description p {
-        font-size: 14px;
-    }
-
-    .post .post-description .stats {
-        margin-top: 5px;
-    }
-
-    .post .post-description .stats .stat-item form {
-        display: inline-block;
-        margin-right: 15px;
-     }
-
-     .post .post-description .stats .stat-item .icon {
-        margin-right: 8px;
-     }
-</style>
 
 <script>
     $(function () {
@@ -85,7 +25,7 @@
 </script>
 
 <h3 class="headerw3" style="margin-bottom: 30px;">View all ideas</h3>
-@if (ViewBag.role_id == 5)
+@if (ViewBag.currentUser.role_id == 5)
 {
     <button style="margin-bottom: 10px" class="btn btn-primary">
         <a style="color: white;" href="@Url.Action("Create", "Idea")"><span class="glyphicon glyphicon-plus"></span> Create a new idea</a>
@@ -109,6 +49,14 @@
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Category")</div>
         <div class="col-md-10">@Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "All", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Department")</div>
+        <div class="col-md-10">@Html.DropDownList("departmentID", Session["deptCbb"] as SelectList, "None", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Status")</div>
+        <div class="col-md-10">@Html.DropDownList("ideaStatus", new SelectList(new List<String> { "Pending", "Approved", "Rejected" }), "None", htmlAttributes: new { @class = "form-control" })</div>
     </div>
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-2">@Html.Label("Publish Order")</div>
@@ -161,7 +109,15 @@
 
                             <!--Three spaces-->
                             &nbsp&nbsp&nbsp
-                            <span class="glyphicon glyphicon-comment" title="Comments"> @item.idea.comments.Where(c => c.idea_id == item.idea.idea_id).Where(c => c.user.role_id == 5).Count()</span>
+                            @if (ViewBag.currentUser.role_id == 5)
+                            {
+                                <span class="glyphicon glyphicon-comment" title="Comments"> @item.idea.comments.Where(c => c.idea_id == item.idea.idea_id).Where(c => c.user.role_id == 5).Count()</span>
+                            }
+                            else
+                            {
+                                <span class="glyphicon glyphicon-comment" title="Comments"> @item.idea.comments.Where(c => c.idea_id == item.idea.idea_id).Count()</span>
+                            }
+
 
                             <!--Three spaces-->
                             &nbsp&nbsp&nbsp
@@ -191,13 +147,15 @@
 @*Pagination*@
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     @Html.PagedListPager(Model, page => Url.Action("Index",
-                                                new
-                                                {
-                                                    page,
-                                                    idea_title = ViewBag.idea_title,
-                                                    name = ViewBag.name,
-                                                    categoryID = ViewBag.categoryID,
-                                                    time_order = ViewBag.time_order,
-                                                    pubFrom = ViewBag.pubFrom,
-                                                    pubTo = ViewBag.pubTo
-                                                }))
+                                                    new
+                                                    {
+                                                        page,
+                                                        idea_title = ViewBag.idea_title,
+                                                        name = ViewBag.name,
+                                                        categoryID = ViewBag.categoryID,
+                                                        departmentID = ViewBag.departmentID,
+                                                        ideaStatus = ViewBag.ideaStatus,
+                                                        time_order = ViewBag.time_order,
+                                                        pubFrom = ViewBag.pubFrom,
+                                                        pubTo = ViewBag.pubTo
+                                                    }))

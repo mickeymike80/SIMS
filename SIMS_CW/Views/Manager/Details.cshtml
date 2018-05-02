@@ -177,9 +177,14 @@
 <br />
 @foreach (var item in ViewBag.documents)
 {
-    <a href="@Url.Action("DownloadAttachment", "Idea", new { @new_file_name = item.new_file_name, @old_file_name = item.old_file_name})">@item.old_file_name</a>
-    <br />
+    <div style="border: 1px solid #dddddd; padding: 10px; border-radius: 5px; background-color: aliceblue">
+        <span class="glyphicon glyphicon-paperclip" title="Attachments">
+            <a href="@Url.Action("DownloadAttachment", "Idea", new { @new_file_name = item.new_file_name, @old_file_name = item.old_file_name})">@item.old_file_name</a>
+        </span>
+    </div>
 }
+
+
 <br />
 <script>
     function approve() {
@@ -249,6 +254,10 @@
             <div class="col-md-12">
                 <div class="panel-gray post">
                     <div class="post-heading">
+                        @if (Model.Comments[i].user.role_id != 5)
+                        {
+                            <div class="ribbon"><span>STAFF</span></div>
+                        }
                         <div class="pull-left meta">
                             <div class="title h5">
                                 <b>@Model.Comment_users[i].user_name</b>

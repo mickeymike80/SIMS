@@ -12,66 +12,6 @@
     Show details the idea
 }
 
-<style>
-    hr {
-        margin: 5px 0 15px 0;
-    }
-
-    .panel-white {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: aliceblue;
-    }
-
-    .panel-gray {
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-        background-color: #f6f6f6;
-    }
-
-    .post .post-heading {
-        height: 70px;
-        padding: 20px 15px 0 15px;
-    }
-
-    .post .post-heading .meta .title {
-        margin-bottom: 0;
-    }
-
-    .post .post-heading .meta .title a {
-        color: black;
-    }
-
-    .post .post-heading .meta .title a:hover {
-        color: #aaaaaa;
-    }
-
-    .post .post-heading .meta .time {
-        margin-top: 8px;
-        color: #999;
-    }
-
-    .post .post-description {
-        padding: 15px;
-    }
-
-    .post .post-description p {
-        font-size: 14px;
-    }
-
-    .post .post-description .stats {
-        margin-top: 5px;
-    }
-
-    .post .post-description .stats .stat-item form {
-        display: inline-block;
-        margin-right: 15px;
-     }
-
-     .post .post-description .stats .stat-item .icon {
-        margin-right: 8px;
-     }
-</style>
 
 <h3 class="headerw3" style="margin-bottom: 30px;">Idea Details</h3>
 
@@ -85,17 +25,17 @@
             <div class="post-heading">
                 <div class="pull-left meta">
                     <div class="title h5">
-                        @if (ViewBag.Idea.user_id == ViewBag.currentUser.user_id && ViewBag.Idea_user == null)
+                        @if (ViewBag.Idea.user_id == ViewBag.currentUser.user_id && ViewBag.Idea.isAnonymous == 1)
                         {
                             <b>@ViewBag.Idea.user.user_name (Anonymous)</b>
                         }
-                        else if (ViewBag.Idea.user_id != ViewBag.currentUser.user_id && ViewBag.Idea_user == null)
+                        else if (ViewBag.Idea.user_id != ViewBag.currentUser.user_id && ViewBag.Idea.isAnonymous == 1)
                         {
                             <b>Anonymous</b>
                         }
-                        else if (ViewBag.Idea.user_id == ViewBag.currentUser.user_id && ViewBag.Idea_user != null)
+                        else if (ViewBag.Idea.isAnonymous == 0)
                         {
-                            <b>@ViewBag.Idea_user.user_name</b>
+                            <b>@ViewBag.Idea.user.user_name</b>
                         }
                     </div>
                     <h6 class="text-muted time">
@@ -115,6 +55,17 @@
                         <!--Three spaces-->
                         &nbsp&nbsp&nbsp
                         <span class="glyphicon glyphicon-paperclip" title="Attachments"> @ViewBag.documents.Count</span>
+
+                        <!--Three spaces-->
+                        &nbsp&nbsp&nbsp
+                        @if (ViewBag.currentUser.role_id == 5)
+                        {
+                            <span class="glyphicon glyphicon-comment" title="Comments"> @ViewBag.commentCountStudent</span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-comment" title="Comments"> @ViewBag.commentCountStaff</span>
+                        }
 
                         <!--Three spaces-->
                         &nbsp&nbsp&nbsp
@@ -142,7 +93,7 @@
                             if (ViewBag.rate == 1)
                             {
                                 <button class="btn" type="submit" value="Like"
-                                        style="background-color:red; padding: 5px 8px 5px 8px; font-size: 14px;" disabled="disabled">
+                                        style="background-color:green; color:white; padding: 5px 8px 5px 8px; font-size: 14px;" disabled="disabled">
                                     <i class="glyphicon glyphicon-thumbs-up"> Like</i>
                                 </button>
                             }
@@ -159,7 +110,7 @@
                         {
                             if (ViewBag.rate == -1)
                             {
-                                <button class="btn" type="submit" value="Dislike" style="background-color:red; padding: 5px 8px 5px 8px; font-size: 14px;" disabled="disabled">
+                                <button class="btn" type="submit" value="Dislike" style="background-color:red; color:white; padding: 5px 8px 5px 8px; font-size: 14px;" disabled="disabled">
                                     <i class="glyphicon glyphicon-thumbs-down"> Dislike</i>
                                 </button>
                             }
@@ -260,6 +211,10 @@
             <div class="col-md-12">
                 <div class="panel-gray post">
                     <div class="post-heading">
+                        @if (Model.Comments[i].user.role_id != 5)
+                        {
+                            <div class="ribbon"><span>STAFF</span></div>
+                        }
                         <div class="pull-left meta">
                             <div class="title h5">
                                 <b>@Model.Comment_users[i].user_name</b>
