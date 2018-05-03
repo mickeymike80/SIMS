@@ -1,0 +1,100 @@
+﻿@model PagedList.IPagedList<SIMS_CW.Models.display_idea>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "LatestIdeas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section title {
+    Latest Ideas
+}
+
+@section title_page {
+    Latest Ideas
+}
+<script>
+    $(function () {
+        $(".date-picker").datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+    });
+    function clickToFilterIdeas() {
+        $(".filterIdeasForm").toggle();
+    }
+</script>
+
+<h3 class="headerw3" style="margin-bottom: 30px;">Latest Ideas</h3>
+<div>
+    <a href="@Url.Action("LatestIdeas", "Manager")" class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;"><span class="glyphicon glyphicon-refresh"></span> Refresh</a>
+    <p class="btn btn-primary" style="padding: 5px 8px 5px 8px; margin: 0 0 10px 0;" cursor: pointer" onclick="clickToFilterIdeas()"><span class="glyphicon glyphicon-filter"></span> Filter ideas</p>
+</div>
+@using (Html.BeginForm("LatestIdeas", "Manager", new { page = 1 }, FormMethod.Post, new { @class = "filterIdeasForm", style = "display: none" }))
+{
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("UserName")</div>
+        <div class="col-md-10"> @Html.TextBox("name", null, htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Title")</div>
+        <div class="col-md-10">@Html.TextBox("idea_title", null, htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Category")</div>
+        <div class="col-md-10">@Html.DropDownList("categoryID", Session["cateCbb"] as SelectList, "All", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Department")</div>
+        <div class="col-md-10">@Html.DropDownList("departmentID", Session["deptCbb"] as SelectList, "None", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Publish Order")</div>
+        <div class="col-md-10">@Html.DropDownList("time_order", new SelectList(new List<String> { "Newest", "Oldest" }), "None", htmlAttributes: new { @class = "form-control" })</div>
+    </div>
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-2">@Html.Label("Publish from")</div>
+        <div class="col-md-10" style="display: flex">
+            <input class="date-picker form-control" name="pubFrom" type="date" value="@ViewBag.pubFrom" />
+            @Html.Label("to", htmlAttributes: new { style = "margin: 5px 10px 0 10px" })
+            <input class="date-picker form-control" type="date" name="pubTo" value="@ViewBag.pubTo" />
+        </div>
+    </div>
+
+    @ViewBag.error
+    <input type="submit" value="Filter" class="btn" style="margin-bottom: 10px;" />
+}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th>UserName</th>
+                <th>Title</th>
+                <th>Published at</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="btn-adjust">
+                        <button type="button" class="btn btn-info">
+                            <a style="color: white;" href="@Url.Action("Details", "Manager", new { idea_id =  item.idea.idea_id, mode="viewall"})" title="Details"><span style="margin-right: 5px" class="glyphicon glyphicon-align-justify"></span></a>
+                        </button>
+                    </td>
+                    <td style="width: 150px">@item.user.user_name</td>
+                    <td> @item.idea.idea_title</td>
+
+                    <td class="column-create_at">@item.idea.created_at</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@*Pagination*@
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("LatestIdeas",
+                                                                        new { page, idea_title = ViewBag.idea_title, name = ViewBag.name, categoryID = ViewBag.categoryID, departmentID = ViewBag.departmentID, time_order = ViewBag.time_order, pubFrom = ViewBag.pubFrom, pubTo = ViewBag.pubTo }))
