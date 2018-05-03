@@ -639,7 +639,7 @@ namespace SIMS_CW.Controllers
             }
 
             //store page to return to proper page when visited Details page
-            Session["previousPage"] = Url.Action("AnonymousComments", "Manager");
+            Session["previousPage"] = Url.Action("ViewAllComments", "Manager");
 
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
             List<display_comment> display_Comments = getAllDisplayComments().ToList();
