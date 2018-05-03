@@ -297,7 +297,7 @@ namespace SIMS_CW.Controllers
                     }
                 }
             }
-            return Redirect(Url.Action("Index", "Idea", new { page = 1 }));
+            return Redirect(Url.Action("MyIdeas", "Idea", new { page = 1 }));
             //End COde
 
         }

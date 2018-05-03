@@ -373,7 +373,7 @@ namespace SIMS_CW.Controllers
             Session["previousPage"] = Url.Action("MostPopular", "Manager");
 
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
-            List<display_idea> display_Ideas = getAllDisplayIdeas().ToList();
+            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(di => di.idea.status == 1).ToList();
 
             //--------filtering-------
 
@@ -543,6 +543,73 @@ namespace SIMS_CW.Controllers
 
 
         //GET
+        public ActionResult LatestIdeas(int? page, string idea_title, string name, string categoryID, string departmentID, string time_order, string pubFrom, string pubTo)
+        {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (Session["cateCbb"] == null)
+            {
+                List<category> categories = dbData.categories.ToList();
+                SelectList listItems = new SelectList(categories, "category_id", "category_name");
+                Session["cateCbb"] = listItems;
+            }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 4)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
+            //store page to return to proper page when visited Details page
+            Session["previousPage"] = Url.Action("LatestIdeas", "Manager");
+
+            //get date two weeks earlier
+            DateTime today = DateTime.Today;
+            DateTime twoWeeks_Earlier = today.AddDays(-14);
+
+            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
+            List<display_idea> display_Ideas = getAllDisplayIdeas().Where(di => di.idea.status == 1).Where(dc => dc.idea.created_at > twoWeeks_Earlier).ToList();
+
+
+
+            //--------filtering-------
+
+            //filter with title
+            display_Ideas = TitleFilter(display_Ideas, idea_title);
+
+            // filter with published user name
+            display_Ideas = UsernameFilter(display_Ideas, name);
+
+            //filter with category
+            display_Ideas = CategoryFilter(display_Ideas, categoryID);
+
+            //filter with department
+            display_Ideas = DepartmentFilter(display_Ideas, departmentID);
+
+            // filter publish from to
+            display_Ideas = PublishFromFilter(display_Ideas, pubFrom, pubTo);
+
+            // filter for order
+            display_Ideas = OrderFilter(display_Ideas, time_order);
+
+            //--------End filtering-------
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(display_Ideas.ToPagedList(pageNumber, pageSize));
+        }
+
+
+        //GET
         public ActionResult AnonymousComments(int? page, string name, string roleID, string departmentID, string time_order, string pubFrom, string pubTo)
         {
             user loggedIn = (user)Session["loggedIn"];
@@ -589,6 +656,85 @@ namespace SIMS_CW.Controllers
             //filter for 'Publish from to ..'
             display_Comments = PublishFromFilterComment(display_Comments, pubFrom, pubTo);
             
+            // filter for order
+            if (time_order == null)
+            {
+                display_Comments = display_Comments.OrderByDescending(dc => dc.comment.created_at).ToList();
+            }
+            else
+            {
+                if (time_order.Equals("Newest"))
+                {
+                    display_Comments = display_Comments.OrderByDescending(dc => dc.comment.created_at).ToList();
+                    ViewBag.time_order = time_order;
+                }
+                else if (time_order.Equals("Oldest"))
+                {
+                    display_Comments = display_Comments.OrderBy(dc => dc.comment.created_at).ToList();
+                    ViewBag.time_order = time_order;
+                }
+            }
+
+            //--------End filtering-------
+
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(display_Comments.ToPagedList(pageNumber, pageSize));
+        }
+
+
+        //GET
+        public ActionResult LatestComments(int? page, string name, string roleID, string departmentID, string time_order, string pubFrom, string pubTo)
+        {
+            user loggedIn = (user)Session["loggedIn"];
+
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (Session["roleCbb"] == null)
+            {
+                List<role> roles = dbData.roles.ToList();
+                SelectList listItems = new SelectList(roles, "role_id", "role_name");
+                Session["roleCbb"] = listItems;
+            }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 4)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
+            //store page to return to proper page when visited Details page
+            Session["previousPage"] = Url.Action("LatestComments", "Manager");
+
+            //get date two weeks earlier
+            DateTime today = DateTime.Today;
+            DateTime twoWeeks_Earlier = today.AddDays(-14);
+
+            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
+            List<display_comment> display_Comments = getAllDisplayComments().Where(dc => dc.comment.created_at > twoWeeks_Earlier).ToList();
+
+
+            //--------filtering-------
+
+            //filter for username
+            display_Comments = UsernameFilterComment(display_Comments, name);
+
+            display_Comments = RoleFilterComment(display_Comments, roleID);
+
+            //filter for departments
+            display_Comments = DepartmentFilterComment(display_Comments, departmentID);
+
+            //filter for 'Publish from to ..'
+            display_Comments = PublishFromFilterComment(display_Comments, pubFrom, pubTo);
+
             // filter for order
             if (time_order == null)
             {
