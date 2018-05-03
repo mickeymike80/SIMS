@@ -420,6 +420,8 @@ namespace SIMS_CW.Controllers
             int staffComments = dbData.comments.Where(c => c.idea_id == idea_id).Count();
             ViewBag.commentCountStaff = staffComments;
 
+            ViewBag.timepast = TimePast(idea);
+
             ViewBag.Idea = idea;
             if (idea.isAnonymous == 0)
             {

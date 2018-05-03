@@ -348,6 +348,7 @@
     <Content Include="Views\Manager\AnonymousComments.cshtml" />
     <Content Include="Views\Manager\LatestComments.cshtml" />
     <Content Include="Views\Manager\LatestIdeas.cshtml" />
+    <Content Include="Views\Manager\ViewAllComments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

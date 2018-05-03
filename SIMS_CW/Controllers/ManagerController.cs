@@ -2,11 +2,13 @@
 using SIMS_CW.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -608,7 +610,83 @@ namespace SIMS_CW.Controllers
             return View(display_Ideas.ToPagedList(pageNumber, pageSize));
         }
 
+        
+        //GET
+        public ActionResult ViewAllComments(int? page, string name, string roleID, string departmentID, string time_order, string pubFrom, string pubTo)
+        {
+            user loggedIn = (user)Session["loggedIn"];
 
+            //check logged in?
+            if (loggedIn == null)
+            {
+                return Redirect("~/Home/LoginPage");
+            }
+            if (Session["roleCbb"] == null)
+            {
+                List<role> roles = dbData.roles.ToList();
+                SelectList listItems = new SelectList(roles, "role_id", "role_name");
+                Session["roleCbb"] = listItems;
+            }
+            if (Session["deptCbb"] == null)
+            {
+                List<department> departments = dbData.departments.ToList();
+                SelectList listItems = new SelectList(departments, "department_id", "department_name");
+                Session["deptCbb"] = listItems;
+            }
+            if (loggedIn.role.role_id < 1 || loggedIn.role.role_id > 3)
+            {
+                return Redirect("~/Home/DeniedAccess");
+            }
+
+            //store page to return to proper page when visited Details page
+            Session["previousPage"] = Url.Action("AnonymousComments", "Manager");
+
+            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
+            List<display_comment> display_Comments = getAllDisplayComments().ToList();
+
+
+            //--------filtering-------
+
+            //filter for username
+            display_Comments = UsernameFilterComment(display_Comments, name);
+
+            //filter for role
+            display_Comments = RoleFilterComment(display_Comments, roleID);
+
+            //filter for departments
+            display_Comments = DepartmentFilterComment(display_Comments, departmentID);
+
+            //filter for 'Publish from to ..'
+            display_Comments = PublishFromFilterComment(display_Comments, pubFrom, pubTo);
+
+            // filter for order
+            if (time_order == null)
+            {
+                display_Comments = display_Comments.OrderByDescending(dc => dc.comment.created_at).ToList();
+            }
+            else
+            {
+                if (time_order.Equals("Newest"))
+                {
+                    display_Comments = display_Comments.OrderByDescending(dc => dc.comment.created_at).ToList();
+                    ViewBag.time_order = time_order;
+                }
+                else if (time_order.Equals("Oldest"))
+                {
+                    display_Comments = display_Comments.OrderBy(dc => dc.comment.created_at).ToList();
+                    ViewBag.time_order = time_order;
+                }
+            }
+
+            //--------End filtering-------
+
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(display_Comments.ToPagedList(pageNumber, pageSize));
+        }
+
+        
         //GET
         public ActionResult AnonymousComments(int? page, string name, string roleID, string departmentID, string time_order, string pubFrom, string pubTo)
         {
@@ -825,6 +903,7 @@ namespace SIMS_CW.Controllers
                     cnt_dislikes++;
                 }
             }
+            ViewBag.timepast = TimePast(idea);
 
             ViewBag.likes = cnt_likes;
             ViewBag.dislikes = cnt_dislikes;
@@ -847,7 +926,6 @@ namespace SIMS_CW.Controllers
 
             return View(mymodel);
         }
-
 
         [HttpPost]
         public ActionResult Approve(int idea_id)
@@ -1265,5 +1343,152 @@ namespace SIMS_CW.Controllers
             return display_Comments;
         }
 
+
+        private String TimePast(idea idea)
+        {
+            String str = null;
+            DateTime date1 = (DateTime)idea.created_at;
+            DateTime date2 = DateTime.Now;
+
+            DateTime fromDate = new DateTime();
+            DateTime toDate = new DateTime();
+
+            int[] monthDay = new int[12] { 31, -1, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+            int year;
+            int month;
+            int day;
+            int hour;
+            int minute;
+            String now = "Just now";
+
+            if (date2 > date1)
+            {
+                fromDate = date1;
+                toDate = date2;
+            }
+            else
+            {
+                fromDate = date2;
+                toDate = date1;
+            }
+
+
+            TimeSpan span = (toDate - fromDate);
+
+            minute = span.Minutes;
+            hour = span.Hours;
+
+            //Day calculation
+            int increment = 0;
+            if (fromDate.Day > toDate.Day)
+            {
+                increment = monthDay[fromDate.Month - 1];
+            }
+
+            if (increment == -1)
+            {
+                if (DateTime.IsLeapYear(fromDate.Year))
+                {
+                    increment = 29;
+                }
+                else
+                {
+                    increment = 28;
+                }
+            }
+
+            if (increment != 0)
+            {
+                day = (toDate.Day + increment) - fromDate.Day;
+                increment = 1;
+            }
+            else
+            {
+                day = toDate.Day - fromDate.Day;
+            }
+
+            //Month
+            if ((fromDate.Month + increment) > toDate.Month)
+            {
+                month = (toDate.Month + 12) - (fromDate.Month + increment);
+                increment = 1;
+            }
+            else
+            {
+                month = (toDate.Month) - (fromDate.Month + increment);
+                increment = 0;
+            }
+
+            //Year
+            year = toDate.Year - (fromDate.Year + increment);
+
+
+
+
+
+            if (year == 0 && month == 0 && day == 0 && hour == 0 && minute == 0)
+            {
+                str = now;
+            }
+            else if (year == 0 && month == 0 && day == 0 && hour == 0 && minute > 0)
+            {
+                if (minute == 1)
+                {
+                    str = minute + " minute ago";
+                }
+                else
+                {
+                    str = minute + " minutes ago";
+                }
+            }
+            else if (year == 0 && month == 0 && day == 0 && hour > 0)
+            {
+                if (hour == 1)
+                {
+                    str = hour + " hour ago";
+                }
+                else
+                {
+                    str = hour + " hours ago";
+                }
+
+            }
+            else if (year == 0 && month == 0 && day > 0)
+            {
+                if (day == 1)
+                {
+                    str = day + " day ago";
+                }
+                else
+                {
+                    str = day + " days ago";
+                }
+
+            }
+            else if (year == 0 && month > 0)
+            {
+                if (month == 1)
+                {
+                    str = month + " month ago";
+                }
+                else
+                {
+                    str = month + " months ago";
+                }
+
+            }
+            else if (year > 0)
+            {
+                if (year == 1)
+                {
+                    str = year + " year ago";
+                }
+                else
+                {
+                    str = year + " years ago";
+                }
+            }
+            return str;
+        }
     }
 }
