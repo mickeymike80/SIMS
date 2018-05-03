@@ -117,7 +117,7 @@
 <!-- end of confirmation dialog -->
 <div>
     <h3 class="headerw3">Create a new idea</h3>
-    @if (ViewBag.error != null)
+    @if (ViewBag.error != null && ViewBag.error == "1")
     {
         <br/>
         <h4 style="color:red">The deadline for submitting new idea for this academic year has passed. Creating ideas is not currently available.</h4>
@@ -161,3 +161,15 @@
         </div>
     </div>
 </div>
+
+@if (ViewBag.Ideamessage != null)
+{
+    <script>
+        var text = '@ViewBag.Ideamessage';
+        alert(text);
+        var redirectUrl = '@ViewBag.redirectUrl';
+        if (redirectUrl !== null || redirectUrl !== '') {
+            window.location.href = redirectUrl;
+        }
+    </script>
+}
