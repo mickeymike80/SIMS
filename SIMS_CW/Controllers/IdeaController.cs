@@ -49,7 +49,7 @@ namespace SIMS_CW.Controllers
 
             //filter with title
             display_Ideas = TitleFilter(display_Ideas, idea_title);
-
+            
             // filter with published user name
             display_Ideas = UsernameFilter(display_Ideas, name);
 
@@ -154,7 +154,16 @@ namespace SIMS_CW.Controllers
             display_Ideas.OrderByDescending(item => item.idea.created_at);
             return display_Ideas;
         }
-
+        private void initIdealCreateComp(bool checkedSessionISNull)
+        {
+            if (!checkedSessionISNull)
+            {
+                return;
+            }
+            List<category> categories = dbData.categories.ToList();
+            SelectList listItems = new SelectList(categories, "category_id", "category_name");
+            Session["cateCbb"] = listItems;
+        }
         [HttpGet]
         public ActionResult Create()
         {
@@ -163,17 +172,14 @@ namespace SIMS_CW.Controllers
             {
                 return Redirect("~/Home/LoginPage");
             }
-            current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
-            if (Session["cateCbb"] == null)
-            {
-                List<category> categories = dbData.categories.ToList();
-                SelectList listItems = new SelectList(categories, "category_id", "category_name");
-                Session["cateCbb"] = listItems;
-            }
+            current_year = dbData.academic_years.FirstOrDefault(item => item.started_at <= DateTime.Now && item.ended_at >= DateTime.Now) ;
+           
+            initIdealCreateComp(Session["cateCbb"] == null);
             if (current_year.deadline_ideas < DateTime.Now)
             {
                 ViewBag.error = "1";
             }
+            //here
             return View();
         }
 
@@ -194,7 +200,7 @@ namespace SIMS_CW.Controllers
             }
             // 0 = false; 1 = true
             idea.category_id = Convert.ToInt32(Request.Form["categoryID"].ToString());
-
+           
             idea.isEnabled = 1;
             idea.status = 0;
             idea.viewed_count = 0;
@@ -296,8 +302,12 @@ namespace SIMS_CW.Controllers
                         Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
                     }
                 }
+
             }
-            return Redirect(Url.Action("Index", "Idea", new { page = 1 }));
+            initIdealCreateComp(Session["cateCbb"] == null);
+            ViewBag.Ideamessage = "Your idea has been submitted for approval";
+            ViewBag.redirectUrl = (Url.Action("Index", "Idea", new { page = 1 }));
+            return View();
             //End COde
 
         }
