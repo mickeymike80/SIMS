@@ -10,7 +10,6 @@ namespace SIMS_CW.Controllers
     public class HomeController : Controller
     {
         DbModel dbModel = new DbModel();
-
       
         public ActionResult Index()
         {
@@ -53,6 +52,7 @@ namespace SIMS_CW.Controllers
             String email = Request.Form["email"].ToString();
             String password = Request.Form["password"].ToString();
 
+            
             List<user> users = dbModel.users.ToList();
             foreach (user user in users)
             {
@@ -62,8 +62,24 @@ namespace SIMS_CW.Controllers
                     Session["role"] = user.role.role_name;
                     Session["liRole"] = user.role_id;
 
+                    //for return button purposes
                     Session["previousPage"] = Url.Action("LoginPage", "Home");
-                    Session["currentPage"] = Url.Action("LoginPage", "Home");
+
+                    //store last login to notify user of new comments
+                    if (user.last_login == null)
+                    {
+                        Session["lastLogin"] = DateTime.Now;
+                    }
+                    else
+                    {
+                        Session["lastLogin"] = user.last_login;
+                    }
+                    user.last_login = DateTime.Now;
+                    dbModel.SaveChanges();
+
+
+                    List<idea> viewed_ideas = new List<idea>();
+                    Session["viewedIdeas"] = viewed_ideas;
 
                     switch (user.role_id)
                     {

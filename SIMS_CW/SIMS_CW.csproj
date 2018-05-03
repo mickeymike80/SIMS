@@ -180,6 +180,7 @@
     <Compile Include="Models\idea.cs" />
     <Compile Include="Models\rate.cs" />
     <Compile Include="Models\role.cs" />
+    <Compile Include="Models\unviewed_idea.cs" />
     <Compile Include="Models\user.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

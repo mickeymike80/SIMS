@@ -84,8 +84,8 @@ namespace SIMS_CW.Controllers
         private List<display_idea> getAllDisplayIdeas()
         {
             List<display_idea> display_Ideas = new List<display_idea>();
-            /*List<idea> ideas = dbData.ideas.Where(item=>item.academic_year_id == current_year.academic_year_id).Where(item=>item.isEnabled == 1).ToList();*/
-            List<idea> ideas = dbData.ideas.Where(item => item.isEnabled == 1).ToList();
+            List<idea> ideas = dbData.ideas.Where(item=>item.academic_year_id == current_year.academic_year_id).Where(item=>item.isEnabled == 1).ToList();
+            /*List<idea> ideas = dbData.ideas.Where(item => item.isEnabled == 1).ToList();*/
 
             user loggedIn = (user)Session["loggedIn"];
 
@@ -122,7 +122,34 @@ namespace SIMS_CW.Controllers
                 {
                     display_Ideas.Add(display_Idea);
                 }
-                
+
+
+                //display time
+                display_Idea.timepast = TimePast(idea);
+
+
+
+                //for New comments purposes
+                DateTime lastLogin = (DateTime)Session["lastLogin"];
+                List<comment> newComments = dbData.comments.Where(c => c.idea_id == idea.idea_id).Where(c => c.created_at > lastLogin).Where(c => c.user.role_id == 5).Where(c => c.user_id != loggedIn.user_id).ToList();
+
+                List<idea> viewed_ideas = (List<idea>)Session["viewedIdeas"];
+
+                var count = 0;
+                foreach (idea item in viewed_ideas)
+                {
+                    if (item.idea_id == idea.idea_id)
+                    {
+                        count++;
+                    }
+                }
+
+
+                if (newComments.Count != 0 && count == 0 && loggedIn.role_id == 5)
+                {
+                    display_Idea.new_comments = true;
+                }
+
             }
             display_Ideas.OrderByDescending(item => item.idea.created_at);
             return display_Ideas;
@@ -291,12 +318,31 @@ namespace SIMS_CW.Controllers
             List<comment> comments = comments = dbData.comments.Where(c => c.idea_id == idea_id).OrderByDescending(c=>c.created_at).ToList();
             List<comment> temp = new List<comment>();
 
+
+            List<idea> viewed_ideas = (List<idea>)Session["viewedIdeas"];
             //Views not added for own ideas
             if (idea.user.user_id != loggedIn.user_id)
             {
                 idea.viewed_count += 1;
+                dbData.SaveChanges();
             }
-            dbData.SaveChanges();
+            else
+            {
+                var count = 0;
+                foreach (idea i in viewed_ideas)
+                {
+                    if (i.idea_id == idea.idea_id)
+                    {
+                        count++;
+                    }
+                }
+                if (count == 0)
+                {
+                    viewed_ideas.Add(idea);
+                }
+            }
+            
+
 
             //student can't see staff comments
             if (loggedIn.role_id == 5)
@@ -367,6 +413,7 @@ namespace SIMS_CW.Controllers
                 ViewBag.rate = rates.First().rate_point;
             }
 
+            //show difference between staff and student comments
             int studentComments = dbData.comments.Where(c => c.idea_id == idea_id).Where(c => c.user.role_id == 5).Count();
             ViewBag.commentCountStudent = studentComments;
 
@@ -558,7 +605,19 @@ namespace SIMS_CW.Controllers
             Session["previousPage"] = Url.Action("MyIdeas", "Idea");
 
             current_year = dbData.academic_years.Where(item => item.started_at <= DateTime.Now).Where(item => item.ended_at >= DateTime.Now).Single();
-            var display_Ideas = getAllDisplayIdeas().Where(item=>item.idea.user_id == user.user_id).OrderByDescending(item=>item.idea.created_at);            
+
+            var display_Ideas = getAllDisplayIdeas().Where(item => item.idea.user_id == user.user_id).OrderByDescending(item => item.idea.created_at);
+
+            List<display_idea> display_IdeasList = getAllDisplayIdeas().Where(item => item.idea.user_id == user.user_id).ToList();
+            
+            foreach (display_idea di in display_IdeasList)
+            {
+                if (di.new_comments)
+                {
+                    display_Ideas = getAllDisplayIdeas().Where(item => item.idea.user_id == user.user_id).OrderByDescending(item => item.new_comments == true);
+                }
+            }
+
 
             int pageSize = 5;
             int pageNumber = (page ?? 1);
@@ -758,5 +817,161 @@ namespace SIMS_CW.Controllers
             return display_Ideas;
         }
 
+
+        private String TimePast(idea idea)
+        {
+            String str = null;
+            DateTime date1 = (DateTime)idea.created_at;
+            DateTime date2 = DateTime.Now;
+
+            DateTime fromDate = new DateTime();
+            DateTime toDate = new DateTime();
+
+            int[] monthDay = new int[12] { 31, -1, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+            int year;
+            int month;
+            int day;
+            int hour;
+            int minute;
+            String now = "Just now";
+
+            if (date2 > date1)
+            {
+                fromDate = date1;
+                toDate = date2;
+            }
+            else
+            {
+                fromDate = date2;
+                toDate = date1;
+            }
+
+
+            TimeSpan span = (toDate - fromDate);
+
+            minute = span.Minutes;
+            hour = span.Hours;
+
+            //Day calculation
+            int increment = 0;
+            if (fromDate.Day > toDate.Day)
+            {
+                increment = monthDay[fromDate.Month - 1];
+            }
+
+            if (increment == -1)
+            {
+                if (DateTime.IsLeapYear(fromDate.Year))
+                {
+                    increment = 29;
+                }
+                else
+                {
+                    increment = 28;
+                }
+            }
+
+            if (increment != 0)
+            {
+                day = (toDate.Day + increment) - fromDate.Day;
+                increment = 1;
+            }
+            else
+            {
+                day = toDate.Day - fromDate.Day;
+            }
+
+            //Month
+            if ((fromDate.Month + increment) > toDate.Month)
+            {
+                month = (toDate.Month + 12) - (fromDate.Month + increment);
+                increment = 1;
+            }
+            else
+            {
+                month = (toDate.Month) - (fromDate.Month + increment);
+                increment = 0;
+            }
+
+            //Year
+            year = toDate.Year - (fromDate.Year + increment);
+
+
+
+
+
+            if (year == 0 && month == 0 && day == 0 && hour == 0 && minute == 0)
+            {
+                str = now;
+            }
+            else if (year == 0 && month == 0 && day == 0 && hour == 0 && minute > 0)
+            {
+                if (minute == 1)
+                {
+                    str = minute + " minute ago";
+                }
+                else
+                {
+                    str = minute + " minutes ago";
+                }
+            }
+            else if (year == 0 && month == 0 && day == 0 && hour > 0)
+            {
+                if (hour == 1)
+                {
+                    str = hour + " hour ago";
+                }
+                else
+                {
+                    str = hour + " hours ago";
+                }
+                
+            }
+            else if (year == 0 && month == 0 && day > 0)
+            {
+                if (day == 1)
+                {
+                    str = day + " day ago";
+                }
+                else
+                {
+                    str = day + " days ago";
+                }
+
+            }
+            else if (year == 0 && month > 0)
+            {
+                if (month == 1)
+                {
+                    str = month + " month ago";
+                }
+                else
+                {
+                    str = month + " months ago";
+                }
+
+            }
+            else if (year > 0)
+            {
+                if (year == 1)
+                {
+                    str = year + " year ago";
+                }
+                else
+                {
+                    str = year + " years ago";
+                }
+            }
+
+
+
+
+
+
+
+
+
+            return str;
+        }
     }
 }

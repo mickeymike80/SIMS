@@ -83,6 +83,10 @@
         <div class="col-md-12">
             <div class="panel-white post">
                 <div class="post-heading">
+                    @if (item.new_comments)
+                    {
+                        <div class="cross-shadow-ribbon">New Comments</div>
+                    }
                     <div class="pull-left meta">
                         <div class="title h5">
                             <b>
@@ -90,7 +94,7 @@
                             </b>
                         </div>
                         <h6 class="text-muted time">
-                            <span class="glyphicon glyphicon-calendar" title="Created at"> @item.idea.created_at</span>
+                            <span class="glyphicon glyphicon-calendar" title="Created at"> @item.timepast</span>
 
                             <!--Three spaces-->
                             &nbsp&nbsp&nbsp

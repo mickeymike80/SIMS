@@ -36,6 +36,8 @@ namespace SIMS_CW.Models
 
         public DateTime? created_at { get; set; }
 
+        public DateTime? last_login { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<comment> comments { get; set; }
 

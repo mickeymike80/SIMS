@@ -11,9 +11,6 @@
     My Submitted ideas
 }
 
-<style>
-
-</style>
 
 <h3 class="headerw3" style="margin-bottom: 30px;">My Submitted ideas</h3>
 @foreach (var item in Model)
@@ -22,6 +19,10 @@
         <div class="col-md-12">
             <div class="panel-white post">
                 <div class="post-heading">
+                   @if (item.new_comments)
+                    {
+                        <div class="cross-shadow-ribbon">New Comments</div>
+                    }
                     <div class="pull-left meta">
                         <div class="title h5">
                             <b>

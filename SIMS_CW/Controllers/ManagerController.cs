@@ -93,8 +93,8 @@ namespace SIMS_CW.Controllers
         private List<display_idea> getAllDisplayIdeas()
         {
             List<display_idea> display_Ideas = new List<display_idea>();
-            /*List<idea> ideas = dbData.ideas.Where(item => item.academic_year_id == current_year.academic_year_id).ToList();*/
-            List<idea> ideas = dbData.ideas.ToList();
+            List<idea> ideas = dbData.ideas.Where(item => item.academic_year_id == current_year.academic_year_id).ToList();
+            /*List<idea> ideas = dbData.ideas.ToList();*/
             for (int i = 0; i < ideas.Count; i++)
             {
                 idea idea = ideas[i];
@@ -158,7 +158,8 @@ namespace SIMS_CW.Controllers
         private List<display_comment> getAllDisplayComments()
         {
             List<display_comment> display_Comments = new List<display_comment>();
-            List<comment> comments = dbData.comments.ToList();
+            /*List<comment> comments = dbData.comments.ToList();*/
+            List<comment> comments = dbData.comments.Where(item => item.idea.academic_year_id == current_year.academic_year_id).ToList();
             for (int i = 0; i < comments.Count; i++)
             {
                 comment comment = comments[i];

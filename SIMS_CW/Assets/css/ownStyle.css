@@ -58,6 +58,7 @@ hr {
     border: 1px solid #dddddd;
     border-radius: 5px;
     background-color: aliceblue;
+    margin-top: 15px;
 }
 
 .panel-gray {
@@ -171,3 +172,29 @@ hr {
                 border-bottom: 3px solid transparent;
                 border-top: 3px solid #8F5408;
             }
+
+
+/*---------new comment RIBBON--------*/
+
+.cross-shadow-ribbon {
+    position: absolute;
+    background: #EA4335;
+    top: 5px;
+    padding: 5px;
+    color: #FFF;
+    border-radius: 0 0 2px 2px;
+    font-size: 12px;
+}
+
+.cross-shadow-ribbon:before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-bottom: 10px solid #A42F25;
+    border-left: 10px solid transparent;
+}
