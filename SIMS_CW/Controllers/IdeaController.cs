@@ -145,7 +145,7 @@ namespace SIMS_CW.Controllers
                 }
 
 
-                if (newComments.Count != 0 && count == 0 && loggedIn.role_id == 5)
+                if (newComments.Count != 0 && count == 0 && loggedIn.role_id == 5 && loggedIn.user_id == idea.user_id)
                 {
                     display_Idea.new_comments = true;
                 }
@@ -154,6 +154,8 @@ namespace SIMS_CW.Controllers
             display_Ideas.OrderByDescending(item => item.idea.created_at);
             return display_Ideas;
         }
+
+
         private void initIdealCreateComp(bool checkedSessionISNull)
         {
             if (!checkedSessionISNull)
@@ -435,6 +437,8 @@ namespace SIMS_CW.Controllers
             {
                 ViewBag.Idea_user = dbData.users.Where(u => u.user_id == uid).First();
             }
+
+            ViewBag.timepast = TimePast(idea);
 
             dynamic mymodel = new ExpandoObject();
             mymodel.Comments = comments;
