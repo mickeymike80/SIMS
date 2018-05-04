@@ -231,7 +231,9 @@ namespace SIMS_CW.Controllers
                         string oldfileName = Path.GetFileName(file.FileName);
                         string sessionID = HttpContext.Session.SessionID;
                         string newfilename = sessionID + Guid.NewGuid().ToString() + oldfileName;
-                        string path = Path.Combine(Server.MapPath("~/UploadedFiles"), newfilename);
+                        string fileSavePath = System.Web.Hosting.HostingEnvironment.MapPath("~/UploadedFiles");
+                        DirectoryInfo dirInfo = new DirectoryInfo(fileSavePath);
+                        string path = Path.Combine(dirInfo.FullName + "/", newfilename);
                         file.SaveAs(path);
                         document document = new document();
                         document.new_file_name = newfilename;
@@ -601,7 +603,9 @@ namespace SIMS_CW.Controllers
 
         public FileResult DownloadAttachment(string new_file_name, string old_file_name)
         {
-            string currentFile = "~/UploadedFiles/" + new_file_name;
+            string fileSavePath = System.Web.Hosting.HostingEnvironment.MapPath("~/UploadedFiles");
+            DirectoryInfo dirInfo = new DirectoryInfo(fileSavePath);
+            string currentFile = dirInfo.FullName + "/" + new_file_name;
             string contentType = "application/" + old_file_name.Split('.').Last();
             return File(currentFile, contentType, old_file_name);
         }
