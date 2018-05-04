@@ -597,7 +597,9 @@ namespace SIMS_CW.Controllers
 
         public FileResult DownloadAttachment(string new_file_name, string old_file_name)
         {
-            string currentFile = "~/UploadedFiles/" + new_file_name;
+            string fileSavePath = System.Web.Hosting.HostingEnvironment.MapPath("~/UploadedFiles");
+            DirectoryInfo dirInfo = new DirectoryInfo(fileSavePath);
+            string currentFile = dirInfo.FullName + "/" + new_file_name;
             string contentType = "application/" + old_file_name.Split('.').Last();
             return File(currentFile, contentType, old_file_name);
         }
